@@ -1,0 +1,25 @@
+[project]
+name = "pyseasters"
+version = "1.0.0-alpha.0"
+description = "Python package to handle data in the SEASTERS project."
+authors = [{ name = "Quentin Desmet", email = "desmetque@gmail.com" }]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.black]
+line-length = 88
+
+[tool.flake8]
+ignore = ["E501"]
+exclude = ["test/*", "example/*"]
+per-file-ignores = """
+  pyseasters/__init__.py: F401
+"""
+
+[tool.mypy]
+exclude = '^example/'
+
+[tool.pytest.ini_options]
+addopts = "-v --cov=pyseasters --cov-report=term-missing"
