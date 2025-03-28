@@ -1,3 +1,6 @@
 __pycache__
+pyseasters/__pycache__
+tests/__pycache__
+.pytest_cache
 .coverage
 pyseasters.egg-info

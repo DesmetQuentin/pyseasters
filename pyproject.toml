@@ -13,13 +13,13 @@ line-length = 88
 
 [tool.flake8]
 ignore = ["E501"]
-exclude = ["test/*", "example/*"]
+exclude = ["tests/*", "examples/*"]
 per-file-ignores = """
   pyseasters/__init__.py: F401
 """
 
 [tool.mypy]
-exclude = '^example/'
+exclude = '^examples/'
 
 [tool.pytest.ini_options]
 addopts = "-v --cov=pyseasters --cov-report=term-missing"
