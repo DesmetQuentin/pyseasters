@@ -1,19 +1,28 @@
+import importlib.resources
 import logging
 import socket
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
+import yaml
+
 __all__ = ["paths"]
 
 log = logging.getLogger(__name__)
 
 # Machine-specific root directory mapping
-MACHINE_CONFIG = {
-    "LALL2423D3": Path(
-        "/home/desq/work/DATA/SEASTERS"
-    ),  # Q. Desmet's laptop for the package development
-}
+MACHINE_CONFIG = {}
+try:
+    with importlib.resources.files("pyseasters.data").joinpath("paths.yaml").open(
+        "r"
+    ) as file:
+        data = yaml.safe_load(file)
+        MACHINE_CONFIG.update({k: Path(v) for k, v in data["machine config"].items()})
+        del data
+except FileNotFoundError:
+    log.warning("No path data found. Have you forgotten to download paths.yaml?")
+
 
 # Detect current machine
 CURRENT_MACHINE = socket.gethostname()

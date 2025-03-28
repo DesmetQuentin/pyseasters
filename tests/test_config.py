@@ -1,16 +1,19 @@
+import importlib.resources
+import logging
 import shutil
 import tempfile
 from pathlib import Path
+from unittest.mock import patch
 
 import pytest
 
-from pyseasters.config import MACHINE_CONFIG, PathConfig
+import pyseasters.config
 
 
 @pytest.fixture
 def config():
     """Fixture to create a fresh instance of PathConfig."""
-    return PathConfig()
+    return pyseasters.config.PathConfig()
 
 
 @pytest.fixture
@@ -21,11 +24,36 @@ def temp_dir():
     shutil.rmtree(dir_path, ignore_errors=True)
 
 
+def test_missing_paths_yaml(caplog):
+    """Test behavior when paths.yaml is missing."""
+
+    original_machine_config = pyseasters.config.MACHINE_CONFIG.copy()
+
+    with patch("importlib.resources.files", side_effect=FileNotFoundError):
+        # Reload the module to trigger the import
+        with caplog.at_level(logging.WARNING):
+            importlib.reload(pyseasters.config)
+
+        # Check if warning was logged
+        assert (
+            "No path data found. Have you forgotten to download paths.yaml?"
+            in caplog.text
+        )
+
+    pyseasters.config.MACHINE_CONFIG.clear()
+    pyseasters.config.MACHINE_CONFIG.update(original_machine_config)
+
+
 def test_initialize_with_known_machine(config, monkeypatch):
     """Test initialization with a known machine from MACHINE_CONFIG."""
-    monkeypatch.setattr("pyseasters.config.CURRENT_MACHINE", "LALL2423D3")
+    original_machine_config = pyseasters.config.MACHINE_CONFIG.copy()
+    pyseasters.config.MACHINE_CONFIG.update({"KNOWN MACHINE": "/known/directory"})
+    monkeypatch.setattr("pyseasters.config.CURRENT_MACHINE", "KNOWN MACHINE")
     config.initialize()
-    assert config.root == MACHINE_CONFIG["LALL2423D3"]
+    print(pyseasters.config.MACHINE_CONFIG)
+    assert config.root == pyseasters.config.MACHINE_CONFIG["KNOWN MACHINE"]
+    pyseasters.config.MACHINE_CONFIG.clear()
+    pyseasters.config.MACHINE_CONFIG.update(original_machine_config)
 
 
 def test_initialize_with_custom_path(config, temp_dir):
