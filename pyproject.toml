@@ -4,6 +4,13 @@ version = "1.0.0-alpha.1"
 description = "Python package to handle data in the SEASTERS project."
 authors = [{ name = "Quentin Desmet", email = "desmetque@gmail.com" }]
 
+[project.optional-dependencies]
+docs = [
+  "sphinx",
+  "sphinx-rtd-theme",
+  "myst-parser",
+]
+
 [tool.isort]
 profile = "black"
 line_length = 88
