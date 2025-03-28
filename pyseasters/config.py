@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
+import numpy as np
 import yaml
 
 __all__ = ["paths"]
@@ -12,13 +13,29 @@ __all__ = ["paths"]
 log = logging.getLogger(__name__)
 
 # Machine-specific root directory mapping
-MACHINE_CONFIG = {}
+MACHINE_TO_PATH = {}
 try:
     with importlib.resources.files("pyseasters.data").joinpath("paths.yaml").open(
         "r"
     ) as file:
         data = yaml.safe_load(file)
-        MACHINE_CONFIG.update({k: Path(v) for k, v in data["machine config"].items()})
+        for k, v in data["path to machine"].items():
+            if isinstance(v, list):
+                already_recorded = np.array(
+                    [machine in MACHINE_TO_PATH.keys() for machine in v]
+                )
+                if np.any(already_recorded):
+                    raise RuntimeError(
+                        f"paths.yaml inconsistent: several paths found for machine '{v[np.where(already_recorded)[0][0]]}'"
+                    )
+                MACHINE_TO_PATH.update({machine: Path(k) for machine in v})
+            else:
+                if v in MACHINE_TO_PATH.keys():
+                    raise RuntimeError(
+                        f"paths.yaml inconsistent: several paths found for machine '{v}'"
+                    )
+                MACHINE_TO_PATH[v] = Path(k)
+        del already_recorded
         del data
 except FileNotFoundError:
     log.warning("No path data found. Have you forgotten to download paths.yaml?")
@@ -35,8 +52,8 @@ class PathConfig:
     def initialize(self, custom_path: Optional[str] = None):
         """Initialize data directories based on the current machine or a provided custom_path."""
         if custom_path is None:
-            if CURRENT_MACHINE in MACHINE_CONFIG.keys():
-                self.root = MACHINE_CONFIG[CURRENT_MACHINE]
+            if CURRENT_MACHINE in MACHINE_TO_PATH.keys():
+                self.root = MACHINE_TO_PATH[CURRENT_MACHINE]
 
             else:
                 log.error(
@@ -56,12 +73,12 @@ class PathConfig:
                     f"Custom data directory '{custom_path}' does not exist."
                 )
 
-            if CURRENT_MACHINE in MACHINE_CONFIG.keys():
+            if CURRENT_MACHINE in MACHINE_TO_PATH.keys():
                 log.warning(
                     "Custom data directory overrides existing settings for this machine."
                 )
                 log.info(
-                    f"Previous settings: {CURRENT_MACHINE} {MACHINE_CONFIG[CURRENT_MACHINE]}"
+                    f"Previous settings: {CURRENT_MACHINE} {MACHINE_TO_PATH[CURRENT_MACHINE]}"
                 )
                 log.info(f"     New settings: {CURRENT_MACHINE} {custom_path}")
 

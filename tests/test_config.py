@@ -3,7 +3,7 @@ import logging
 import shutil
 import tempfile
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import mock_open, patch
 
 import pytest
 
@@ -24,10 +24,34 @@ def temp_dir():
     shutil.rmtree(dir_path, ignore_errors=True)
 
 
+def mock_paths_yaml_list():
+    """Mock content of paths.yaml."""
+    content = """
+    path to machine:
+        /test/directory: machine1
+        /test/directory/two:
+        - machine1
+        - machine2
+    """
+    return content
+
+
+def mock_paths_yaml_standalone():
+    """Mock content of paths.yaml."""
+    content = """
+    path to machine:
+        /test/directory:
+        - machine1
+        - machine2
+        /test/directory/two: machine2
+    """
+    return content
+
+
 def test_missing_paths_yaml(caplog):
     """Test behavior when paths.yaml is missing."""
 
-    original_machine_config = pyseasters.config.MACHINE_CONFIG.copy()
+    original_machine_to_path = pyseasters.config.MACHINE_TO_PATH.copy()
 
     with patch("importlib.resources.files", side_effect=FileNotFoundError):
         # Reload the module to trigger the import
@@ -40,20 +64,52 @@ def test_missing_paths_yaml(caplog):
             in caplog.text
         )
 
-    pyseasters.config.MACHINE_CONFIG.clear()
-    pyseasters.config.MACHINE_CONFIG.update(original_machine_config)
+    pyseasters.config.MACHINE_TO_PATH.clear()
+    pyseasters.config.MACHINE_TO_PATH.update(original_machine_to_path)
+
+
+def test_paths_yaml_inconsistent_list():
+    """Test behavior when paths.yaml is inconsistent: one machine in a list has already been recorded."""
+
+    original_machine_to_path = pyseasters.config.MACHINE_TO_PATH.copy()
+
+    with patch("importlib.resources.files") as mock_files:
+        mock_file = mock_open(read_data=mock_paths_yaml_list())
+        mock_files.return_value.joinpath.return_value.open = mock_file
+
+        with pytest.raises(RuntimeError):
+            importlib.reload(pyseasters.config)
+
+    pyseasters.config.MACHINE_TO_PATH.clear()
+    pyseasters.config.MACHINE_TO_PATH.update(original_machine_to_path)
+
+
+def test_paths_yaml_inconsistent_standalone():
+    """Test behavior when paths.yaml is inconsistent: one standalone machine has already been recorded."""
+
+    original_machine_to_path = pyseasters.config.MACHINE_TO_PATH.copy()
+
+    with patch("importlib.resources.files") as mock_files:
+        mock_file = mock_open(read_data=mock_paths_yaml_standalone())
+        mock_files.return_value.joinpath.return_value.open = mock_file
+
+        with pytest.raises(RuntimeError):
+            importlib.reload(pyseasters.config)
+
+    pyseasters.config.MACHINE_TO_PATH.clear()
+    pyseasters.config.MACHINE_TO_PATH.update(original_machine_to_path)
 
 
 def test_initialize_with_known_machine(config, monkeypatch):
-    """Test initialization with a known machine from MACHINE_CONFIG."""
-    original_machine_config = pyseasters.config.MACHINE_CONFIG.copy()
-    pyseasters.config.MACHINE_CONFIG.update({"KNOWN MACHINE": "/known/directory"})
+    """Test initialization with a known machine from MACHINE_TO_PATH."""
+    original_machine_to_path = pyseasters.config.MACHINE_TO_PATH.copy()
+    pyseasters.config.MACHINE_TO_PATH.update({"KNOWN MACHINE": "/known/directory"})
     monkeypatch.setattr("pyseasters.config.CURRENT_MACHINE", "KNOWN MACHINE")
     config.initialize()
-    print(pyseasters.config.MACHINE_CONFIG)
-    assert config.root == pyseasters.config.MACHINE_CONFIG["KNOWN MACHINE"]
-    pyseasters.config.MACHINE_CONFIG.clear()
-    pyseasters.config.MACHINE_CONFIG.update(original_machine_config)
+    print(pyseasters.config.MACHINE_TO_PATH)
+    assert config.root == pyseasters.config.MACHINE_TO_PATH["KNOWN MACHINE"]
+    pyseasters.config.MACHINE_TO_PATH.clear()
+    pyseasters.config.MACHINE_TO_PATH.update(original_machine_to_path)
 
 
 def test_initialize_with_custom_path(config, temp_dir):
