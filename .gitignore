@@ -4,3 +4,4 @@ tests/__pycache__
 .pytest_cache
 .coverage
 pyseasters.egg-info
+.mypy_cache
