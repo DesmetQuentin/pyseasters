@@ -5,6 +5,15 @@ description = "Python package to handle data in the SEASTERS project."
 authors = [{ name = "Quentin Desmet", email = "desmetque@gmail.com" }]
 
 [project.optional-dependencies]
+dev = [
+  "isort",
+  "black",
+  "flake8",
+  "flake8-pyproject",
+  "mypy",
+  "pytest",
+  "pytest-cov",
+]
 docs = [
   "sphinx",
   "sphinx-rtd-theme",
