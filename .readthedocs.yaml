@@ -34,4 +34,5 @@ python:
   install:
     - method: pip
       path: .
-      options: ["[docs]"]
+      extra_requirements:
+        - docs
