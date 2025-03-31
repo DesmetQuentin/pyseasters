@@ -5,5 +5,7 @@ There is also this other {doc}`page <page>`.
 
 ```{toctree}
 :hidden:
-page.md
+
+page
+modules
 ```
