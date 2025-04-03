@@ -48,6 +48,9 @@ CURRENT_MACHINE = socket.gethostname()
 @dataclass
 class PathConfig:
     root: str = None
+    ghcnd: str = None
+    ghcnd_stations: str = None
+    ghcnd_inventory: str = None
 
     def initialize(self, custom_path: Optional[str] = None):
         """Initialize data directories based on the current machine or a provided custom_path."""
@@ -84,8 +87,15 @@ class PathConfig:
 
             self.root = custom_path
 
+        self.ghcnd = self.root / "GHCNd"
+        self.ghcnd_stations = self.ghcnd / "ghcnd-stations.txt"
+        self.ghcnd_inventory = self.ghcnd / "ghcnd-inventory.txt"
+
     def is_initialized(self):
         return self.root is not None
+
+    def ghcnd_file(self, station_id: str) -> str:
+        return self.ghcnd / f"{station_id}.csv"
 
 
 paths = PathConfig()

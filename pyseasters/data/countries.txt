@@ -1,0 +1,31 @@
+Alpha-2	Alpha-3	FIPS	Country name
+AU	AUS	AS	Australia
+BD	BGD	BG	Bangladesh
+BT	BTN	BT	Bhutan
+BN	BRN	BX	Brunei
+KH	KHM	CB	Cambodia
+CN	CHN	CH	China
+CX	CXR	KT	Christmas Island
+CC	CCK	CK	Cocos (Keeling) Islands
+FM	FSM	FM	Federated States of Micronesia
+GU	GUM	GQ	Guam
+HK	HKG	HK	Hong Kong
+IN	IND	IN	India
+ID	IDN	ID	Indonesia
+JP	JPN	JA	Japan
+LA	LAO	LA	Laos
+MO	MCO	MC	Macau
+MY	MYS	MY	Malaysia
+MM	MMR	BM	Myanmar
+NP	NPL	NP	Nepal
+MP	MNP	CQ	Northern Mariana Islands
+PW	PLW	PS	Palau
+PG	PNG	PP	Papua New Guinea
+PH	PHL	RP	Philippines
+SG	SGP	SN	Singapore
+SB	SLB	BP	Solomon Islands
+LK	LKA	CE	Sri Lanka
+TW	TWN	TW	Taiwan
+TH	THA	TH	Thailand
+TL	TLS	TT	Timor-Leste
+VN	VNM	VM	Vietnam
