@@ -4,9 +4,9 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-from pyseasters.config import paths
-from pyseasters.download.ghcnd import _generate_main_script as _gen_ghcnd_main
-from pyseasters.download.ghcnd import _generate_metadata_script as _gen_ghcnd_meta
+from pyseasters.commands.ghcnd import _generate_main_script as _gen_ghcnd_main
+from pyseasters.commands.ghcnd import _generate_metadata_script as _gen_ghcnd_meta
+from pyseasters.constants.pathconfig import paths
 
 __all__ = ["generate_download_script"]
 
@@ -50,7 +50,7 @@ def main():
         "-o",
         "--output",
         default="",
-        help="path to output file (default is printing to stdout)",
+        help="path to output file (default: print to stdout)",
     )
 
     args = parser.parse_args()

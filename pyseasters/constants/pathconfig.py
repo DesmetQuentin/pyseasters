@@ -1,3 +1,12 @@
+"""
+This module defines the paths variable with its dataclass, PathConfig.
+paths aims at providing the paths to the external data employed in this package.
+It adapts to the machine/network where the package is imported based on the information
+provided in paths.yaml, a personal configuration file that must be placed in
+pyseasters/constants/data.
+TODO: details
+"""
+
 import importlib.resources
 import logging
 import socket
@@ -15,9 +24,9 @@ log = logging.getLogger(__name__)
 # Machine-specific root directory mapping
 MACHINE_TO_PATH = {}
 try:
-    with importlib.resources.files("pyseasters.data").joinpath("paths.yaml").open(
-        "r"
-    ) as file:
+    with importlib.resources.files("pyseasters.constants.data").joinpath(
+        "paths.yaml"
+    ).open("r") as file:
         data = yaml.safe_load(file)
         for k, v in data["path to machine"].items():
             if isinstance(v, list):
@@ -43,6 +52,7 @@ except FileNotFoundError:
 
 # Detect current machine
 CURRENT_MACHINE = socket.gethostname()
+# TODO: CURRENT_NETWORK = subprocess.run(f'nslookup {CURRENT_MACHINE} | grep Name | cut -d "." -f 2-', shell=True, check=True)
 
 
 @dataclass

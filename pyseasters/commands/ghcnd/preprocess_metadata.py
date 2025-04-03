@@ -2,10 +2,10 @@ import logging
 import subprocess
 from typing import List
 
-from pyseasters.config import paths
-from pyseasters.utils.countries import COUNTRIES
+from pyseasters.constants.countries import COUNTRIES
+from pyseasters.constants.pathconfig import paths
 
-__all__ = ["preprocess"]
+__all__ = ["preprocess_metadata"]
 
 log = logging.getLogger(__name__)
 
@@ -31,7 +31,7 @@ def _clean_columns(input: str, output: str, indices: List[str]) -> None:
         raise RuntimeError(f"cut error: {e}")
 
 
-def preprocess() -> None:
+def preprocess_metadata() -> None:
     if not paths.is_initialized():
         paths.initialize()
 
@@ -52,8 +52,8 @@ def preprocess() -> None:
         f"mv {paths.ghcnd / buffer} {paths.ghcnd_inventory}", shell=True, check=True
     )
 
-    log.info(f"Preprocessing completed for GHCNd data.")
+    log.info("Preprocessing completed for GHCNd data.")
 
 
 if __name__ == "__main__":
-    preprocess()
+    preprocess_metadata()

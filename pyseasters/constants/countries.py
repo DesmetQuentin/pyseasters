@@ -1,11 +1,5 @@
-import importlib.resources
-
-import pandas as pd
-
-__all__ = ["COUNTRIES"]
-
-COUNTRIES: pd.DataFrame
 """
+This module defines the `COUNTRIES` constant.
 COUNTRIES is a pandas DataFrame containing ISO and FIPS codes associated with the
 countries considered for the extended Southeast Asian region.
 The data is loaded from an ASCII file stored at `pyseasters/data/countries.txt`.
@@ -17,7 +11,15 @@ dictionaries, e.g., mapping FIPS codes to country names:
 'Indonesia'
 """
 
-with importlib.resources.files("pyseasters.data").joinpath("countries.txt").open(
-    "r"
-) as file:
+import importlib.resources
+
+import pandas as pd
+
+__all__ = ["COUNTRIES"]
+
+COUNTRIES: pd.DataFrame
+
+with importlib.resources.files("pyseasters.constants.data").joinpath(
+    "countries.txt"
+).open("r") as file:
     COUNTRIES = pd.read_csv(file, delimiter="\t", header=0)

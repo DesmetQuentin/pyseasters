@@ -1,9 +1,8 @@
-from pathlib import Path
 from typing import Optional
 
 import pandas as pd
 
-from pyseasters.config import paths
+from pyseasters.constants.pathconfig import paths
 
 STATIONS = "https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt"
 INVENTORY = "https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-inventory.txt"
@@ -41,10 +40,10 @@ def _generate_main_script(
 
     script = f"""#!/bin/bash
 
-for link in {' '.join([DATA %(station) for station in stations])}; do
+for link in {' '.join([DATA % (station) for station in stations])}; do
     wget $link
 done
-"""
+"""  # noqa: E272, E702
 
     if output is not None:
         with open(output, "w") as file:

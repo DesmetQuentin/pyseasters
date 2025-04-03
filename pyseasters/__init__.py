@@ -1,1 +1,1 @@
-from .config import paths
+from .constants import COUNTRIES, paths
