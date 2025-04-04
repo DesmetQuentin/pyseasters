@@ -19,6 +19,7 @@ docs = [
   "sphinx",
   "sphinx-rtd-theme",
   "myst-parser",
+  "sphinx-autodoc2",
 ]
 
 [tool.isort]
