@@ -62,7 +62,7 @@ def _generate_main_script(
     script = f"""#!/bin/bash
 
 for station in {' '.join(stations)}; do
-    wget {_DATA %('${link}')}
+    wget {_DATA %('${station}')}
 done
 """  # noqa: E272, E702
 
