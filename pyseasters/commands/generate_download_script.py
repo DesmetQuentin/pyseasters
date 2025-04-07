@@ -1,12 +1,18 @@
 #!/bin/usr python3
+
+"""Running this module as a script calls the `generate_download_script` function."""
+
 import argparse
 import sys
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union
 
-from pyseasters.commands.ghcnd import _generate_main_script as _gen_ghcnd_main
-from pyseasters.commands.ghcnd import _generate_metadata_script as _gen_ghcnd_meta
-from pyseasters.constants.pathconfig import paths
+from pyseasters.commands.ghcnd.generate_download_script import (
+    _generate_main_script as _gen_ghcnd_main,
+)
+from pyseasters.commands.ghcnd.generate_download_script import (
+    _generate_metadata_script as _gen_ghcnd_meta,
+)
 
 __all__ = ["generate_download_script"]
 
@@ -18,14 +24,23 @@ _accepted_keys = [
 
 def generate_download_script(
     key: str,
-    output: Optional[str] = None,
-) -> Optional[str]:
+    output: Optional[Union[str, Path]] = None,
+) -> str:
+    """Generate a download script in bash for the provided `key`.
 
-    if not paths.is_initialized():
-        paths.initialize()
+    Args:
+        key: The key associated with the desired download script (one in 'GHCNd',
+        'GHCNd metadata').
 
-    if output is not None:
-        output = Path(output)
+        output: Optional path to an output file to write the script in.
+
+    Returns:
+        Returns the download script as an str.
+
+    Raises:
+        ValueError: If the `key` is not valid.
+
+    """
 
     if key == "GHCNd metadata":
         res = _gen_ghcnd_meta(output)
@@ -54,9 +69,11 @@ def main():
     )
 
     args = parser.parse_args()
-    res = generate_download_script(args.key, args.output if args.output != "" else None)
-    if res is not None:
-        sys.stdout.write(res)
+    script = generate_download_script(
+        args.key, args.output if args.output != "" else None
+    )
+    if args.output == "":
+        sys.stdout.write(script)
 
 
 if __name__ == "__main__":

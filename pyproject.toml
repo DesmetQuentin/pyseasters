@@ -22,6 +22,10 @@ docs = [
   "sphinx-autodoc2",
 ]
 
+[project.scripts]
+generate_download_script = "pyseasters.commands.generate_download_script:main"
+preprocess_ghcnd_metadata = "pyseasters.commands.ghcnd.preprocess_metadata:main"
+
 [tool.isort]
 profile = "black"
 line_length = 88
