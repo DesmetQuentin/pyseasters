@@ -1,12 +1,10 @@
 """
 This module provides the `paths` constant -- and defines its dataclass, `PathConfig`.
 
-`paths`This module defines the paths variable with its dataclass, PathConfig.
-paths aims at providing the paths to the external data employed in this package.
-It adapts to the machine/network where the package is imported based on the information
-provided in paths.yaml, a personal configuration file that must be placed in
-pyseasters/constants/data.
-TODO: details
+`paths` aims at providing the paths to the external data employed in this package.
+It adapts to the session's machine/network based on the information provided in
+'paths.yaml', a personal configuration file that must be placed in
+`pyseasters/constants/data.`
 """
 
 import importlib.resources
@@ -15,7 +13,7 @@ import socket
 import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Union, Dict
+from typing import Dict, Union
 
 import yaml
 
@@ -27,7 +25,7 @@ log = logging.getLogger(__name__)
 def _parse_pathsyaml():
     """
     Return two dictionaries mapping machines and networks to root directories,
-    issued by reading and parsing paths.yaml.
+    issued by reading and parsing 'paths.yaml'.
     """
 
     machine_to_root, network_to_root = {}, {}
@@ -43,13 +41,15 @@ def _parse_pathsyaml():
                         if ttype == "machine":
                             if target in machine_to_root.keys():
                                 raise RuntimeError(
-                                    f"paths.yaml inconsistent: several paths found for machine '{target}'"
+                                    "paths.yaml inconsistent: several paths found for "
+                                    + f"machine '{target}'"
                                 )
                             machine_to_root[target] = Path(k)
                         elif ttype == "network":
                             if target in network_to_root.keys():
                                 raise RuntimeError(
-                                    f"paths.yaml inconsistent: several paths found for network '{target}'"
+                                    "paths.yaml inconsistent: several paths found for "
+                                    + f"network '{target}'"
                                 )
                             network_to_root[target] = Path(k)
                 else:
@@ -57,13 +57,15 @@ def _parse_pathsyaml():
                     if ttype == "machine":
                         if target in machine_to_root.keys():
                             raise RuntimeError(
-                                f"paths.yaml inconsistent: several paths found for machine '{target}'"
+                                "paths.yaml inconsistent: several paths found for "
+                                + f"machine '{target}'"
                             )
                         machine_to_root[target] = Path(k)
                     if ttype == "network":
                         if target in network_to_root.keys():
                             raise RuntimeError(
-                                f"paths.yaml inconsistent: several paths found for network '{target}'"
+                                "paths.yaml inconsistent: several paths found for "
+                                + f"network '{target}'"
                             )
                         network_to_root[target] = Path(k)
     except FileNotFoundError:
@@ -73,14 +75,12 @@ def _parse_pathsyaml():
 
 
 # Build dictionaries mapping machines and networks to root directories
-MACHINE_TO_ROOT: Dict[str, Path]
-NETWORK_TO_ROOT: Dict[str, Path]
-MACHINE_TO_ROOT, NETWORK_TO_ROOT = _parse_pathsyaml()
+_MACHINE_TO_ROOT, _NETWORK_TO_ROOT = _parse_pathsyaml()
 
 # Detect current machine and network
-CURRENT_MACHINE = socket.gethostname()
-CURRENT_NETWORK = subprocess.run(
-    f'nslookup {CURRENT_MACHINE} | grep Name | cut -d "." -f 2-',
+_CURRENT_MACHINE = socket.gethostname()
+_CURRENT_NETWORK = subprocess.run(
+    f'nslookup {_CURRENT_MACHINE} | grep Name | cut -d "." -f 2-',
     shell=True,
     check=True,
     capture_output=True,
@@ -90,38 +90,59 @@ CURRENT_NETWORK = subprocess.run(
 
 @dataclass
 class PathConfig:
+    """
+    Class to handle data access based on the session's machine/network
+    (takes no argument).
+
+    On instantiation, a `PathConfig` object attemps to assign its `root` attribute with
+    the data root path associated with the current session, based on the predefines
+    mappings parsed from the 'paths.yaml' file located in `pyseasters/constants/data/`.
+    If the current session's machine or network does not match any predefined data root
+    path, then the `PathConfig` object is considered not operational and a warning is
+    emitted to notify the user that no data will be accessible unless configured
+    manually (see the `manual_config()` method to override or define the data root path
+    explicitly).
+
+    Once operational, a `PathConfig` object provides plenty of paths to various data
+    under the data root directory, accessible via methods.
+    """
+
     root: Path = field(init=False)
     _dummy_root: Path = Path("/dummy/root")
 
     def __post_init__(self) -> None:
-        global MACHINE_TO_ROOT, NETWORK_TO_ROOT, CURRENT_MACHINE, CURRENT_NETWORK
+        global _MACHINE_TO_ROOT, _NETWORK_TO_ROOT, _CURRENT_MACHINE, _CURRENT_NETWORK
 
-        if CURRENT_MACHINE in MACHINE_TO_ROOT.keys():
-            self.root = MACHINE_TO_ROOT[CURRENT_MACHINE]
-            if CURRENT_NETWORK in NETWORK_TO_ROOT.keys():
+        if _CURRENT_MACHINE in _MACHINE_TO_ROOT.keys():
+            self.root = _MACHINE_TO_ROOT[_CURRENT_MACHINE]
+            if _CURRENT_NETWORK in _NETWORK_TO_ROOT.keys():
                 log.info(
                     "Found configuration matches for both this machine and network:"
                 )
                 log.info(
-                    f"With the machine '{CURRENT_MACHINE}': {MACHINE_TO_ROOT[CURRENT_MACHINE]}"
+                    f"With the machine '{_CURRENT_MACHINE}': "
+                    f"{_MACHINE_TO_ROOT[_CURRENT_MACHINE]}"
                 )
                 log.info(
-                    f"With the network '{CURRENT_NETWORK}': {NETWORK_TO_ROOT[CURRENT_NETWORK]}"
+                    f"With the network '{_CURRENT_NETWORK}': "
+                    + f"{_NETWORK_TO_ROOT[_CURRENT_NETWORK]}"
                 )
                 log.info("Prioritizing machine configuration.")
 
-        elif CURRENT_NETWORK in NETWORK_TO_ROOT.keys():
-            self.root = NETWORK_TO_ROOT[CURRENT_NETWORK]
+        elif _CURRENT_NETWORK in _NETWORK_TO_ROOT.keys():
+            self.root = _NETWORK_TO_ROOT[_CURRENT_NETWORK]
 
         else:
             self.root = self._dummy_root
 
             log.warning(
-                f"No default setting set for this machine ('{CURRENT_MACHINE}') or network ('{CURRENT_NETWORK}')."
+                f"No default setting set for this machine ('{_CURRENT_MACHINE}') "
+                + f"or network ('{_CURRENT_NETWORK}')."
             )
             log.warning("Attempting to access data will yield an error.")
             log.warning(
-                "Configure manually using `pyseasters.constants.pathconfig.paths.manual_config('/path/to/data/')"
+                "Configure manually using `pyseasters"
+                + ".constants.pathconfig.paths.manual_config('/path/to/data/')"
             )
 
     def is_operational(self) -> bool:
@@ -129,25 +150,35 @@ class PathConfig:
         return self.root != self._dummy_root
 
     def manual_config(self, root: Union[str, Path]) -> None:
-        """Manually set up the root directory for this session."""
+        """
+        Manually set up the data root directory for this session.
+
+        Args:
+            root: The path to use as root for data access.
+
+        Raises:
+            FileNotFoundError: If the provided path does not exist.
+        """
 
         root_path = Path(root).resolve()
         if not root_path.exists():
             raise FileNotFoundError(f"Provided directory '{root_path}' does not exist.")
 
-        if CURRENT_MACHINE in MACHINE_TO_ROOT.keys():
+        if _CURRENT_MACHINE in _MACHINE_TO_ROOT.keys():
             log.warning("Overriding existing settings for this machine.")
             log.info(
-                f"Previous settings: {CURRENT_MACHINE} {MACHINE_TO_ROOT[CURRENT_MACHINE]}"
+                f"Previous settings: {_CURRENT_MACHINE} "
+                + f"{_MACHINE_TO_ROOT[_CURRENT_MACHINE]}"
             )
-            log.info(f"     New settings: {CURRENT_MACHINE} {root_path}")
+            log.info(f"     New settings: {_CURRENT_MACHINE} {root_path}")
 
-        elif CURRENT_NETWORK in NETWORK_TO_ROOT.keys():
+        elif _CURRENT_NETWORK in _NETWORK_TO_ROOT.keys():
             log.warning("Overriding existing settings for this network.")
             log.info(
-                f"Previous settings: {CURRENT_NETWORK} {NETWORK_TO_ROOT[CURRENT_NETWORK]}"
+                f"Previous settings: {_CURRENT_NETWORK} "
+                + f"{_NETWORK_TO_ROOT[_CURRENT_NETWORK]}"
             )
-            log.info(f"     New settings: {CURRENT_NETWORK} {root_path}")
+            log.info(f"     New settings: {_CURRENT_NETWORK} {root_path}")
 
         self.root = root_path
 

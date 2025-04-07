@@ -31,7 +31,6 @@ import pandas as pd
 
 __all__ = ["COUNTRIES"]
 
-#: Pandas DataFrame containing ISO and FIPS codes associated with the countries considered for the extended Southeast Asian region.
 COUNTRIES: pd.DataFrame
 
 with importlib.resources.files("pyseasters.constants.data").joinpath(
