@@ -13,7 +13,7 @@ import socket
 import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, Union
+from typing import Union
 
 import yaml
 

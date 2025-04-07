@@ -43,4 +43,9 @@ autodoc2_packages = ["../pyseasters"]
 # autodoc2_render_plugin = "myst"  # produce apidocs file in myst
 autodoc2_hidden_objects = ["dunder", "private", "inherited"]
 # autodoc2_module_all_regexes = [r"my_package\..*"]  # only include what's in __all__
-autodoc2_hidden_regexes = [".*log"]
+autodoc2_hidden_regexes = [
+    ".*log",
+    ".*main",
+    "pyseasters.constants.countries.COUNTRIES",
+    "pyseasters.constants.pathconfig.paths",
+]

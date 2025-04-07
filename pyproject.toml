@@ -12,6 +12,7 @@ dev = [
   "flake8-pyproject",
   "mypy",
   "types-PyYAML",
+  "pandas.stubs",
   "pytest",
   "pytest-cov",
 ]
@@ -34,7 +35,7 @@ line_length = 88
 line-length = 88
 
 [tool.flake8]
-ignore = ["E501"]
+ignore = ["E501", "W503"]
 exclude = ["examples/*"]
 per-file-ignores = """
   */__init__.py: F401
