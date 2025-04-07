@@ -22,10 +22,14 @@ docs = [
   "myst-parser",
   "sphinx-autodoc2",
 ]
+scripts = [
+  "csvkit",
+]
 
 [project.scripts]
 generate_download_script = "pyseasters.commands.generate_download_script:main"
 preprocess_ghcnd_metadata = "pyseasters.commands.ghcnd.preprocess_metadata:main"
+preprocess_ghcnd_data = "pyseasters.commands.ghcnd.preprocess_data:main"
 
 [tool.isort]
 profile = "black"

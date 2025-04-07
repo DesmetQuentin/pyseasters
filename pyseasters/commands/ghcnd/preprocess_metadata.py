@@ -18,6 +18,11 @@ log = logging.getLogger(__name__)
 
 
 def _filter_countries(input: Union[str, Path], output: Union[str, Path]) -> None:
+    """
+    Filter input data by removing lines where the first column's first two characters
+    do not match any FIPS code of the global `COUNTRIES` constant.
+    """
+
     regex_pattern = f"^({'|'.join(COUNTRIES['FIPS'].to_list())})"
     command = f"awk '$1 ~ /{regex_pattern}/' {input} > {output}"
 
@@ -31,6 +36,8 @@ def _filter_countries(input: Union[str, Path], output: Union[str, Path]) -> None
 def _clean_columns(
     input: Union[str, Path], output: Union[str, Path], indices: List[int]
 ) -> None:
+    """Remove from input data the columns corresponding to indices (starts at 1)."""
+
     command = (
         f"cat {input} | tr -s ' ' | cut -d' ' --complement "
         + f"-f{','.join([str(i) for i in indices])} > {output}"
@@ -63,7 +70,7 @@ def preprocess_metadata() -> None:
         f"mv {paths.ghcnd() / buffer} {paths.ghcnd_inventory()}", shell=True, check=True
     )
 
-    log.info("Preprocessing completed for GHCNd data.")
+    log.info("Preprocessing completed for GHCNd metadata.")
 
 
 def main():
@@ -75,10 +82,14 @@ def main():
     )
     parser.parse_args()
 
-    response = input(
-        "This program modifies files in place. Are you sure you want to continue? "
-        + "(y/[n]): "
-    ).strip().lower()
+    response = (
+        input(
+            "This program modifies files in place. Are you sure you want to continue? "
+            + "(y/[n]): "
+        )
+        .strip()
+        .lower()
+    )
     if response not in ("y", "yes"):
         sys.stderr.write("Aborted by user.\n")
         sys.exit(0)

@@ -1,8 +1,8 @@
 from pathlib import Path
 from typing import Optional, Union
 
-from pyseasters.commands.ghcnd.parse_station_metadata import _parse_station_metadata
 from pyseasters.constants.pathconfig import paths
+from pyseasters.parsers.ghcnd import _parse_ghcnd_stations
 
 _STATIONS = "https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt"
 _INVENTORY = "https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-inventory.txt"
@@ -52,7 +52,7 @@ def _generate_main_script(
     """
 
     try:
-        stations = _parse_station_metadata(paths.ghcnd_stations()).iloc[:, 0].to_list()
+        stations = _parse_ghcnd_stations(paths.ghcnd_stations()).iloc[:, 0].to_list()
     except FileNotFoundError:
         raise FileNotFoundError(
             "GHCNd metadata files not found. Please download and preprocess metadata "

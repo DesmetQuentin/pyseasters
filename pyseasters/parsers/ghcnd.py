@@ -1,10 +1,17 @@
+from datetime import datetime
 from pathlib import Path
 from typing import Union
 
 import pandas as pd
 
 
-def _parse_station_metadata(file: Union[str, Path]) -> pd.DataFrame:
+def _parse_ghcnd_date(date: str) -> datetime:
+    """Parse GHCNd date format into a `datetime.datetime`."""
+    return datetime.strptime(date, "%Y-%m-%d")
+
+
+def _parse_ghcnd_stations(file: Union[str, Path]) -> pd.DataFrame:
+    """Parse the 'ghcnd-stations.txt' ASCII file into a `pd.DataFrame`."""
     colspecs = [
         (0, 11),
         (12, 20),
