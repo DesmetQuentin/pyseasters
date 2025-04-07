@@ -150,8 +150,7 @@ class PathConfig:
         return self.root != self._dummy_root
 
     def manual_config(self, root: Union[str, Path]) -> None:
-        """
-        Manually set up the data root directory for this session.
+        """Manually set up the data root directory for this session.
 
         Args:
             root: The path to use as root for data access.
