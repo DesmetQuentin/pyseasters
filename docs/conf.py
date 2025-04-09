@@ -19,6 +19,7 @@ extensions = [
     "autodoc2",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
+    "sphinx_copybutton",
 ]
 
 templates_path = ["_templates"]
@@ -44,8 +45,25 @@ autodoc2_packages = ["../pyseasters"]
 autodoc2_hidden_objects = ["dunder", "private", "inherited"]
 # autodoc2_module_all_regexes = [r"my_package\..*"]  # only include what's in __all__
 autodoc2_hidden_regexes = [
-    ".*log",
-    ".*main",
-    "pyseasters.constants.countries.COUNTRIES",
-    "pyseasters.constants.pathconfig.paths",
+    "pyseasters.*log",
+    "pyseasters.cli.*main",
+    "pyseasters.api.constants.countries.COUNTRIES",
+    "pyseasters.api.constants.paths.paths",
+    "pyseasters.api.utils.unit.ureg",
 ]
+autodoc2_index_template = """PySEASTERS Code Reference
+=========================
+
+.. autodoc2-docstring:: pyseasters
+   :allowtitles:
+
+.. toctree::
+   :titlesonly:
+
+   pyseasters/pyseasters.api
+   pyseasters/pyseasters.cli
+
+.. note::
+    This page contains auto-generated API reference documentation created with
+    `sphinx-autodoc2 <https://github.com/chrisjsewell/sphinx-autodoc2>`_.
+"""

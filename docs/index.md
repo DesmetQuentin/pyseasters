@@ -1,4 +1,4 @@
-# Welcome to PySEASTERS' documentation!
+# Welcome to PySEASTERS documentation!
 
 PySEASTERS is Python package providing a number of tools to support the SEASTERS scientific project.
 
@@ -9,5 +9,7 @@ This package is not entirely public and notably relies on several data and confi
 ```{toctree}
 :hidden:
 
+install
+contributing
 apidocs/index
 ```

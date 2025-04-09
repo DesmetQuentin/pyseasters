@@ -1,10 +1,10 @@
 """
-This module provides the `paths` constant -- and defines its dataclass, `PathConfig`.
+This module provides the ``paths`` constant -- and defines its dataclass, ``PathConfig``.
 
-`paths` aims at providing the paths to the external data employed in this package.
+``paths`` aims at providing the paths to the external data employed in this package.
 It adapts to the session's machine/network based on the information provided in
 'paths.yaml', a personal configuration file that must be placed in
-`pyseasters/constants/data.`
+'pyseasters/constants/data'.
 """
 
 import importlib.resources
@@ -30,7 +30,7 @@ def _parse_pathsyaml():
 
     machine_to_root, network_to_root = {}, {}
     try:
-        with importlib.resources.files("pyseasters.constants.data").joinpath(
+        with importlib.resources.files("pyseasters.api.constants.data").joinpath(
             "paths.yaml"
         ).open("r") as file:
             data = yaml.safe_load(file)
@@ -94,16 +94,16 @@ class PathConfig:
     Class to handle data access based on the session's machine/network
     (takes no argument).
 
-    On instantiation, a `PathConfig` object attemps to assign its `root` attribute with
-    the data root path associated with the current session, based on the predefines
-    mappings parsed from the 'paths.yaml' file located in `pyseasters/constants/data/`.
+    On instantiation, a ``PathConfig`` object attemps to assign its ``root`` attribute with
+    the data root path associated with the current session, based on the predefined
+    mappings parsed from the 'paths.yaml' file located in 'pyseasters/constants/data/'.
     If the current session's machine or network does not match any predefined data root
-    path, then the `PathConfig` object is considered not operational and a warning is
+    path, then the ``PathConfig`` object is considered not operational and a warning is
     emitted to notify the user that no data will be accessible unless configured
-    manually (see the `manual_config()` method to override or define the data root path
+    manually (see the ``manual_config()`` method to override or define the data root path
     explicitly).
 
-    Once operational, a `PathConfig` object provides plenty of paths to various data
+    Once operational, a ``PathConfig`` object provides plenty of paths to various data
     under the data root directory, accessible via methods.
     """
 
@@ -142,7 +142,7 @@ class PathConfig:
             log.warning("Attempting to access data will yield an error.")
             log.warning(
                 "Configure manually using `pyseasters"
-                + ".constants.pathconfig.paths.manual_config('/path/to/data/')"
+                + ".constants.paths.paths.manual_config('/path/to/data/')`"
             )
 
     def is_operational(self) -> bool:
@@ -194,7 +194,7 @@ class PathConfig:
         return self.ghcnd() / "ghcnd-inventory.txt"
 
     def ghcnd_file(self, station_id: str) -> Path:
-        """Return path to the GHCNd file associate with the station `station_id`."""
+        """Return path to the GHCNd file associate with the station ``station_id``."""
         return self.ghcnd() / f"{station_id}.csv"
 
 
