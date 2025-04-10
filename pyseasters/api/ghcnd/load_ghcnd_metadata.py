@@ -55,7 +55,7 @@ def load_ghcnd_inventory(
         col_names = ["station_id", "var", "start", "end"]
         inventory = pd.read_csv(
             paths.ghcnd_inventory(ext="txt"),
-            sep="\s+",  # noqa: W605
+            sep=r"\s+",
             header=None,
             names=col_names,
         )
