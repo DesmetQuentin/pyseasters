@@ -19,7 +19,7 @@ def generate_download_script(
     """Generate a download script in bash for the provided ``key``.
 
     Args:
-        key: The key associated with the desired download script (one in 'GHCNd',
+        key: The key associated with the desired download script (one of 'GHCNd',
         'GHCNd metadata').
 
         output: Optional path to an output file to write the script in.
@@ -35,8 +35,8 @@ def generate_download_script(
         script = _dispatcher[key](output)
     except KeyError:
         raise ValueError(
-            f"Provided key ('{key}') invalid. Please provide one in "
-            + f"{list(_dispatcher.keys())}."
+            f"Provided key ('{key}') invalid. Please provide one of "
+            + f"""{",".join(["'%s'" %(key) for key in _dispatcher.keys()])}."""
         )
 
     return script

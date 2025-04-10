@@ -40,18 +40,19 @@ def load_ghcnd_data(
     also be used to subset stations based on metadata attributes.
 
     Args:
-        var: The variable code to load: one in ``['PRCP', 'TMAX', 'TMIN', 'TAVG']``.
+        var: The variable code to load (one of 'PRCP', 'TMAX', 'TMIN', 'TAVG').
 
         filter_condition: An optional query string to filter the station metadata.
-            available attributes are in
-            ``['station_id', 'lon', 'lat', 'elevation', 'station_name']``.
+            Available attributes are 'station_id', 'lon', 'lat', 'elevation'
+            and 'station_name'.
 
         time_range: A tuple of (start_datetime, end_datetime) for selecting time
             coverage.
 
     Returns:
         A tuple:
-            - A DataFrame with station data as columns and dates as index.
+            - A DataFrame with station data as columns and dates as index, and with
+            the 'units' attribute indicating its units, i.e., "mm/day".
             - A DataFrame of metadata for the selected stations.
 
     Raises:

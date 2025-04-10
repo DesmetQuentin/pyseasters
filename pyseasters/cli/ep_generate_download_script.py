@@ -11,7 +11,7 @@ Entry point for the ``generate_download_script`` command. The command has a help
     Generate a download bash script for the desired data.
 
     positional arguments:
-    key                   key associated with the desired data (one in ['GHCNd', 'GHCNd metadata'])
+    key                   key associated with the desired data (one of 'GHCNd', 'GHCNd metadata')
 
     options:
     -h, --help            show this help message and exit
@@ -33,7 +33,7 @@ def main():
     parser.add_argument(
         "key",
         help="key associated with the desired data "
-        + f"(one in {list(_dispatcher.keys())})",
+        + f"""(one of {",".joint(["'%s'" %(key) for key in _dispatcher.keys()])})""",
     )
     parser.add_argument(
         "-o",
