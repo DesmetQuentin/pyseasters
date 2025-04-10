@@ -44,7 +44,7 @@ def load_gauge_data(
     filter_condition: Optional[str] = None,
     time_range: Optional[Tuple[datetime, datetime]] = None,
     usesources: List[str] = _gauge_data_sources,
-    unit: str = "mm day-1",
+    unit: str = "mm/day",
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
 
     all_data, all_metadata = [], []
@@ -55,7 +55,7 @@ def load_gauge_data(
             filter_condition=filter_condition,
             time_range=time_range,
         )
-        data = check_dataframe_unit(data, target_unit="mm/day")
+        data = check_dataframe_unit(data, target_unit=unit)
         all_data.append(data)
         all_metadata.append(metadata)
 
