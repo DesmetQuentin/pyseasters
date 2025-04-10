@@ -1,7 +1,7 @@
 import logging
 import subprocess
 from pathlib import Path
-from typing import List, Union
+from typing import List, Optional, Union
 
 from pyseasters.api import COUNTRIES, paths
 from pyseasters.cli._utils import require_tools
@@ -28,12 +28,46 @@ def _filter_countries(input: Union[str, Path], output: Union[str, Path]) -> None
         raise RuntimeError(f"awk error: {e}")
 
 
-@require_tools("cat", "tr", "cut")
+@require_tools("cat", "tr", "cut", "awk")
 def _clean_columns(
-    input: Union[str, Path], output: Union[str, Path], indices: List[int]
+    input: Union[str, Path],
+    output: Union[str, Path],
+    indices: List[int],
+    expected_ncol: Optional[int] = None,
 ) -> None:
-    """Remove from input data the columns corresponding to indices (starts at 1)."""
+    """
+    Remove from input data the columns corresponding to indices (starts at 1),
+    with an optional prior check about the expected number of columns.
+    """
 
+    # Check the number of columns (prevent ruining the files in case already ran)
+    if expected_ncol is not None:
+        try:
+            ncol = int(
+                subprocess.run(
+                    'awk -F" " "{print NF; exit}"' + f" {input}",
+                    shell=True,
+                    capture_output=True,
+                    text=True,
+                    check=True,
+                ).stdout.strip()
+            )
+            if ncol != expected_ncol:
+                log.warning(
+                    "Number of columns in %s different from expected. "
+                    + "Abort cleaning columns.",
+                    str(input),
+                )
+                log.debug(
+                    "Number of columns vs. expected: %i vs. %i",
+                    ncol,
+                    expected_ncol,
+                )
+                return
+        except subprocess.CalledProcessError as e:
+            raise RuntimeError(f"csvcut error: {e}")
+
+    # Actually clean columns
     command = (
         f"cat {input} | tr -s ' ' | cut -d' ' --complement "
         + f"-f{','.join([str(i) for i in indices])} > {output}"
@@ -61,7 +95,12 @@ def preprocess_ghcnd_metadata() -> None:
         f"mv {paths.ghcnd() / buffer} {paths.ghcnd_inventory()}", shell=True, check=True
     )
 
-    _clean_columns(paths.ghcnd_inventory(), paths.ghcnd() / buffer, [2, 3])
+    _clean_columns(
+        paths.ghcnd_inventory(),
+        paths.ghcnd() / buffer,
+        [2, 3],
+        expected_ncol=6,
+    )
     subprocess.run(
         f"mv {paths.ghcnd() / buffer} {paths.ghcnd_inventory()}", shell=True, check=True
     )

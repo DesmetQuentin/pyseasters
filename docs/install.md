@@ -61,6 +61,7 @@ Then the CLI also depends on several common system tools:
 - cat
 - tr
 - cut
+- wc
 
 You may check whether you have them already installed on your machine using the
 `which <tool>` command, and install them in case they are not.
