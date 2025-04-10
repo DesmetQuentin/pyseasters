@@ -7,13 +7,14 @@ The command has a help option:
 .. code-block:: console
 
     $ preprocess_ghcnd_metadata --help
-    usage: preprocess_ghcnd_metadata [-h] [-v]
+    usage: preprocess_ghcnd_metadata [-h] [-m] [-v]
 
-    Preprocess GHCNd metadata files (filter countries and remove duplicate columns).
+    Preprocess GHCNd metadata files (filter countries, remove duplicate columns and compress).
 
     options:
     -h, --help     show this help message and exit
-    -v, --verbose  Enable debug output
+    -m, --minimal  keep orignial csv format (default: convert to parquet)
+    -v, --verbose  enable debug output
 """
 
 import argparse
@@ -28,11 +29,17 @@ def main():
     parser = argparse.ArgumentParser(
         description=(
             "Preprocess GHCNd metadata files "
-            + "(filter countries and remove duplicate columns)."
+            + "(filter countries, remove duplicate columns and compress)."
         )
     )
     parser.add_argument(
-        "-v", "--verbose", action="store_true", help="Enable debug output"
+        "-m",
+        "--minimal",
+        action="store_true",
+        help="keep orignial csv format (default: convert to parquet)",
+    )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="enable debug output"
     )
     args = parser.parse_args()
 
@@ -49,7 +56,7 @@ def main():
         sys.exit(0)
 
     setup_cli_logging(logging.DEBUG if args.verbose else logging.INFO)
-    preprocess_ghcnd_metadata()
+    preprocess_ghcnd_metadata(to_parquet=not args.minimal)
 
 
 if __name__ == "__main__":

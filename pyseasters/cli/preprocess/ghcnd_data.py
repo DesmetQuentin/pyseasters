@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import List, Optional, Union
 
 from pyseasters.api import get_ghcnd_station_list, paths
+from pyseasters.api.ghcnd.load_ghcnd_data import _load_ghcnd_single_station
 from pyseasters.cli._utils import require_tools
 
 __all__ = ["preprocess_ghcnd_data"]
@@ -61,13 +62,22 @@ def _clean_columns(
     log.debug(f"Cleaning completed on {input}. Output saved to {output}.")
 
 
-def preprocess_ghcnd_data() -> None:
-    """Remove duplicate columns in GHCNd data files."""
+def _single_station_to_parquet(station_id: str) -> None:
+    """Convert a single station csv file for ``station_id`` into parquet."""
+    data = _load_ghcnd_single_station(station_id, from_parquet=False)
+    data.to_parquet(paths.ghcnd_file(station_id))
+    log.debug(
+        "Converted %s into parquet.", str(paths.ghcnd_file(station_id, ext="txt"))
+    )
 
-    buffer = "tmp.txt"
+
+def preprocess_ghcnd_data(to_parquet: bool = True) -> None:
+    """Remove duplicate columns and compress GHCNd data files."""
+
+    buffer = "tmp.csv"
 
     for station_id in get_ghcnd_station_list():
-        file = paths.ghcnd_file(station_id)
+        file = paths.ghcnd_file(station_id, ext="csv")
         if file.exists():
             _clean_columns(
                 file,
@@ -78,5 +88,8 @@ def preprocess_ghcnd_data() -> None:
             subprocess.run(
                 f"mv {paths.ghcnd() / buffer} {file}", shell=True, check=True
             )
+            if to_parquet:
+                _single_station_to_parquet(station_id)
+                subprocess.run(f"rm {file}", shell=True, check=True)
 
     log.info("GHCNd data preprocessing completed.")

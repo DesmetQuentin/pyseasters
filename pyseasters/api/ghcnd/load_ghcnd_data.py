@@ -10,21 +10,49 @@ from .load_ghcnd_metadata import get_ghcnd_metadata, load_ghcnd_stations
 __all__ = ["load_ghcnd_data"]
 
 
-def _load_ghcnd_single_data(
+def _load_ghcnd_single_station(
     station_id: str,
-    var: str = "PRCP",
+    from_parquet: bool = True,
 ) -> pd.DataFrame:
-    """Load ``var`` data from the single GHCNd file associated with ``station_id``."""
-    data = (
-        pd.read_csv(
-            paths.ghcnd_file(station_id),
-            usecols=["DATE", var],
+    """Load data from the single GHCNd file associated with ``station_id``."""
+
+    if from_parquet:
+        data = pd.read_parquet(paths.ghcnd_file(station_id))
+
+    else:
+        data = pd.read_csv(
+            paths.ghcnd_file(station_id, ext="csv"),
             index_col="DATE",
             parse_dates=["DATE"],
+        ).rename_axis("time")
+
+    return data
+
+
+def _load_ghcnd_single_var_station(
+    station_id: str,
+    var: str = "PRCP",
+    from_parquet: bool = True,
+) -> pd.DataFrame:
+    """Load ``var`` data from the single GHCNd file associated with ``station_id``."""
+
+    if from_parquet:
+        data = pd.read_parquet(
+            paths.ghcnd_file(station_id), columns=["time", var]
+        ).dropna()
+
+    else:
+        data = (
+            pd.read_csv(
+                paths.ghcnd_file(station_id, ext="csv"),
+                usecols=["DATE", var],
+                index_col="DATE",
+                parse_dates=["DATE"],
+            )
+            .dropna()
+            .rename_axis("time")
         )
-        .dropna()
-        .rename_axis("time")
-    )
+
     return data
 
 
@@ -32,6 +60,7 @@ def load_ghcnd_data(
     var: str = "PRCP",
     filter_condition: Optional[str] = None,
     time_range: Optional[Tuple[datetime, datetime]] = None,
+    from_parquet: bool = True,
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """Load daily GHCNd data and associated station metadata for a given variable.
 
@@ -48,6 +77,8 @@ def load_ghcnd_data(
 
         time_range: A tuple of (start_datetime, end_datetime) for selecting time
             coverage.
+
+        from_parquet: Whether the data to load is stored in the parquet format.
 
     Returns:
         A tuple:
@@ -82,7 +113,10 @@ def load_ghcnd_data(
 
     # Load data for the selected stations and refine the time range filtering
     data = pd.concat(
-        [_load_ghcnd_single_data(station, var=var) for station in metadata.index],
+        [
+            _load_ghcnd_single_var_station(station, var=var)
+            for station in metadata.index
+        ],
         axis=1,
     )
     if time_range is not None:

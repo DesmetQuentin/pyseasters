@@ -51,6 +51,7 @@ def _dispatcher(source: str, **kwargs) -> Tuple[pd.DataFrame, pd.DataFrame]:
             var=kwargs.get("var", "PRCP"),
             filter_condition=kwargs.get("filter_condition"),
             time_range=kwargs.get("time_range"),
+            from_parquet=kwargs.get("from_parquet", True),
         )
     else:
         raise ValueError(
@@ -70,6 +71,7 @@ def load_gauge_data(
     time_range: Optional[Tuple[datetime, datetime]] = None,
     usesources: List[str] = _gauge_data_sources,
     unit: str = "mm/day",
+    from_parquet: bool = True,
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """Load rain gauge data and associated station metadata from multiple sources.
 
@@ -94,6 +96,8 @@ def load_gauge_data(
 
         unit: The output unit for the rain gauge data DataFrame (default: 'mm/day').
 
+        from_parquet: Whether the data to load is stored in the parquet format.
+
     Returns:
         A tuple:
             - A DataFrame with station data as columns and dates as index, and with
@@ -111,6 +115,7 @@ def load_gauge_data(
             var="PRCP",
             filter_condition=filter_condition,
             time_range=time_range,
+            from_parquet=from_parquet,
         )
         data = check_dataframe_unit(data, target_unit=unit)
         all_data.append(data)

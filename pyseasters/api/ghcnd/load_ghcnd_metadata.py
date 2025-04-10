@@ -11,75 +11,74 @@ __all__ = [
     "get_ghcnd_metadata",
 ]
 
-_col_names_stations = ["station_id", "lat", "lon", "elevation", "station_name"]
-_col_names_inventory = ["station_id", "var", "start", "end"]
 
+def load_ghcnd_stations(from_parquet: bool = True) -> pd.DataFrame:
+    """Load the 'ghcnd-stations' ASCII/parquet file into a pandas DataFrame."""
 
-def load_ghcnd_stations() -> pd.DataFrame:
-    """Load the 'ghcnd-stations.txt' ASCII file into a pandas DataFrame."""
-    colspecs = [
-        (0, 11),
-        (12, 20),
-        (21, 30),
-        (31, 37),
-        (38, 85),
-    ]
+    if from_parquet:
+        stations = pd.read_parquet(paths.ghcnd_stations())
 
-    try:
+    else:
+        col_names = ["station_id", "lat", "lon", "elevation", "station_name"]
+        colspecs = [
+            (0, 11),
+            (12, 20),
+            (21, 30),
+            (31, 37),
+            (38, 85),
+        ]
         stations = pd.read_fwf(
-            paths.ghcnd_stations(), colspecs=colspecs, names=_col_names_stations
-        )
-    except FileNotFoundError:
-        raise FileNotFoundError(
-            "GHCNd station file not found. Please download and preprocess "
-            + "'ghcnd-stations.txt' before running this function."
-        )
-
-    stations = stations.set_index(_col_names_stations[0])
+            paths.ghcnd_stations(ext="txt"), colspecs=colspecs, names=col_names
+        ).set_index(col_names[0])
 
     return stations
 
 
-def get_ghcnd_station_list() -> list:
+def get_ghcnd_station_list(from_parquet: bool = True) -> list:
     """Return GHCNd station IDs as a list."""
-    return load_ghcnd_stations().index.to_list()
+    return load_ghcnd_stations(from_parquet=from_parquet).index.to_list()
 
 
-def load_ghcnd_inventory(usevars: Optional[List[str]] = None) -> pd.DataFrame:
+def load_ghcnd_inventory(
+    usevars: Optional[List[str]] = None,
+    from_parquet: bool = True,
+) -> pd.DataFrame:
     """
-    Load the 'ghcnd-inventory.txt' ASCII file into a pandas DataFrame,
+    Load the 'ghcnd-inventory' ASCII/parquet file into a pandas DataFrame,
     with optional variable filtering through ``usevars``.
     """
 
-    try:
+    if from_parquet:
+        inventory = pd.read_parquet(paths.ghcnd_inventory())
+
+    else:
+        col_names = ["station_id", "var", "start", "end"]
         inventory = pd.read_csv(
-            paths.ghcnd_inventory(),
+            paths.ghcnd_inventory(ext="txt"),
             sep="\s+",  # noqa: W605
             header=None,
-            names=_col_names_inventory,
-            index_col=_col_names_inventory[0],
-        )
-    except FileNotFoundError:
-        raise FileNotFoundError(
-            "GHCNd inventory file not found. Please download and preprocess "
-            + "'ghcnd-inventory.txt' before running this function."
+            names=col_names,
         )
 
     if usevars is not None:
         if len(usevars) == 0:
             raise ValueError("`usevars` cannot have zero length.")
 
-        inventory = inventory[inventory["var"].isin(usevars)].drop("var", axis=1)
+        inventory = (
+            inventory[inventory["var"].isin(usevars)]
+            .drop("var", axis=1)
+            .set_index(col_names[0])
+        )
 
     return inventory
 
 
-def get_ghcnd_metadata(var: str = "PRCP") -> pd.DataFrame:
+def get_ghcnd_metadata(var: str = "PRCP", from_parquet: bool = True) -> pd.DataFrame:
     """
     Concatenate station and inventory GHCNd files for the variable ``var`` into a pandas
     DataFrame.
     """
-    stations = load_ghcnd_stations()
-    inventory = load_ghcnd_inventory(usevars=[var])
+    stations = load_ghcnd_stations(from_parquet=from_parquet)
+    inventory = load_ghcnd_inventory(usevars=[var], from_parquet=from_parquet)
     metadata = pd.concat([stations, inventory], axis=1)
     return metadata

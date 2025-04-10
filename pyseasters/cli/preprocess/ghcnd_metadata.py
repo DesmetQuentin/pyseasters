@@ -3,7 +3,7 @@ import subprocess
 from pathlib import Path
 from typing import List, Optional, Union
 
-from pyseasters.api import COUNTRIES, paths
+from pyseasters.api import COUNTRIES, load_ghcnd_inventory, load_ghcnd_stations, paths
 from pyseasters.cli._utils import require_tools
 
 __all__ = ["preprocess_ghcnd_metadata"]
@@ -80,29 +80,55 @@ def _clean_columns(
         raise RuntimeError(f"cat/tr/cut error: {e}")
 
 
-def preprocess_ghcnd_metadata() -> None:
-    """Filter countries and remove duplicate columns in GHCNd metadata files."""
+def _stations_to_parquet() -> None:
+    """Convert the 'ghcnd-stations' ASCII file into parquet."""
+    data = load_ghcnd_stations(from_parquet=False)
+    data.to_parquet(paths.ghcnd_stations())
+    log.info("Converted %s into parquet.", str(paths.ghcnd_stations(ext="txt")))
+
+
+def _inventory_to_parquet() -> None:
+    """Convert the 'ghcnd-inventory' ASCII file into parquet."""
+    data = load_ghcnd_inventory(from_parquet=False)
+    data.to_parquet(paths.ghcnd_inventory())
+    log.info("Converted %s into parquet.", str(paths.ghcnd_inventory(ext="txt")))
+
+
+def preprocess_ghcnd_metadata(to_parquet: bool = True) -> None:
+    """Filter countries, remove duplicate columns and compress GHCNd metadata files."""
 
     buffer = "tmp.txt"
 
-    _filter_countries(paths.ghcnd_stations(), paths.ghcnd() / buffer)
+    _filter_countries(paths.ghcnd_stations(ext="txt"), paths.ghcnd() / buffer)
     subprocess.run(
-        f"mv {paths.ghcnd() / buffer} {paths.ghcnd_stations()}", shell=True, check=True
+        f"mv {paths.ghcnd() / buffer} {paths.ghcnd_stations(ext='txt')}",
+        shell=True,
+        check=True,
     )
 
-    _filter_countries(paths.ghcnd_inventory(), paths.ghcnd() / buffer)
+    _filter_countries(paths.ghcnd_inventory(ext="txt"), paths.ghcnd() / buffer)
     subprocess.run(
-        f"mv {paths.ghcnd() / buffer} {paths.ghcnd_inventory()}", shell=True, check=True
+        f"mv {paths.ghcnd() / buffer} {paths.ghcnd_inventory(ext='txt')}",
+        shell=True,
+        check=True,
     )
 
     _clean_columns(
-        paths.ghcnd_inventory(),
+        paths.ghcnd_inventory(ext="txt"),
         paths.ghcnd() / buffer,
         [2, 3],
         expected_ncol=6,
     )
     subprocess.run(
-        f"mv {paths.ghcnd() / buffer} {paths.ghcnd_inventory()}", shell=True, check=True
+        f"mv {paths.ghcnd() / buffer} {paths.ghcnd_inventory(ext='txt')}",
+        shell=True,
+        check=True,
     )
+
+    if to_parquet:
+        _stations_to_parquet()
+        subprocess.run(f"rm {paths.ghcnd_stations(ext='txt')}", shell=True, check=True)
+        _inventory_to_parquet()
+        subprocess.run(f"rm {paths.ghcnd_inventory(ext='txt')}", shell=True, check=True)
 
     log.info("GHCNd metadata preprocessing completed.")
