@@ -141,8 +141,7 @@ class PathConfig:
             )
             log.warning("Attempting to access data will yield an error.")
             log.warning(
-                "Configure manually using `pyseasters"
-                + ".constants.paths.paths.manual_config('/path/to/data/')`"
+                "Configure manually using `paths.manual_config('/path/to/data/')`"
             )
 
     def is_operational(self) -> bool:
