@@ -18,7 +18,7 @@ def _clean_columns(
     output: Union[str, Path],
     indices: List[int],
     expected_ncol: Optional[int] = None,
-) -> None:
+) -> bool:
     """
     Remove from input data the columns corresponding to indices (starts at 1),
     with an optional prior check about the expected number of columns.
@@ -47,7 +47,7 @@ def _clean_columns(
                     ncol,
                     expected_ncol,
                 )
-                return
+                return False
         except subprocess.CalledProcessError as e:
             raise RuntimeError(f"csvcut error: {e}")
 
@@ -60,6 +60,7 @@ def _clean_columns(
         raise RuntimeError(f"csvcut error: {e}")
 
     log.debug(f"Cleaning completed on {input}. Output saved to {output}.")
+    return True
 
 
 def _single_station_to_parquet(station_id: str) -> None:
@@ -79,15 +80,17 @@ def preprocess_ghcnd_data(to_parquet: bool = True) -> None:
     for station_id in get_ghcnd_station_list():
         file = paths.ghcnd_file(station_id, ext="csv")
         if file.exists():
-            _clean_columns(
+            done = _clean_columns(
                 file,
                 paths.ghcnd() / buffer,
                 [1, 3, 4, 5, 6],
                 expected_ncol=14,
             )
-            subprocess.run(
-                f"mv {paths.ghcnd() / buffer} {file}", shell=True, check=True
-            )
+            # If the file has actually changed
+            if done:
+                subprocess.run(
+                    f"mv {paths.ghcnd() / buffer} {file}", shell=True, check=True
+                )
             if to_parquet:
                 _single_station_to_parquet(station_id)
                 subprocess.run(f"rm {file}", shell=True, check=True)
