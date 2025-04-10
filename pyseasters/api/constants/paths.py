@@ -186,15 +186,15 @@ class PathConfig:
 
     def ghcnd_stations(self, ext: str = "parquet") -> Path:
         """Return path to the GHCNd station metadata file."""
-        return self.ghcnd() / ("ghcnd-stations." + ext)
+        return self.ghcnd() / "metadata" / ("ghcnd-stations." + ext)
 
     def ghcnd_inventory(self, ext: str = "parquet") -> Path:
         """Return path to the GHCNd inventory file."""
-        return self.ghcnd() / ("ghcnd-inventory." + ext)
+        return self.ghcnd() / "metadata" / ("ghcnd-inventory." + ext)
 
     def ghcnd_file(self, station_id: str, ext: str = "parquet") -> Path:
         """Return path to the GHCNd file associate with the station ``station_id``."""
-        return self.ghcnd() / (station_id + "." + ext)
+        return self.ghcnd() / "data" / (station_id + "." + ext)
 
 
 paths = PathConfig()
