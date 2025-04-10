@@ -25,6 +25,7 @@ dev = [
   "pandas.stubs",
   "pytest",
   "pytest-cov",
+  "pre-commit",
 ]
 docs = [
   "sphinx",
