@@ -33,7 +33,7 @@ def main():
     parser.add_argument(
         "key",
         help="key associated with the desired data "
-        + f"""(one of {",".joint(["'%s'" %(key) for key in _dispatcher.keys()])})""",
+        + f"""(one of {",".join(["'%s'" %(key) for key in _dispatcher.keys()])})""",
     )
     parser.add_argument(
         "-o",
