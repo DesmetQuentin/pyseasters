@@ -82,7 +82,7 @@ def _preprocess_single_station(
     file = paths.ghcnd_file(station_id, ext="csv")
     if not file.exists():
         log.warning(
-            "File %s not found. Abort preprocessing for this station", str(file)
+            "File %s not found. Abort preprocessing for this station.", str(file)
         )
         return
 
