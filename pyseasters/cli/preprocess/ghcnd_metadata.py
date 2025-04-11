@@ -59,7 +59,7 @@ def _clean_columns(
                     str(input),
                 )
                 log.debug(
-                    "Number of columns vs. expected: %i vs. %i",
+                    "(Number of columns vs. expected: %i vs. %i)",
                     ncol,
                     expected_ncol,
                 )

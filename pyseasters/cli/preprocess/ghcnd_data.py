@@ -43,7 +43,7 @@ def _clean_columns(
                     str(input),
                 )
                 log.debug(
-                    "Number of columns vs. expected: %i vs. %i",
+                    "(Number of columns vs. expected: %i vs. %i)",
                     ncol,
                     expected_ncol,
                 )
@@ -99,5 +99,9 @@ def preprocess_ghcnd_data(to_parquet: bool = True) -> None:
             if to_parquet:
                 _single_station_to_parquet(station_id)
                 subprocess.run(f"rm {file}", shell=True, check=True)
+        else:
+            log.warning(
+                "File %s not found. Abort preprocessing for this station", str(file)
+            )
 
     log.info("GHCNd data preprocessing completed.")
