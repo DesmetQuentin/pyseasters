@@ -21,6 +21,7 @@ Entry point for the ``preprocess_ghcnd_data`` command. The command has a help op
 import argparse
 import logging
 import sys
+from typing import Optional
 
 from ._utils import setup_cli_logging
 from .preprocess import preprocess_ghcnd_data
@@ -36,6 +37,13 @@ def main():
         "--minimal",
         action="store_true",
         help="keep orignial csv format (default: convert to parquet)",
+    )
+    parser.add_argument(
+        "-n",
+        "--ntasks",
+        type=Optional[int],
+        default=None,
+        help="number of tasks to run in parallel (default: auto)",
     )
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="enable debug output"
@@ -72,7 +80,7 @@ def main():
         if args.verbose
         else (logging.INFO if not args.silent else logging.WARNING)
     )
-    preprocess_ghcnd_data(to_parquet=not args.minimal)
+    preprocess_ghcnd_data(ntasks=args.ntasks, to_parquet=not args.minimal)
 
 
 if __name__ == "__main__":

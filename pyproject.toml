@@ -12,7 +12,7 @@ dependencies = [
   "pint",
   "pyyaml",
   "pyarrow",
-  "dask",
+  "dask[distributed]",
 ]
 
 [project.optional-dependencies]

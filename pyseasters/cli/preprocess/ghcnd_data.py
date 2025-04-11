@@ -1,9 +1,10 @@
 import logging
 import subprocess
 from pathlib import Path
-from typing import List, Optional, Union
+from typing import List, Optional
 
 from dask import compute, delayed
+from dask.distributed import Client, LocalCluster
 
 from pyseasters.api import load_ghcnd_inventory, paths
 from pyseasters.api.ghcnd.load_ghcnd_data import _load_ghcnd_single_station
@@ -16,8 +17,8 @@ log = logging.getLogger(__name__)
 
 @require_tools("csvcut", "wc")
 def _clean_columns(
-    input: Union[str, Path],
-    output: Union[str, Path],
+    input: Path,
+    output: Path,
     indices: List[int],
     expected_ncol: Optional[int] = None,
 ) -> bool:
@@ -42,10 +43,11 @@ def _clean_columns(
                 log.warning(
                     "Number of columns in %s different from expected. "
                     + "Abort cleaning columns.",
-                    str(input),
+                    input.stem,
                 )
                 log.debug(
-                    "(Number of columns vs. expected: %i vs. %i)",
+                    "[%s] Number of columns vs. expected: %i vs. %i",
+                    input.stem,
                     ncol,
                     expected_ncol,
                 )
@@ -82,7 +84,7 @@ def _preprocess_single_station(
     file = paths.ghcnd_file(station_id, ext="csv")
     if not file.exists():
         log.warning(
-            "File %s not found. Abort preprocessing for this station", str(file)
+            "File %s not found. Abort preprocessing for this station.", str(file)
         )
         return
 
@@ -102,7 +104,9 @@ def _preprocess_single_station(
         subprocess.run(f"rm {file}", shell=True, check=True)
 
 
-def preprocess_ghcnd_data(to_parquet: bool = True) -> None:
+def preprocess_ghcnd_data(
+    ntasks: Optional[int] = None, to_parquet: bool = True
+) -> None:
     """Remove duplicate columns and compress GHCNd data files."""
 
     inventory = load_ghcnd_inventory()
@@ -110,10 +114,23 @@ def preprocess_ghcnd_data(to_parquet: bool = True) -> None:
         k: len(v) * 2 + 6 for k, v in inventory.groupby(level=0).groups.items()
     }
 
+    cluster = (
+        LocalCluster()
+        if ntasks is None
+        else LocalCluster(n_workers=ntasks, threads_per_worker=1)
+    )
+    client = Client(cluster)
     tasks = [
         _preprocess_single_station(station_id, expected_ncol, to_parquet=to_parquet)
         for station_id, expected_ncol in station_to_ncol.items()
     ]
 
-    compute(*tasks)
+    try:
+        log.info("Dask cluster is running.")
+        compute(*tasks)
+    finally:
+        client.close()
+        cluster.close()
+        log.info("Dask cluster has been properly shut down.")
+
     log.info("GHCNd data preprocessing completed.")
