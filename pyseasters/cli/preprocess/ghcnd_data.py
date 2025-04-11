@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import List, Optional
 
 from dask import compute, delayed
+from dask.distributed import Client, LocalCluster
 
 from pyseasters.api import load_ghcnd_inventory, paths
 from pyseasters.api.ghcnd.load_ghcnd_data import _load_ghcnd_single_station
@@ -103,7 +104,9 @@ def _preprocess_single_station(
         subprocess.run(f"rm {file}", shell=True, check=True)
 
 
-def preprocess_ghcnd_data(to_parquet: bool = True) -> None:
+def preprocess_ghcnd_data(
+    ntasks: Optional[int] = None, to_parquet: bool = True
+) -> None:
     """Remove duplicate columns and compress GHCNd data files."""
 
     inventory = load_ghcnd_inventory()
@@ -111,10 +114,23 @@ def preprocess_ghcnd_data(to_parquet: bool = True) -> None:
         k: len(v) * 2 + 6 for k, v in inventory.groupby(level=0).groups.items()
     }
 
+    cluster = (
+        LocalCluster()
+        if ntasks is None
+        else LocalCluster(n_workers=ntasks, threads_per_worker=1)
+    )
+    client = Client(cluster)
     tasks = [
         _preprocess_single_station(station_id, expected_ncol, to_parquet=to_parquet)
         for station_id, expected_ncol in station_to_ncol.items()
     ]
 
-    compute(*tasks)
+    try:
+        log.info("Dask cluster is running.")
+        compute(*tasks)
+    finally:
+        client.close()
+        cluster.close()
+        log.info("Dask cluster has been properly shut down.")
+
     log.info("GHCNd data preprocessing completed.")
