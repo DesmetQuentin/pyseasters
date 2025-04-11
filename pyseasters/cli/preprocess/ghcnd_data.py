@@ -79,7 +79,7 @@ def preprocess_ghcnd_data(to_parquet: bool = True) -> None:
     stations = get_ghcnd_station_list()
     inventory = load_ghcnd_inventory()
     station_to_ncol = {
-        k: len(v) + 6 for k, v in inventory.groupby(level=0).groups.items()
+        k: len(v) * 2 + 6 for k, v in inventory.groupby(level=0).groups.items()
     }
 
     for station_id in stations:
