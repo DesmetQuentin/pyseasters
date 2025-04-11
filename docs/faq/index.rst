@@ -1,5 +1,5 @@
-Q & A
-=====
+Frequently asked questions
+==========================
 
 Some questions and answers.
 

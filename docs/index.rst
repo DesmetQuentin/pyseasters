@@ -17,5 +17,5 @@ scientific project.
     user_guide/index
     apidocs/index
     development/index
-    qa/index
+    faq/index
     release_notes/index
