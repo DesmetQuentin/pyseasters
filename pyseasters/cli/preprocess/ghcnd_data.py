@@ -3,7 +3,9 @@ import subprocess
 from pathlib import Path
 from typing import List, Optional, Union
 
-from pyseasters.api import get_ghcnd_station_list, load_ghcnd_inventory, paths
+from dask import compute, delayed
+
+from pyseasters.api import load_ghcnd_inventory, paths
 from pyseasters.api.ghcnd.load_ghcnd_data import _load_ghcnd_single_station
 from pyseasters.cli._utils import require_tools
 
@@ -72,36 +74,46 @@ def _single_station_to_parquet(station_id: str) -> None:
     )
 
 
+@delayed
+def _preprocess_single_station(
+    station_id: str, expected_ncol: int, to_parquet: bool = True
+) -> None:
+    """Dask task preprocessing a single station file."""
+    file = paths.ghcnd_file(station_id, ext="csv")
+    if not file.exists():
+        log.warning(
+            "File %s not found. Abort preprocessing for this station", str(file)
+        )
+        return
+
+    done = _clean_columns(
+        file,
+        paths.ghcnd() / "data" / "tmp.csv",
+        [1, 3, 4, 5, 6],
+        expected_ncol=expected_ncol,
+    )
+    # If the file has actually changed
+    if done:
+        subprocess.run(
+            f"mv {paths.ghcnd() / "data" / "tmp.csv"} {file}", shell=True, check=True
+        )
+    if to_parquet:
+        _single_station_to_parquet(station_id)
+        subprocess.run(f"rm {file}", shell=True, check=True)
+
+
 def preprocess_ghcnd_data(to_parquet: bool = True) -> None:
     """Remove duplicate columns and compress GHCNd data files."""
 
-    buffer = "tmp.csv"
-    stations = get_ghcnd_station_list()
     inventory = load_ghcnd_inventory()
     station_to_ncol = {
         k: len(v) * 2 + 6 for k, v in inventory.groupby(level=0).groups.items()
     }
 
-    for station_id in stations:
-        file = paths.ghcnd_file(station_id, ext="csv")
-        if file.exists():
-            done = _clean_columns(
-                file,
-                paths.ghcnd() / buffer,
-                [1, 3, 4, 5, 6],
-                expected_ncol=station_to_ncol[station_id],
-            )
-            # If the file has actually changed
-            if done:
-                subprocess.run(
-                    f"mv {paths.ghcnd() / buffer} {file}", shell=True, check=True
-                )
-            if to_parquet:
-                _single_station_to_parquet(station_id)
-                subprocess.run(f"rm {file}", shell=True, check=True)
-        else:
-            log.warning(
-                "File %s not found. Abort preprocessing for this station", str(file)
-            )
+    tasks = [
+        _preprocess_single_station(station_id, expected_ncol, to_parquet=to_parquet)
+        for station_id, expected_ncol in station_to_ncol.items()
+    ]
 
+    compute(*tasks)
     log.info("GHCNd data preprocessing completed.")
