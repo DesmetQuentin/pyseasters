@@ -6,7 +6,7 @@ Entry point for the ``preprocess_ghcnd_data`` command. The command has a help op
 .. code-block:: console
 
     $ preprocess_ghcnd_data --help
-    usage: preprocess_ghcnd_data [-h] [-m] [-v]
+    usage: preprocess_ghcnd_data [-h] [-m] [-v] [-s]
 
     Preprocess GHCNd data files (remove duplicate columns and compress).
 
@@ -14,6 +14,7 @@ Entry point for the ``preprocess_ghcnd_data`` command. The command has a help op
     -h, --help     show this help message and exit
     -m, --minimal  keep orignial csv format (default: convert to parquet)
     -v, --verbose  enable debug output
+    -s, --silent   disable info output (priority to --verbose)
 """
 
 import argparse
@@ -38,6 +39,12 @@ def main():
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="enable debug output"
     )
+    parser.add_argument(
+        "-s",
+        "--silent",
+        action="store_true",
+        help="disable info output (priority to --verbose)",
+    )
     args = parser.parse_args()
 
     response = (
@@ -52,7 +59,11 @@ def main():
         sys.stderr.write("Aborted by user.\n")
         sys.exit(0)
 
-    setup_cli_logging(logging.DEBUG if args.verbose else logging.INFO)
+    setup_cli_logging(
+        logging.DEBUG
+        if args.verbose
+        else (logging.INFO if not args.silent else logging.WARNING)
+    )
     preprocess_ghcnd_data(to_parquet=not args.minimal)
 
 
