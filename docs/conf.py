@@ -29,8 +29,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "sphinx_rtd_theme"
-# html_theme = 'sphinx_book_theme'
+html_theme = "pydata_sphinx_theme"
 html_static_path = ["_static"]
 
 
@@ -51,7 +50,7 @@ autodoc2_hidden_regexes = [
     "pyseasters.api.constants.paths.paths",
     "pyseasters.api.utils.unit.ureg",
 ]
-autodoc2_index_template = """PySEASTERS Code Reference
+autodoc2_index_template = """API Reference
 =========================
 
 .. autodoc2-docstring:: pyseasters

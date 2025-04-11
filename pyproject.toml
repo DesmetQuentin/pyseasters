@@ -29,7 +29,7 @@ dev = [
 ]
 docs = [
   "sphinx",
-  "sphinx-rtd-theme",
+  "pydata-sphinx-theme",
   "myst-parser",
   "sphinx-autodoc2",
   "sphinx-copybutton",
