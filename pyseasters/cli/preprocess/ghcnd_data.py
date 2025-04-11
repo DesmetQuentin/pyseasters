@@ -1,7 +1,7 @@
 import logging
 import subprocess
 from pathlib import Path
-from typing import List, Optional, Union
+from typing import List, Optional
 
 from dask import compute, delayed
 
@@ -16,8 +16,8 @@ log = logging.getLogger(__name__)
 
 @require_tools("csvcut", "wc")
 def _clean_columns(
-    input: Union[str, Path],
-    output: Union[str, Path],
+    input: Path,
+    output: Path,
     indices: List[int],
     expected_ncol: Optional[int] = None,
 ) -> bool:
@@ -42,10 +42,11 @@ def _clean_columns(
                 log.warning(
                     "Number of columns in %s different from expected. "
                     + "Abort cleaning columns.",
-                    str(input),
+                    input.stem,
                 )
                 log.debug(
-                    "(Number of columns vs. expected: %i vs. %i)",
+                    "[%s] Number of columns vs. expected: %i vs. %i",
+                    input.stem,
                     ncol,
                     expected_ncol,
                 )
