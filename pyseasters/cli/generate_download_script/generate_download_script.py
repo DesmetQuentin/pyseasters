@@ -36,7 +36,7 @@ def generate_download_script(
     except KeyError:
         raise ValueError(
             f"Provided key ('{key}') invalid. Please provide one of "
-            + f"""{",".join(["'%s'" %(key) for key in _dispatcher.keys()])}."""
+            + f"""{",".join(["'%s'" % (key) for key in _dispatcher.keys()])}."""
         )
 
     return script

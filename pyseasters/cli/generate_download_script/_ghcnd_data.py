@@ -26,7 +26,7 @@ def generate_ghcnd_data_download_script(
     script = f"""#!/bin/bash
 
 for station in {' '.join(stations)}; do
-    wget {DATA %('${station}')}
+    wget {DATA % ('${station}')}
 done
 """  # noqa: E272, E702
 

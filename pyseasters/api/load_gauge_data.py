@@ -19,7 +19,7 @@ def _renamer(source: str) -> Callable[[str], str]:
     """
 
     def mapper(station_id):
-        return f"{source}:{station_id}"
+        return f"{source}:{station_id}"  # noqa: E231
 
     return mapper
 
@@ -56,7 +56,7 @@ def _dispatcher(source: str, **kwargs) -> Tuple[pd.DataFrame, pd.DataFrame]:
     else:
         raise ValueError(
             f"'{source}' is not a valid source. Please provide one of "
-            + f"""{",".join(["'%s'" %(key) for key in _gauge_data_sources])}."""
+            + f"""{",".join(["'%s'" % (key) for key in _gauge_data_sources])}."""
         )
 
     # Add the source as a prefix to the station ID
