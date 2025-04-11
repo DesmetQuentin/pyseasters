@@ -111,8 +111,6 @@ class PathConfig:
     _dummy_root: Path = Path("/dummy/root")
 
     def __post_init__(self) -> None:
-        global _MACHINE_TO_ROOT, _NETWORK_TO_ROOT, _CURRENT_MACHINE, _CURRENT_NETWORK
-
         if _CURRENT_MACHINE in _MACHINE_TO_ROOT.keys():
             self.root = _MACHINE_TO_ROOT[_CURRENT_MACHINE]
             if _CURRENT_NETWORK in _NETWORK_TO_ROOT.keys():
