@@ -3,6 +3,7 @@ import subprocess
 from pathlib import Path
 from typing import List, Optional
 
+import pandas as pd
 from dask import compute, delayed
 from dask.distributed import Client, LocalCluster
 
@@ -20,6 +21,7 @@ def _clean_columns(
     input: Path,
     output: Path,
     indices: List[int],
+    names: List[str],  # used in case manual cleaning is needed
     expected_ncol: Optional[int] = None,
 ) -> bool:
     """
@@ -39,10 +41,11 @@ def _clean_columns(
                     check=True,
                 ).stdout.strip()
             )
-            if ncol != expected_ncol:
+            if ncol == expected_ncol:
+                need_manual_cleaning = False
+            else:
                 log.warning(
-                    "Number of columns in %s different from expected. "
-                    + "Abort cleaning columns.",
+                    "Number of columns in %s different from expected.",
                     input.stem,
                 )
                 log.debug(
@@ -51,17 +54,28 @@ def _clean_columns(
                     ncol,
                     expected_ncol,
                 )
-                return False
+                if ncol < expected_ncol:
+                    log.warning("Abort cleaning columns.")
+                    return False
+                elif ncol > expected_ncol:
+                    log.info("Attempt cleaning columns manually.")
+                    need_manual_cleaning = True
         except subprocess.CalledProcessError as e:
             raise RuntimeError(f"csvcut error: {e}")
 
     # Actually clean columns
-    command = f"csvcut -C {','.join([str(i) for i in indices])} {input} > {output}"
+    if need_manual_cleaning:
+        df = pd.read_csv(input)
+        df.drop(columns=names, inplace=True)
+        df.to_csv(output, index=False)
 
-    try:
-        subprocess.run(command, shell=True, check=True)
-    except subprocess.CalledProcessError as e:
-        raise RuntimeError(f"csvcut error: {e}")
+    else:
+        command = f"csvcut -C {','.join([str(i) for i in indices])} {input} > {output}"
+
+        try:
+            subprocess.run(command, shell=True, check=True)
+        except subprocess.CalledProcessError as e:
+            raise RuntimeError(f"csvcut error: {e}")
 
     log.debug(f"Cleaning completed on {input}. Output saved to {output}.")
     return True
@@ -92,6 +106,7 @@ def _preprocess_single_station(
         file,
         paths.ghcnd() / "data" / f"tmp-{station_id}.csv",
         [1, 3, 4, 5, 6],
+        ["STATION", "LONGITUDE", "LATITUDE", "ELEVATION", "NAME"],
         expected_ncol=expected_ncol,
     )
     # If the file has actually changed
