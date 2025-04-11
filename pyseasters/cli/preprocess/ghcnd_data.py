@@ -88,14 +88,14 @@ def _preprocess_single_station(
 
     done = _clean_columns(
         file,
-        paths.ghcnd() / "data" / "tmp.csv",
+        paths.ghcnd() / "data" / f"tmp-{station_id}.csv",
         [1, 3, 4, 5, 6],
         expected_ncol=expected_ncol,
     )
     # If the file has actually changed
     if done:
         subprocess.run(
-            f"mv {paths.ghcnd() / "data" / "tmp.csv"} {file}", shell=True, check=True
+            f"mv {paths.ghcnd() / 'data' / ('tmp-%s.csv' % (station_id))} {file}", shell=True, check=True
         )
     if to_parquet:
         _single_station_to_parquet(station_id)
