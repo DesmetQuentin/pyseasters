@@ -73,9 +73,9 @@ def load_ghcnd_inventory(
 
     # Set index/multiindex
     if multiindex and ((usevars is None) or (len(usevars) > 1)):
-        inventory.set_index(["station_id", "var"])
+        inventory.set_index(["station_id", "var"], inplace=True)
     elif (usevars is not None) and (len(usevars) == 1):
-        inventory.set_index("station_id")
+        inventory.set_index("station_id", inplace=True)
 
     return inventory
 
