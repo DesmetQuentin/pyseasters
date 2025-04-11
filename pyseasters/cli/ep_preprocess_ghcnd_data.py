@@ -21,7 +21,6 @@ Entry point for the ``preprocess_ghcnd_data`` command. The command has a help op
 import argparse
 import logging
 import sys
-from typing import Optional
 
 from ._utils import setup_cli_logging
 from .preprocess import preprocess_ghcnd_data
@@ -41,7 +40,7 @@ def main():
     parser.add_argument(
         "-n",
         "--ntasks",
-        type=Optional[int],
+        type=int,
         default=None,
         help="number of tasks to run in parallel (default: auto)",
     )
