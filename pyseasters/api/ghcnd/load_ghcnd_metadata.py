@@ -42,15 +42,16 @@ def get_ghcnd_station_list(from_parquet: bool = True) -> list:
 def load_ghcnd_inventory(
     usevars: Optional[List[str]] = None,
     from_parquet: bool = True,
+    multiindex: bool = True,
 ) -> pd.DataFrame:
     """
     Load the 'ghcnd-inventory' ASCII/parquet file into a pandas DataFrame,
     with optional variable filtering through ``usevars``.
     """
 
+    # Load
     if from_parquet:
         inventory = pd.read_parquet(paths.ghcnd_inventory())
-
     else:
         col_names = ["station_id", "var", "start", "end"]
         inventory = pd.read_csv(
@@ -60,15 +61,21 @@ def load_ghcnd_inventory(
             names=col_names,
         )
 
+    # Select variables in ``usevars``
     if usevars is not None:
         if len(usevars) == 0:
             raise ValueError("`usevars` cannot have zero length.")
 
-        inventory = (
-            inventory[inventory["var"].isin(usevars)]
-            .drop("var", axis=1)
-            .set_index(col_names[0])
-        )
+        inventory = inventory[inventory["var"].isin(usevars)]
+
+        if len(usevars) == 1:
+            inventory = inventory.drop("var", axis=1)
+
+    # Set index/multiindex
+    if multiindex and ((usevars is None) or (len(usevars) > 1)):
+        inventory.set_index(["station_id", "var"])
+    elif (usevars is not None) and (len(usevars) == 1):
+        inventory.set_index("station_id")
 
     return inventory
 

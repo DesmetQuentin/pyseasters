@@ -3,7 +3,7 @@ import subprocess
 from pathlib import Path
 from typing import List, Optional, Union
 
-from pyseasters.api import get_ghcnd_station_list, paths
+from pyseasters.api import get_ghcnd_station_list, load_ghcnd_inventory, paths
 from pyseasters.api.ghcnd.load_ghcnd_data import _load_ghcnd_single_station
 from pyseasters.cli._utils import require_tools
 
@@ -76,15 +76,20 @@ def preprocess_ghcnd_data(to_parquet: bool = True) -> None:
     """Remove duplicate columns and compress GHCNd data files."""
 
     buffer = "tmp.csv"
+    stations = get_ghcnd_station_list()
+    inventory = load_ghcnd_inventory()
+    station_to_ncol = {
+        k: len(v) + 6 for k, v in inventory.groupby(level=0).groups.items()
+    }
 
-    for station_id in get_ghcnd_station_list():
+    for station_id in stations:
         file = paths.ghcnd_file(station_id, ext="csv")
         if file.exists():
             done = _clean_columns(
                 file,
                 paths.ghcnd() / buffer,
                 [1, 3, 4, 5, 6],
-                expected_ncol=14,
+                expected_ncol=station_to_ncol[station_id],
             )
             # If the file has actually changed
             if done:

@@ -91,7 +91,7 @@ def _stations_to_parquet() -> None:
 
 def _inventory_to_parquet() -> None:
     """Convert the 'ghcnd-inventory' ASCII file into parquet."""
-    data = load_ghcnd_inventory(from_parquet=False)
+    data = load_ghcnd_inventory(from_parquet=False, multiindex=False)
     data.to_parquet(paths.ghcnd_inventory())
     log.info("Converted %s into parquet.", str(paths.ghcnd_inventory(ext="txt")))
 
