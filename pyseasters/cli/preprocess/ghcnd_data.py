@@ -97,7 +97,9 @@ def _preprocess_single_station(
     # If the file has actually changed
     if done:
         subprocess.run(
-            f"mv {paths.ghcnd() / 'data' / ('tmp-%s.csv' % (station_id))} {file}", shell=True, check=True
+            f"mv {paths.ghcnd() / 'data' / ('tmp-%s.csv' % (station_id))} {file}",
+            shell=True,
+            check=True,
         )
     if to_parquet:
         _single_station_to_parquet(station_id)
