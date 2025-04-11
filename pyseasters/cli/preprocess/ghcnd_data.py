@@ -68,7 +68,7 @@ def _single_station_to_parquet(station_id: str) -> None:
     data = _load_ghcnd_single_station(station_id, from_parquet=False)
     data.to_parquet(paths.ghcnd_file(station_id))
     log.debug(
-        "Converted %s into parquet.", str(paths.ghcnd_file(station_id, ext="txt"))
+        "Converted %s into parquet.", str(paths.ghcnd_file(station_id, ext="csv"))
     )
 
 
