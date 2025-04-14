@@ -83,6 +83,11 @@ def setup_cli_logging(level: int = logging.INFO) -> None:
 
 @dataclass
 class LoggingStack:
+    """
+    Class thought to be used in dask tasks, stacking logging statements
+    for printing later.
+    """
+
     name: str
     messages: List[Tuple[str, ...]] = field(default_factory=list)
 
