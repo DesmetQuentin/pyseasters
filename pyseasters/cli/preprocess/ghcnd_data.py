@@ -1,7 +1,7 @@
 import logging
 import subprocess
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Union
 
 import pandas as pd
 from dask import compute, delayed
@@ -22,7 +22,7 @@ def _clean_columns(
     output: Path,
     indices: List[int],
     names: List[str],  # used in case manual cleaning is needed
-    logger: LoggingStack,
+    logger: Union[LoggingStack, logging.Logger],
     expected_ncol: Optional[int] = None,
 ) -> bool:
     """
@@ -78,7 +78,9 @@ def _clean_columns(
     return True
 
 
-def _single_station_to_parquet(station_id: str, logger: LoggingStack) -> None:
+def _single_station_to_parquet(
+    station_id: str, logger: Union[LoggingStack, logging.Logger]
+) -> None:
     """Convert a single station csv file for ``station_id`` into parquet."""
     data = _load_ghcnd_single_station(station_id, from_parquet=False)
     data.to_parquet(paths.ghcnd_file(station_id))
