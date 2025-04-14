@@ -86,7 +86,7 @@ def capture_logging(func: Callable) -> Callable:
 
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        log = func.__module__
+        log = logging.getLogger(func.__module__)
         log_stream = StringIO()
         temp_handler = logging.StreamHandler(log_stream)
         temp_handler.setLevel(logging.DEBUG)
