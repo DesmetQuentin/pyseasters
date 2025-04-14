@@ -102,6 +102,8 @@ def _preprocess_single_station(
             "File %s not found. Abort preprocessing for this station.", str(file)
         )
         return
+    log.debug("Debug statement: youhou")
+    log.info("Info statement")
 
     done = _clean_columns(
         file,
@@ -149,10 +151,13 @@ def preprocess_ghcnd_data(
     finally:
         client.close()
         cluster.close()
-        for log_output in log_outputs:
-            for line in log_outputs.split("\n"):
-                [level, message] = line.strip().split(": ")
-                eval(f"log.{level.lower()}('{message}')")
         log.info("Dask cluster has been properly shut down.")
+        log.info("Logging statements are printed below.")
+        for log_output in log_outputs:
+            for line in log_output.split("\n"):
+                if not line.strip():
+                    continue
+                level, message = line.strip().split(": ", 1)
+                getattr(log, level.lower())(message)
 
     log.info("GHCNd data preprocessing completed.")

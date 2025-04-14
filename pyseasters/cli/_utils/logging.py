@@ -90,10 +90,14 @@ def capture_logging(func: Callable) -> Callable:
         log_stream = StringIO()
         temp_handler = logging.StreamHandler(log_stream)
         temp_handler.setLevel(logging.DEBUG)
+        temp_handler.setFormatter(
+            logging.Formatter(LOGGING_CONFIG["formatters"]["default"]["format"])
+        )
         log.addHandler(temp_handler)
         try:
             func(*args, **kwargs)
         finally:
+            temp_handler.flush()
             log.removeHandler(temp_handler)
         return log_stream.getvalue()
 
