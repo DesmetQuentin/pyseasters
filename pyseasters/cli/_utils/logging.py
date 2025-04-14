@@ -1,11 +1,10 @@
-import functools
 import logging
 import logging.config
 import sys
-from io import StringIO
-from typing import Callable
+from dataclasses import dataclass, field
+from typing import Callable, List, Tuple
 
-__all__ = ["setup_cli_logging", "capture_logging"]
+__all__ = ["setup_cli_logging", "LoggingStack"]
 
 log = logging.getLogger(__name__)
 
@@ -82,62 +81,31 @@ def setup_cli_logging(level: int = logging.INFO) -> None:
     root_log.setLevel(level if accepted_level else logging.WARNING)
 
 
-def capture_logging(write: bool = False) -> Callable:
+@dataclass
+class LoggingStack:
+    name: str
+    messages: List[Tuple[str, ...]] = field(default_factory=list)
 
-    def decorator(func: Callable) -> Callable:
-        """Decorator aiming to capture and return in-function logging output."""
+    def append(self, level: str, message: str, *args: str) -> None:
+        self.messages.append(tuple([level, message, *args]))
 
-        @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            root_log = logging.getLogger()
-            if write:
-                loc_log = logging.getLogger(func.__module__)
-
-            # Disable existing handlers
-            stdout_handler = next(
-                h
-                for h in root_log.handlers
-                if isinstance(h, logging.StreamHandler) and h.stream == sys.stdout
+    def __getattr__(self, name: str) -> Callable[..., None]:
+        if name.lower() not in ["debug", "info", "warning", "error", "critical"]:
+            raise AttributeError(
+                f"Attribute {name} invalid for class {self.__class__.__name__}."
             )
-            stderr_handler = next(
-                h
-                for h in root_log.handlers
-                if isinstance(h, logging.StreamHandler) and h.stream == sys.stderr
+
+        def method(*args, **kwargs) -> None:
+            self.append(name, *args, **kwargs)
+
+        return method
+
+    def flush(self, logger: logging.Logger):
+        while self.messages:
+            params = self.messages.pop(0)
+            getattr(logger, params[0].lower())(
+                f"[{self.name}] {params[1]}", *params[2:]
             )
-            root_log.removeHandler(stdout_handler)
-            root_log.removeHandler(stderr_handler)
 
-            # Define buffer stream and handler
-            log_stream = StringIO()
-            temp_handler = logging.StreamHandler(log_stream)
-            temp_handler.setLevel(logging.DEBUG)
-            temp_handler.setFormatter(
-                logging.Formatter(LOGGING_CONFIG["formatters"]["default"]["format"])
-            )
-            root_log.addHandler(temp_handler)
-
-            # Run the function and capture all logging messages
-            try:
-                result = func(*args, **kwargs)
-            finally:
-                temp_handler.flush()
-                root_log.removeHandler(temp_handler)
-
-            # Restore original handlers
-            root_log.addHandler(stdout_handler)
-            root_log.addHandler(stderr_handler)
-
-            if write:
-                for line in log_stream.getvalue().split("\n"):
-                    if not line.strip():
-                        continue
-
-                    level, message = line.strip().split(": ", 1)
-                    getattr(loc_log, level.lower())(message)  # loc_log.LEVEL(message)
-                return result
-            else:
-                return result, log_stream.getvalue()
-
-        return wrapper
-
-    return decorator
+    def picklable(self) -> Tuple[str, List[Tuple[str, ...]]]:
+        return self.name, self.messages

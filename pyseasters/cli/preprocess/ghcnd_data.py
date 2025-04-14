@@ -1,7 +1,7 @@
 import logging
 import subprocess
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 import pandas as pd
 from dask import compute, delayed
@@ -9,7 +9,7 @@ from dask.distributed import Client, LocalCluster
 
 from pyseasters.api import load_ghcnd_inventory, paths
 from pyseasters.api.ghcnd.load_ghcnd_data import _load_ghcnd_single_station
-from pyseasters.cli._utils import capture_logging, require_tools
+from pyseasters.cli._utils import LoggingStack, require_tools
 
 __all__ = ["preprocess_ghcnd_data"]
 
@@ -22,6 +22,7 @@ def _clean_columns(
     output: Path,
     indices: List[int],
     names: List[str],  # used in case manual cleaning is needed
+    logger: LoggingStack,
     expected_ncol: Optional[int] = None,
 ) -> bool:
     """
@@ -44,21 +45,17 @@ def _clean_columns(
             if ncol == expected_ncol:
                 need_manual_cleaning = False
             else:
-                log.warning(
-                    "Number of columns in %s different from expected.",
-                    input.stem,
-                )
-                log.debug(
-                    "[%s] Number of columns vs. expected: %i vs. %i",
-                    input.stem,
+                logger.warning("Number of columns different from expected.")
+                logger.debug(
+                    "Number of columns vs. expected: %i vs. %i",
                     ncol,
                     expected_ncol,
                 )
                 if ncol < expected_ncol:
-                    log.warning("Abort cleaning columns.")
+                    logger.warning("Abort cleaning columns.")
                     return False
                 elif ncol > expected_ncol:
-                    log.info("Attempt cleaning columns manually.")
+                    logger.debug("Attempt cleaning columns manually.")
                     need_manual_cleaning = True
         except subprocess.CalledProcessError as e:
             raise RuntimeError(f"csvcut error: {e}")
@@ -77,39 +74,40 @@ def _clean_columns(
         except subprocess.CalledProcessError as e:
             raise RuntimeError(f"csvcut error: {e}")
 
-    log.debug(f"Cleaning completed on {input}. Output saved to {output}.")
+    logger.debug(f"Cleaning completed on {input}. Output saved to {output}.")
     return True
 
 
-def _single_station_to_parquet(station_id: str) -> None:
+def _single_station_to_parquet(station_id: str, logger: LoggingStack) -> None:
     """Convert a single station csv file for ``station_id`` into parquet."""
     data = _load_ghcnd_single_station(station_id, from_parquet=False)
     data.to_parquet(paths.ghcnd_file(station_id))
-    log.debug(
+    logger.debug(
         "Converted %s into parquet.", str(paths.ghcnd_file(station_id, ext="csv"))
     )
 
 
-@capture_logging()
 @delayed
 def _preprocess_single_station(
     station_id: str, expected_ncol: int, to_parquet: bool = True
-) -> None:
+) -> Tuple[str, List[Tuple[str, ...]]]:
     """Dask task preprocessing a single station file."""
+
+    logger = LoggingStack(name=station_id)
+
     file = paths.ghcnd_file(station_id, ext="csv")
     if not file.exists():
-        log.warning(
+        logger.warning(
             "File %s not found. Abort preprocessing for this station.", str(file)
         )
-        return
-    log.debug("Debug statement: youhou")
-    log.info("Info statement")
+        return logger.picklable()
 
     done = _clean_columns(
         file,
         paths.ghcnd() / "data" / f"tmp-{station_id}.csv",
         [1, 3, 4, 5, 6],
         ["STATION", "LONGITUDE", "LATITUDE", "ELEVATION", "NAME"],
+        logger=logger,
         expected_ncol=expected_ncol,
     )
     # If the file has actually changed
@@ -120,8 +118,10 @@ def _preprocess_single_station(
             check=True,
         )
     if to_parquet:
-        _single_station_to_parquet(station_id)
+        _single_station_to_parquet(station_id, logger=logger)
         subprocess.run(f"rm {file}", shell=True, check=True)
+
+    return logger.picklable()
 
 
 def preprocess_ghcnd_data(
@@ -147,17 +147,14 @@ def preprocess_ghcnd_data(
 
     try:
         log.info("Dask cluster is running.")
-        log_outputs = compute(*tasks)
+        stacked_messages = compute(*tasks)
     finally:
         client.close()
         cluster.close()
         log.info("Dask cluster has been properly shut down.")
-        log.info("Logging statements are printed below.")
-        for log_output in log_outputs:
-            for line in log_output.split("\n"):
-                if not line.strip():
-                    continue
-                level, message = line.strip().split(": ", 1)
-                getattr(log, level.lower())(message)
+
+    log.info("Logging statements (if any) are printed below.")
+    for args in stacked_messages:
+        LoggingStack(*args).flush(logger=log)
 
     log.info("GHCNd data preprocessing completed.")
