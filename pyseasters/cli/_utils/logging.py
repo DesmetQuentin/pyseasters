@@ -1,8 +1,11 @@
+import functools
 import logging
 import logging.config
 import sys
+from io import StringIO
+from typing import Callable
 
-__all__ = ["setup_cli_logging"]
+__all__ = ["setup_cli_logging", "capture_logging"]
 
 log = logging.getLogger(__name__)
 
@@ -76,3 +79,22 @@ def setup_cli_logging(level: int = logging.INFO) -> None:
             "Cannot set %s level. Reset to WARNING.", logging.getLevelName(level)
         )
     logging.getLogger().setLevel(level if accepted_level else logging.WARNING)
+
+
+def capture_logging(func: Callable) -> Callable:
+    """Decorator aiming to capture and return in-function logging output."""
+
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        log = func.__module__
+        log_stream = StringIO()
+        temp_handler = logging.StreamHandler(log_stream)
+        temp_handler.setLevel(logging.DEBUG)
+        log.addHandler(temp_handler)
+        try:
+            func(*args, **kwargs)
+        finally:
+            log.removeHandler(temp_handler)
+        return log_stream.getvalue()
+
+    return wrapper

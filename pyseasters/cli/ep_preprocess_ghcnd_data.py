@@ -80,8 +80,6 @@ def main():
         else (logging.INFO if not args.silent else logging.WARNING)
     )
     preprocess_ghcnd_data(ntasks=args.ntasks, to_parquet=not args.minimal)
-    sys.stdout.flush()
-    sys.stderr.flush()
 
 
 if __name__ == "__main__":

@@ -9,7 +9,7 @@ from dask.distributed import Client, LocalCluster
 
 from pyseasters.api import load_ghcnd_inventory, paths
 from pyseasters.api.ghcnd.load_ghcnd_data import _load_ghcnd_single_station
-from pyseasters.cli._utils import require_tools
+from pyseasters.cli._utils import capture_logging, require_tools
 
 __all__ = ["preprocess_ghcnd_data"]
 
@@ -91,6 +91,7 @@ def _single_station_to_parquet(station_id: str) -> None:
 
 
 @delayed
+@capture_logging
 def _preprocess_single_station(
     station_id: str, expected_ncol: int, to_parquet: bool = True
 ) -> None:
@@ -144,10 +145,14 @@ def preprocess_ghcnd_data(
 
     try:
         log.info("Dask cluster is running.")
-        compute(*tasks)
+        log_outputs = compute(*tasks)
     finally:
         client.close()
         cluster.close()
+        for log_output in log_outputs:
+            for line in log_outputs.split("\n"):
+                [level, message] = line.strip().split(": ")
+                eval(f"log.{level.lower()}('{message}')")
         log.info("Dask cluster has been properly shut down.")
 
     log.info("GHCNd data preprocessing completed.")
