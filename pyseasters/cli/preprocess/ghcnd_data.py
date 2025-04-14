@@ -90,8 +90,8 @@ def _single_station_to_parquet(station_id: str) -> None:
     )
 
 
+@capture_logging()
 @delayed
-@capture_logging
 def _preprocess_single_station(
     station_id: str, expected_ncol: int, to_parquet: bool = True
 ) -> None:

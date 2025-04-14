@@ -71,6 +71,7 @@ def setup_cli_logging(level: int = logging.INFO) -> None:
     Args:
         level: Logging level to use (e.g., ``logging.INFO`` or ``logging.DEBUG``).
     """
+    root_log = logging.getLogger()
     logging.config.dictConfig(LOGGING_CONFIG)
     accepted_level = level not in [logging.ERROR, logging.CRITICAL]
     if not accepted_level:
@@ -78,27 +79,65 @@ def setup_cli_logging(level: int = logging.INFO) -> None:
         log.warning(
             "Cannot set %s level. Reset to WARNING.", logging.getLevelName(level)
         )
-    logging.getLogger().setLevel(level if accepted_level else logging.WARNING)
+    root_log.setLevel(level if accepted_level else logging.WARNING)
 
 
-def capture_logging(func: Callable) -> Callable:
-    """Decorator aiming to capture and return in-function logging output."""
+def capture_logging(write: bool = False) -> Callable:
 
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        log = logging.getLogger(func.__module__)
-        log_stream = StringIO()
-        temp_handler = logging.StreamHandler(log_stream)
-        temp_handler.setLevel(logging.DEBUG)
-        temp_handler.setFormatter(
-            logging.Formatter(LOGGING_CONFIG["formatters"]["default"]["format"])
-        )
-        log.addHandler(temp_handler)
-        try:
-            func(*args, **kwargs)
-        finally:
-            temp_handler.flush()
-            log.removeHandler(temp_handler)
-        return log_stream.getvalue()
+    def decorator(func: Callable) -> Callable:
+        """Decorator aiming to capture and return in-function logging output."""
 
-    return wrapper
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            root_log = logging.getLogger()
+            if write:
+                loc_log = logging.getLogger(func.__module__)
+
+            # Disable existing handlers
+            stdout_handler = next(
+                h
+                for h in root_log.handlers
+                if isinstance(h, logging.StreamHandler) and h.stream == sys.stdout
+            )
+            stderr_handler = next(
+                h
+                for h in root_log.handlers
+                if isinstance(h, logging.StreamHandler) and h.stream == sys.stderr
+            )
+            root_log.removeHandler(stdout_handler)
+            root_log.removeHandler(stderr_handler)
+
+            # Define buffer stream and handler
+            log_stream = StringIO()
+            temp_handler = logging.StreamHandler(log_stream)
+            temp_handler.setLevel(logging.DEBUG)
+            temp_handler.setFormatter(
+                logging.Formatter(LOGGING_CONFIG["formatters"]["default"]["format"])
+            )
+            root_log.addHandler(temp_handler)
+
+            # Run the function and capture all logging messages
+            try:
+                result = func(*args, **kwargs)
+            finally:
+                temp_handler.flush()
+                root_log.removeHandler(temp_handler)
+
+            # Restore original handlers
+            root_log.addHandler(stdout_handler)
+            root_log.addHandler(stderr_handler)
+
+            if write:
+                for line in log_stream.getvalue().split("\n"):
+                    if not line.strip():
+                        continue
+
+                    level, message = line.strip().split(": ", 1)
+                    getattr(loc_log, level.lower())(message)  # loc_log.LEVEL(message)
+                return result
+            else:
+                return result, log_stream.getvalue()
+
+        return wrapper
+
+    return decorator
