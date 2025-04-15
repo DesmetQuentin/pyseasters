@@ -84,28 +84,60 @@ def setup_cli_logging(level: int = logging.INFO) -> None:
 @dataclass
 class LoggingStack:
     """
-    Class thought to be used in dask tasks, stacking logging statements
-    for printing later.
+    A lightweight, picklable logging buffer designed for use in delayed or parallel
+    execution contexts (e.g., Dask tasks), where logging should be deferred until
+    after task execution.
+
+    This class mimics the `logging.Logger` interface and stacks logging statements
+    for later flushing into a real logger. Particularly useful for capturing logs
+    during lazy computations.
+
+    Attributes
+    ----------
+    name: str
+        Identifier prepended to all log messages when flushed.
+    messages: List[Tuple[str, ...]], default []
+        Internal list of (level, message, *args) tuples.
+
+    Example
+    -------
+    >>> import logging
+    >>>
+    >>> # In a parallel task with an ID 'task_id'
+    >>> logstack = LoggingStack("task_id")
+    >>> logstack.info("Starting heavy computation on %s", "input.nc")
+    >>> logstack.warning("Took longer than expected.")
+    >>> pickled_stack = logstack.picklable()  # retrieve only (name, messages) for serialization
+    >>>
+    >>> # In a post-computation context:
+    >>> logstack = LoggingStack(*pickled_stack)  # reconstruct the stack
+    >>> logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.INFO)  # some config
+    >>> logger = logging.getLogger(__name__)  # create a logging.Logger
+    >>> logstack.flush(logger)  # flush the stack into the logger
+    INFO: [task_id] Starting heavy computation on input.nc
+    WARNING: [task_id] Took longer than expected.
     """
 
     name: str
     messages: List[Tuple[str, ...]] = field(default_factory=list)
 
-    def append(self, level: str, message: str, *args: str) -> None:
+    def _append(self, level: str, message: str, *args: str) -> None:
         self.messages.append(tuple([level, message, *args]))
 
     def __getattr__(self, name: str) -> Callable[..., None]:
+        """Dynamically intercept standard log levels."""
         if name.lower() not in ["debug", "info", "warning", "error", "critical"]:
             raise AttributeError(
                 f"Attribute {name} invalid for class {self.__class__.__name__}."
             )
 
         def method(*args, **kwargs) -> None:
-            self.append(name, *args, **kwargs)
+            self._append(name, *args, **kwargs)
 
         return method
 
     def flush(self, logger: logging.Logger):
+        """Send all buffered logs to a real logger."""
         while self.messages:
             params = self.messages.pop(0)
             getattr(logger, params[0].lower())(
@@ -113,4 +145,5 @@ class LoggingStack:
             )
 
     def picklable(self) -> Tuple[str, List[Tuple[str, ...]]]:
+        """Return a tuple representation for pickling or serialization."""
         return self.name, self.messages

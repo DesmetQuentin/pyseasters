@@ -24,7 +24,7 @@ def _clean_columns(
     names: List[str],  # used in case manual cleaning is needed
     logger: Union[LoggingStack, logging.Logger],
     expected_ncol: Optional[int] = None,
-) -> bool:
+) -> None:
     """
     Remove from input data the columns corresponding to indices (starts at 1),
     with an optional prior check about the expected number of columns.
@@ -51,31 +51,35 @@ def _clean_columns(
                     ncol,
                     expected_ncol,
                 )
-                if ncol < expected_ncol:
-                    logger.warning("Abort cleaning columns.")
-                    return False
-                elif ncol > expected_ncol:
-                    logger.debug("Attempt cleaning columns manually.")
-                    need_manual_cleaning = True
+                need_manual_cleaning = True
         except subprocess.CalledProcessError as e:
-            raise RuntimeError(f"csvcut error: {e}")
+            logger.error("csvcut/wc failed: %s", e)
+            raise RuntimeError("csvcut/wc failed.") from e
+    else:
+        need_manual_cleaning = False
 
     # Actually clean columns
     if need_manual_cleaning:
+
+        # Manually: read, drop, write with pandas
+        logger.info("Attempt cleaning columns manually.")
         df = pd.read_csv(input)
         df.drop(columns=names, inplace=True)
         df.to_csv(output, index=False)
+        logger.info("Success.")
 
     else:
-        command = f"csvcut -C {','.join([str(i) for i in indices])} {input} > {output}"
 
+        # Otherwise: use csvcut
         try:
+            command = f"csvcut -C {','.join(map(str, indices))} {input} > {output}"
             subprocess.run(command, shell=True, check=True)
         except subprocess.CalledProcessError as e:
-            raise RuntimeError(f"csvcut error: {e}")
+            logger.error("csvcut failed: %s", e)
+            raise RuntimeError("csvcut failed.") from e
 
-    logger.debug(f"Cleaning completed on {input}. Output saved to {output}.")
-    return True
+    logger.info("Column cleaning completed.")
+    logger.debug("Input -> output: %s -> %s", input, output)
 
 
 def _single_station_to_parquet(
@@ -84,8 +88,11 @@ def _single_station_to_parquet(
     """Convert a single station csv file for ``station_id`` into parquet."""
     data = _load_ghcnd_single_station(station_id, from_parquet=False)
     data.to_parquet(paths.ghcnd_file(station_id))
+    logger.info("Conversion to parquet completed.")
     logger.debug(
-        "Converted %s into parquet.", str(paths.ghcnd_file(station_id, ext="csv"))
+        "Input -> output: %s -> %s",
+        paths.ghcnd_file(station_id, ext="csv"),
+        paths.ghcnd_file(station_id),
     )
 
 
@@ -95,33 +102,48 @@ def _preprocess_single_station(
 ) -> Tuple[str, List[Tuple[str, ...]]]:
     """Dask task preprocessing a single station file."""
 
-    logger = LoggingStack(name=station_id)
+    logger = LoggingStack(
+        name=station_id
+    )  # Initiate logging stack for deferred logging
 
+    # File existence check
     file = paths.ghcnd_file(station_id, ext="csv")
     if not file.exists():
-        logger.warning(
-            "File %s not found. Abort preprocessing for this station.", str(file)
-        )
+        logger.error("File %s not found", file)
+        logger.error("Abort task for station %s.", station_id)
         return logger.picklable()
 
-    done = _clean_columns(
-        file,
-        paths.ghcnd() / "data" / f"tmp-{station_id}.csv",
-        [1, 3, 4, 5, 6],
-        ["STATION", "LONGITUDE", "LATITUDE", "ELEVATION", "NAME"],
-        logger=logger,
-        expected_ncol=expected_ncol,
-    )
-    # If the file has actually changed
-    if done:
+    # Clean columns
+    try:
+        _clean_columns(
+            file,
+            paths.ghcnd() / "data" / f"tmp-{station_id}.csv",
+            [1, 3, 4, 5, 6],
+            ["STATION", "LONGITUDE", "LATITUDE", "ELEVATION", "NAME"],
+            logger=logger,
+            expected_ncol=expected_ncol,
+        )
         subprocess.run(
             f"mv {paths.ghcnd() / 'data' / ('tmp-%s.csv' % (station_id))} {file}",
             shell=True,
             check=True,
         )
+    except Exception as e:
+        logger.error("Problem while cleaning columns: %s", e)
+        logger.error("Abort task for station %s.", station_id)
+        return logger.picklable()
+
+    # Convert to parquet
     if to_parquet:
-        _single_station_to_parquet(station_id, logger=logger)
-        subprocess.run(f"rm {file}", shell=True, check=True)
+        try:
+            _single_station_to_parquet(station_id, logger=logger)
+            subprocess.run(f"rm {file}", shell=True, check=True)
+        except Exception as e:
+            logger.error("Problem while converting to parquet: %s", e)
+            logger.error("Abort task for station %s.", station_id)
+            return logger.picklable()
+
+    logger.info("Task completed for station %s", station_id)
 
     return logger.picklable()
 
@@ -131,30 +153,34 @@ def preprocess_ghcnd_data(
 ) -> None:
     """Remove duplicate columns and compress GHCNd data files."""
 
+    # Calculate expected number of columns per station based on the inventory
     inventory = load_ghcnd_inventory()
     station_to_ncol = {
         k: len(v) * 2 + 6 for k, v in inventory.groupby(level=0).groups.items()
     }
 
+    # Set up Dask
     cluster = (
         LocalCluster()
         if ntasks is None
         else LocalCluster(n_workers=ntasks, threads_per_worker=1)
     )
     client = Client(cluster)
+    log.info("Dask cluster is running.")
     tasks = [
         _preprocess_single_station(station_id, expected_ncol, to_parquet=to_parquet)
         for station_id, expected_ncol in station_to_ncol.items()
     ]
 
+    # Run parallel Dask tasks
     try:
-        log.info("Dask cluster is running.")
         stacked_messages = compute(*tasks)
     finally:
         client.close()
         cluster.close()
         log.info("Dask cluster has been properly shut down.")
 
+    # Flush logging statements per station
     log.info("Logging statements (if any) are printed below.")
     for args in stacked_messages:
         LoggingStack(*args).flush(logger=log)

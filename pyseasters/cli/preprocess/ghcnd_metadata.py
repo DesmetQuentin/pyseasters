@@ -17,15 +17,16 @@ def _filter_countries(input: Union[str, Path], output: Union[str, Path]) -> None
     Filter input data by removing lines where the first column's first two characters
     do not match any FIPS code of the global ``COUNTRIES`` constant.
     """
-
-    regex_pattern = f"^({'|'.join(COUNTRIES['FIPS'].to_list())})"
-    command = f"awk '$1 ~ /{regex_pattern}/' {input} > {output}"
-
     try:
+        regex_pattern = f"^({'|'.join(COUNTRIES['FIPS'].to_list())})"
+        command = f"awk '$1 ~ /{regex_pattern}/' {input} > {output}"
         subprocess.run(command, shell=True, check=True)
-        log.info(f"Filtering completed on {input}. Output saved to {output}.")
     except subprocess.CalledProcessError as e:
-        raise RuntimeError(f"awk error: {e}")
+        log.error("awk failed: %s", e)
+        raise RuntimeError("awk failed.") from e
+
+    log.info("Country filtering completed.")
+    log.debug("Input -> output: %s -> %s", input, output)
 
 
 @require_tools("cat", "tr", "cut", "awk")
@@ -53,32 +54,31 @@ def _clean_columns(
                 ).stdout.strip()
             )
             if ncol != expected_ncol:
-                log.warning(
-                    "Number of columns in %s different from expected. "
-                    + "Abort cleaning columns.",
-                    str(input),
-                )
+                log.warning("Number of columns different from expected.")
                 log.debug(
-                    "(Number of columns vs. expected: %i vs. %i)",
+                    "Number of columns vs. expected: %i vs. %i",
                     ncol,
                     expected_ncol,
                 )
+                log.warning("Abort cleaning columns for file %s.", input)
                 return False
         except subprocess.CalledProcessError as e:
-            raise RuntimeError(f"csvcut error: {e}")
+            log.error("awk failed: %s", e)
+            raise RuntimeError("awk failed.") from e
 
     # Actually clean columns
-    command = (
-        f"cat {input} | tr -s ' ' | cut -d' ' --complement "
-        + f"-f{','.join([str(i) for i in indices])} > {output}"
-    )
-
     try:
+        command = (
+            f"cat {input} | tr -s ' ' | cut -d' ' --complement "
+            + f"-f{','.join(map(str, indices))} > {output}"
+        )
         subprocess.run(command, shell=True, check=True)
     except subprocess.CalledProcessError as e:
-        raise RuntimeError(f"cat/tr/cut error: {e}")
+        log.error("cat/tr/cut failed: %s", e)
+        raise RuntimeError("cat/tr/cut failed.") from e
 
-    log.info("Cleaning completed on %s. Output saved to %s.", str(input), str(output))
+    log.info("Column cleaning completed.")
+    log.debug("Input -> output: %s -> %s", input, output)
     return True
 
 
@@ -86,14 +86,24 @@ def _stations_to_parquet() -> None:
     """Convert the 'ghcnd-stations' ASCII file into parquet."""
     data = load_ghcnd_stations(from_parquet=False)
     data.to_parquet(paths.ghcnd_stations())
-    log.info("Converted %s into parquet.", str(paths.ghcnd_stations(ext="txt")))
+    log.info("Conversion to parquet completed.")
+    log.debug(
+        "Input -> output: %s -> %s",
+        paths.ghcnd_stations(ext="txt"),
+        paths.ghcnd_stations(),
+    )
 
 
 def _inventory_to_parquet() -> None:
     """Convert the 'ghcnd-inventory' ASCII file into parquet."""
     data = load_ghcnd_inventory(from_parquet=False, multiindex=False)
     data.to_parquet(paths.ghcnd_inventory())
-    log.info("Converted %s into parquet.", str(paths.ghcnd_inventory(ext="txt")))
+    log.info("Conversion to parquet completed.")
+    log.debug(
+        "Input -> output: %s -> %s",
+        paths.ghcnd_inventory(ext="txt"),
+        paths.ghcnd_inventory(),
+    )
 
 
 def preprocess_ghcnd_metadata(to_parquet: bool = True) -> None:
