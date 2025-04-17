@@ -70,7 +70,7 @@ def load_gauge_data(
     filter_condition: Optional[str] = None,
     time_range: Optional[Tuple[datetime, datetime]] = None,
     usesources: List[str] = _gauge_data_sources,
-    unit: str = "mm/day",
+    units: str = "mm/day",
     from_parquet: bool = True,
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """Load rain gauge data and associated station metadata from multiple sources.
@@ -79,33 +79,39 @@ def load_gauge_data(
     are retained, and the data are time-sliced accordingly. A filter condition can
     also be used to subset stations based on metadata attributes. Sources can be
     selected using ``usesources``, the default corresponding to looking into every
-    matching station across all available sources. ``unit`` allows to choose the output
+    matching station across all available sources. ``units`` allows to choose the output
     unit for rain gauge data.
 
-    Args:
-        filter_condition: An optional query string to filter the station metadata.
-            Available attributes are 'station_id', 'lon', 'lat', 'elevation'
-            and 'station_name'.
+    Arguments
+    ---------
+    filter_condition: str, default None
+        An optional query string to filter the station metadata.
+        Available attributes are 'station_id', 'lon', 'lat', 'elevation'
+        and 'station_name'.
+    time_range: Tuple[datetime.datetime, datetime.datetime]
+        An optional time range for selecting time coverage.
+    usesources: List[str], default ['GHCNd']
+        A list of the sources to include in the search (default is all available
+        sources).
+        Available sources are 'GHCNd'.
+    units: str, default 'mm/day'
+        The output unit for the rain gauge data DataFrame.
+    from_parquet: bool, default True
+        Whether the data to load is stored in the parquet format.
 
-        time_range: A tuple of (start_datetime, end_datetime) for selecting time
-            coverage.
+    Returns
+    -------
+    A tuple:
 
-        usesources: A list of the sources to include in the search
-            (default: all available sources).
-            Available sources are 'GHCNd'.
+        * A DataFrame with station data as columns and dates as index, and with
+        the 'units' attribute indicating its units.
+        * A DataFrame of metadata for the selected stations.
 
-        unit: The output unit for the rain gauge data DataFrame (default: 'mm/day').
 
-        from_parquet: Whether the data to load is stored in the parquet format.
-
-    Returns:
-        A tuple:
-            - A DataFrame with station data as columns and dates as index, and with
-            the 'units' attribute indicating its units.
-            - A DataFrame of metadata for the selected stations.
-
-    Raises:
-        RuntimeError: If the filter condition is invalid or raises an exception.
+    Raises
+    ------
+    RuntimeError
+        If the filter condition is invalid or raises an exception.
     """
 
     all_data, all_metadata = [], []
@@ -117,7 +123,7 @@ def load_gauge_data(
             time_range=time_range,
             from_parquet=from_parquet,
         )
-        data = check_dataframe_unit(data, target_unit=unit)
+        data = check_dataframe_unit(data, target_unit=units)
         all_data.append(data)
         all_metadata.append(metadata)
 
