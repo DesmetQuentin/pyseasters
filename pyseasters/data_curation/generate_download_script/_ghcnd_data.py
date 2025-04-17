@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Optional, Union
 
-from pyseasters.api import get_ghcnd_station_list
+from pyseasters.ghcnd import get_ghcnd_station_list
 
 DATA = (
     "https://www.ncei.noaa.gov/data/global-historical-climatology-network-daily"

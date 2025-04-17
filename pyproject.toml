@@ -40,9 +40,9 @@ cli = [
 ]
 
 [project.scripts]
-generate_download_script = "pyseasters.cli.ep_generate_download_script:main"
-preprocess_ghcnd_metadata = "pyseasters.cli.ep_preprocess_ghcnd_metadata:main"
-preprocess_ghcnd_data = "pyseasters.cli.ep_preprocess_ghcnd_data:main"
+generate_download_script = "pyseasters.cli.generate_download_script:main"
+preprocess_ghcnd_metadata = "pyseasters.cli.preprocess_ghcnd_metadata:main"
+preprocess_ghcnd_data = "pyseasters.cli.preprocess_ghcnd_data:main"
 
 [tool.setuptools_scm]
 write_to = "pyseasters/_version.py"

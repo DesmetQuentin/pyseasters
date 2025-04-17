@@ -22,8 +22,10 @@ Entry point for the ``generate_download_script`` command. The command has a help
 import argparse
 import sys
 
-from .generate_download_script import generate_download_script
-from .generate_download_script.generate_download_script import _dispatcher
+from pyseasters.data_curation import generate_download_script
+from pyseasters.data_curation.generate_download_script.generate_download_script import (
+    _dispatcher,
+)
 
 
 def main():

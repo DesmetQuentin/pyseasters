@@ -1,6 +1,6 @@
 """
-This package provides the base functions of PySEASTERS' CLI tools and hosts the CLI
-entry points ('ep').
+This package provides core functions dedicated to data curation. It relies on several
+unix tools.
 """
 
 from .generate_download_script import generate_download_script

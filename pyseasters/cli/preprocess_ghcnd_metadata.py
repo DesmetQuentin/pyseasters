@@ -1,14 +1,15 @@
 #!/bin/usr python3
 
 """
-Entry point for the ``preprocess_ghcnd_data`` command. The command has a help option:
+Entry point for the ``preprocess_ghcnd_metadata`` command.
+The command has a help option:
 
 .. code-block:: console
 
-    $ preprocess_ghcnd_data --help
-    usage: preprocess_ghcnd_data [-h] [-m] [-v] [-s] [-f]
+    $ preprocess_ghcnd_metadata --help
+    usage: preprocess_ghcnd_metadata [-h] [-m] [-v] [-s] [-f]
 
-    Preprocess GHCNd data files (remove duplicate columns and compress).
+    Preprocess GHCNd metadata files (filter countries, remove duplicate columns and compress).
 
     options:
     -h, --help     show this help message and exit
@@ -22,27 +23,22 @@ import argparse
 import logging
 import sys
 
-from ._utils import setup_cli_logging
-from .preprocess import preprocess_ghcnd_data
+from pyseasters.data_curation import preprocess_ghcnd_metadata
+from pyseasters.utils._logging import setup_cli_logging
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Preprocess GHCNd data files "
-        + "(remove duplicate columns and compress)."
+        description=(
+            "Preprocess GHCNd metadata files "
+            + "(filter countries, remove duplicate columns and compress)."
+        )
     )
     parser.add_argument(
         "-m",
         "--minimal",
         action="store_true",
         help="keep orignial csv format (default: convert to parquet)",
-    )
-    parser.add_argument(
-        "-n",
-        "--ntasks",
-        type=int,
-        default=None,
-        help="number of tasks to run in parallel (default: auto)",
     )
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="enable debug output"
@@ -79,7 +75,7 @@ def main():
         if args.verbose
         else (logging.INFO if not args.silent else logging.WARNING)
     )
-    preprocess_ghcnd_data(ntasks=args.ntasks, to_parquet=not args.minimal)
+    preprocess_ghcnd_metadata(to_parquet=not args.minimal)
 
 
 if __name__ == "__main__":

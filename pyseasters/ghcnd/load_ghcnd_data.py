@@ -3,7 +3,7 @@ from typing import Optional, Tuple
 
 import pandas as pd
 
-from pyseasters.api.constants import paths
+from pyseasters.constants import paths
 
 from .load_ghcnd_metadata import get_ghcnd_metadata, load_ghcnd_stations
 

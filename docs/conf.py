@@ -46,9 +46,9 @@ autodoc2_hidden_objects = ["dunder", "private", "inherited"]
 autodoc2_hidden_regexes = [
     "pyseasters.*log",
     "pyseasters.cli.*main",
-    "pyseasters.api.constants.countries.COUNTRIES",
-    "pyseasters.api.constants.paths.paths",
-    "pyseasters.api.utils.unit.ureg",
+    "pyseasters.constants.countries.COUNTRIES",
+    "pyseasters.constants.paths.paths",
+    "pyseasters.utils.units.ureg",
 ]
 autodoc2_index_template = """API Reference
 =========================
@@ -58,9 +58,12 @@ autodoc2_index_template = """API Reference
 
 .. toctree::
    :titlesonly:
-
-   pyseasters/pyseasters.api
-   pyseasters/pyseasters.cli
+   
+   pyseasters/pyseasters.load_gauge_data
+   pyseasters/pyseasters.ghcnd
+   pyseasters/pyseasters.constants
+   pyseasters/pyseasters.utils
+   pyseasters/pyseasters.data_curation
 
 .. note::
     This page contains auto-generated API reference documentation created with

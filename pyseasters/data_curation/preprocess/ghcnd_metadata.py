@@ -3,8 +3,9 @@ import subprocess
 from pathlib import Path
 from typing import List, Optional, Union
 
-from pyseasters.api import COUNTRIES, load_ghcnd_inventory, load_ghcnd_stations, paths
-from pyseasters.cli._utils import require_tools
+from pyseasters.constants import COUNTRIES, paths
+from pyseasters.ghcnd import load_ghcnd_inventory, load_ghcnd_stations
+from pyseasters.utils._dependencies import require_tools
 
 __all__ = ["preprocess_ghcnd_metadata"]
 

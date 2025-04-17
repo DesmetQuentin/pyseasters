@@ -2,7 +2,7 @@ from typing import List, Optional
 
 import pandas as pd
 
-from pyseasters.api.constants import paths
+from pyseasters.constants import paths
 
 __all__ = [
     "load_ghcnd_stations",
