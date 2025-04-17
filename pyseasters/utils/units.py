@@ -20,18 +20,23 @@ def convert_dataframe_unit(df: pd.DataFrame, target_unit: str) -> pd.DataFrame:
     This function reads the unit from the DataFrame's 'units' attribute,
     performs the unit conversion, and updates the attribute to the new unit.
 
-    Args:
-        df: DataFrame with a 'units' attribute specifying its current unit.
+    Parameters
+    ----------
+    df
+        DataFrame with a 'units' attribute specifying its current units.
+    target_unit
+        Target unit to convert the data to (e.g., 'inch/day').
 
-        target_unit: Target unit to convert the data to (e.g., 'inch/day').
-
-    Returns:
+    Returns
+    -------
+    df_converted : DataFrame
         A new DataFrame with converted values and updated 'units' attribute.
 
-    Raises:
-        ValueError: If the DataFrame has no 'units' attribute.
-
-        Pint package errors.
+    Raises
+    ------
+    ValueError
+        If the DataFrame has no 'units' attribute.
+    Pint package errors.
     """
 
     source_unit = df.attrs.get("units", None)
@@ -61,16 +66,23 @@ def check_dataframe_unit(df: pd.DataFrame, target_unit: str) -> pd.DataFrame:
     converts the data using ``convert_dataframe_unit()`` and updates the 'units'
     attribute.
 
-    Args:
-        df: The input DataFrame with a 'units' attribute in ``df.attrs``.
+    Parameters
+    ----------
+    df
+        DataFrame with a 'units' attribute specifying its current units.
+    target_unit
+        The target unit to match or convert the data to (e.g., 'inch/day').
 
-        target_unit: The desired unit to match or convert to.
+    Returns
+    -------
+    result : DataFrame
+        A DataFrame with the target unit
+        (either unchanged because already matching, or converted).
 
-    Returns:
-        A DataFrame with the target unit, either unchanged or converted.
-
-    Raises:
-        ValueError: If the DataFrame does not have a 'units' attribute.
+    Raises
+    ------
+    ValueError
+        If the DataFrame does not have a 'units' attribute.
     """
     source_unit = df.attrs.get("units", None)
     if source_unit is None:

@@ -19,17 +19,23 @@ def generate_download_script(
 ) -> str:
     """Generate a download script in bash for the provided ``key``.
 
-    Args:
-        key: The key associated with the desired download script (one of 'GHCNd',
-        'GHCNd metadata').
+    Parameters
+    ----------
+    key
+        The key associated with the desired download script.
+        Available keys are: 'GHCNd' and 'GHCNd metadata'.
+    output: PathLike, default None
+        Optional path to an output file to write the script in.
 
-        output: Optional path to an output file to write the script in.
+    Returns
+    -------
+    script : str
+        The download script.
 
-    Returns:
-        Returns the download script as an str.
-
-    Raises:
-        ValueError: If the ``key`` is not valid.
+    Raises
+    ------
+    ValueError
+        If the ``key`` is not valid.
     """
 
     try:

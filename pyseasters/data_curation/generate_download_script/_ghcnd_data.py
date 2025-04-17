@@ -14,11 +14,15 @@ def generate_ghcnd_data_download_script(
 ) -> str:
     """Generate a download script in bash for GHCNd data files.
 
-    Args:
-        output: Optional path to an output file to write the script in.
+    Parameters
+    ----------
+    output
+        Optional path to an output file to write the script in.
 
-    Returns:
-        Returns the download script as an str.
+    Returns
+    -------
+    script : str
+        The download script.
     """
 
     stations = get_ghcnd_station_list()

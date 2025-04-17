@@ -11,11 +11,15 @@ def generate_ghcnd_metadata_download_script(
 ) -> str:
     """Generate a download script in bash for GHCNd stations and inventory files.
 
-    Args:
-        output: Optional path to an output file to write the script in.
+    Parameters
+    ----------
+    output
+        Optional path to an output file to write the script in.
 
-    Returns:
-        Returns the download script as an str.
+    Returns
+    -------
+    script : str
+        The download script.
     """
 
     script = f"""#!/bin/bash

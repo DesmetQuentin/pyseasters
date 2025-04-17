@@ -21,4 +21,5 @@ from .ghcnd import (
     load_ghcnd_inventory,
     load_ghcnd_stations,
 )
+from .load_gauge_data import load_gauge_data
 from .utils import check_dataframe_unit, convert_dataframe_unit

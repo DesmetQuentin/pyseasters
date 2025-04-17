@@ -31,20 +31,23 @@ def _dispatcher(source: str, **kwargs) -> Tuple[pd.DataFrame, pd.DataFrame]:
     kwargs in ``kwargs``. Station IDs in the returned DataFrames are prefixed by the
     the ``source`` keyword, with an colon separator.
 
-    Args:
-        source: The keyword associated with the desired source. Available sources are
-            'GHCNd'.
+    Parameters
+    ----------
+    source
+        The keyword associated with the desired source. Available sources are 'GHCNd'.
+    **kwargs
+        Kwargs to pass to the loader.
 
-        **kwargs: kwargs to pass to the loader.
+    Returns
+    -------
+    (data, metadata) : Tuple[DataFrame, DataFrame]
+        A tuple of DataFrames, with (1) Gauge data, with station IDs as columns, dates
+        as index and a 'units' attribute, and (2) Metadata for the associated stations.
 
-    Returns:
-        A tuple:
-            - A DataFrame with station data as columns and dates as index, and with
-            the 'units' attribute indicating its units.
-            - A DataFrame of metadata for the selected stations.
-
-    Raises:
-        ValueError: If the ``source`` is not valid.
+    Raises
+    ------
+    ValueError
+        If the ``source`` is not valid.
     """
     if source == "GHCNd":
         data, metadata = load_ghcnd_data(
@@ -82,31 +85,28 @@ def load_gauge_data(
     matching station across all available sources. ``units`` allows to choose the output
     unit for rain gauge data.
 
-    Arguments
-    ---------
-    filter_condition: str, default None
+    Parameters
+    ----------
+    filter_condition
         An optional query string to filter the station metadata.
         Available attributes are 'station_id', 'lon', 'lat', 'elevation'
         and 'station_name'.
-    time_range: Tuple[datetime.datetime, datetime.datetime]
+    time_range
         An optional time range for selecting time coverage.
-    usesources: List[str], default ['GHCNd']
+    usesources
         A list of the sources to include in the search (default is all available
         sources).
         Available sources are 'GHCNd'.
-    units: str, default 'mm/day'
-        The output unit for the rain gauge data DataFrame.
-    from_parquet: bool, default True
+    units
+        The output unit for the rain gauge data.
+    from_parquet
         Whether the data to load is stored in the parquet format.
 
     Returns
     -------
-    A tuple:
-
-        * A DataFrame with station data as columns and dates as index, and with
-        the 'units' attribute indicating its units.
-        * A DataFrame of metadata for the selected stations.
-
+    (data, metadata) : Tuple[DataFrame, DataFrame]
+        A tuple of DataFrames, with (1) Gauge data, with station IDs as columns, dates
+        as index and a 'units' attribute, and (2) Metadata for the associated stations.
 
     Raises
     ------

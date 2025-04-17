@@ -150,11 +150,15 @@ class PathConfig:
     def manual_config(self, root: PathLike) -> None:
         """Manually set up the data root directory for this session.
 
-        Args:
-            root: The path to use as root for data access.
+        Parameters
+        ----------
+        root
+            The path to use as root for data access.
 
-        Raises:
-            FileNotFoundError: If the provided path does not exist.
+        Raises
+        ------
+        FileNotFoundError
+            If the provided path does not exist.
         """
 
         root_path = Path(root).resolve()

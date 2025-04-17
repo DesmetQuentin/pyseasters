@@ -68,26 +68,30 @@ def load_ghcnd_data(
     are retained, and the data are time-sliced accordingly. A filter condition can
     also be used to subset stations based on metadata attributes.
 
-    Args:
-        var: The variable code to load (one of 'PRCP', 'TMAX', 'TMIN', 'TAVG').
+    Parameters
+    ----------
+    var
+        The variable code to load.
+        Available variables are: 'PRCP', 'TMAX', 'TMIN' and 'TAVG'.
+    filter_condition
+        An optional query string to filter the station metadata.
+        Available attributes are 'station_id', 'lon', 'lat', 'elevation'
+        and 'station_name'.
+    time_range
+        An optional time range for selecting time coverage.
+    from_parquet
+        Whether the data to load is stored in the parquet format.
 
-        filter_condition: An optional query string to filter the station metadata.
-            Available attributes are 'station_id', 'lon', 'lat', 'elevation'
-            and 'station_name'.
+    Returns
+    -------
+    (data, metadata) : Tuple[DataFrame, DataFrame]
+        A tuple of DataFrames, with (1) Gauge data, with station IDs as columns, dates
+        as index and a 'units' attribute, and (2) Metadata for the associated stations.
 
-        time_range: A tuple of (start_datetime, end_datetime) for selecting time
-            coverage.
-
-        from_parquet: Whether the data to load is stored in the parquet format.
-
-    Returns:
-        A tuple:
-            - A DataFrame with station data as columns and dates as index, and with
-            the 'units' attribute indicating its units, i.e., "mm/day".
-            - A DataFrame of metadata for the selected stations.
-
-    Raises:
-        RuntimeError: If the filter condition is invalid or raises an exception.
+    Raises
+    ------
+    RuntimeError
+        If the filter condition is invalid or raises an exception.
     """
 
     # Load metadata
@@ -120,9 +124,7 @@ def load_ghcnd_data(
         axis=1,
     )
     if time_range is not None:
-        data = data.loc[
-            pd.Timestamp(time_range[0]) : pd.Timestamp(time_range[1])  # noqa: E203
-        ]
+        data = data.loc[pd.Timestamp(time_range[0]) : pd.Timestamp(time_range[1])]  # noqa: E203
 
     # Add attributes
     data.attrs["units"] = "mm/day"

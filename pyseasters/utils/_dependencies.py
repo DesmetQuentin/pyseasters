@@ -12,14 +12,20 @@ def require_tools(*tools: str) -> Callable:
     Decorator to ensure required system tools are available in ``PATH``
     (only once per tool).
 
-    Args:
-        *tools: One or more tool names (e.g., 'csvsql', 'ffmpeg') to check.
+    Parameters
+    ----------
+    *tools
+        One or more tool names (e.g., 'csvsql', 'ffmpeg') to check.
 
-    Returns:
+    Returns
+    -------
+    decorator : Callable
         A wrapped function that raises a RuntimeError if any tool is not found.
 
-    Raises:
-        RuntimeError: If a required tool is not available in the system ``PATH``.
+    Raises
+    ------
+    RuntimeError
+        If a required tool is not available in the system ``PATH``.
     """
 
     def decorator(func: Callable) -> Callable:

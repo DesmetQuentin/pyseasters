@@ -67,8 +67,11 @@ def setup_cli_logging(level: int = logging.INFO) -> None:
     using a simple message-only format. Intended to be called at the start of
     CLI entry points to ensure log messages are visible to the user.
 
-    Args:
-        level: Logging level to use (e.g., ``logging.INFO`` or ``logging.DEBUG``).
+    Parameters
+    ----------
+    level
+        Logging level to use: ``logging.INFO``, ``logging.DEBUG`` or
+        ``logging.WARNING``.
     """
     root_log = logging.getLogger()
     logging.config.dictConfig(_LOGGING_CONFIG)
@@ -88,7 +91,7 @@ class LoggingStack:
     execution contexts (e.g., Dask tasks), where logging should be deferred until
     after task execution.
 
-    This class mimics the `logging.Logger` interface and stacks logging statements
+    This class mimics the ``logging.Logger`` interface and stacks logging statements
     for later flushing into a real logger. Particularly useful for capturing logs
     during lazy computations.
 
@@ -97,10 +100,10 @@ class LoggingStack:
     name: str
         Identifier prepended to all log messages when flushed.
     messages: List[Tuple[str, ...]], default []
-        Internal list of (level, message, *args) tuples.
+        Internal list of ``(level, message, *args)`` tuples.
 
-    Example
-    -------
+    Examples
+    --------
     >>> import logging
     >>>
     >>> # In a parallel task with an ID 'task_id'
@@ -122,6 +125,7 @@ class LoggingStack:
     messages: List[Tuple[str, ...]] = field(default_factory=list)
 
     def _append(self, level: str, message: str, *args: str) -> None:
+        """Append ``(level, message, *args)`` to ``self.messages``."""
         self.messages.append(tuple([level, message, *args]))
 
     def __getattr__(self, name: str) -> Callable[..., None]:

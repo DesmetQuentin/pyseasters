@@ -15,7 +15,6 @@ scientific project.
     :hidden:
 
     user_guide/index
-    apidocs/index
     development/index
     faq/index
     release_notes/index
