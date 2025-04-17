@@ -33,7 +33,7 @@ __all__ = ["COUNTRIES"]
 
 COUNTRIES: pd.DataFrame
 
-with importlib.resources.files("pyseasters.api.constants.data").joinpath(
+with importlib.resources.files("pyseasters.constants.data").joinpath(
     "countries.txt"
 ).open("r") as file:
     COUNTRIES = pd.read_csv(file, delimiter="\t", header=0)

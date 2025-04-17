@@ -31,7 +31,7 @@ def _parse_pathsyaml():
 
     machine_to_root, network_to_root = {}, {}
     try:
-        with importlib.resources.files("pyseasters.api.constants.data").joinpath(
+        with importlib.resources.files("pyseasters.constants.data").joinpath(
             "paths.yaml"
         ).open("r") as file:
             data = yaml.safe_load(file)
