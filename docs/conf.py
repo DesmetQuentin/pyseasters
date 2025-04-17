@@ -58,7 +58,7 @@ autodoc2_index_template = """API Reference
 
 .. toctree::
    :titlesonly:
-   
+
    pyseasters/pyseasters.load_gauge_data
    pyseasters/pyseasters.ghcnd
    pyseasters/pyseasters.constants
