@@ -9,7 +9,7 @@ __all__ = ["setup_cli_logging", "LoggingStack"]
 log = logging.getLogger(__name__)
 
 
-class LevelFilter(logging.Filter):
+class _LevelFilter(logging.Filter):
     """Class to filter out records with level greater of equal to ``threshold``."""
 
     def __init__(self, threshold):
@@ -20,7 +20,7 @@ class LevelFilter(logging.Filter):
         return record.levelno < self.threshold
 
 
-LOGGING_CONFIG = {
+_LOGGING_CONFIG = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
@@ -46,7 +46,7 @@ LOGGING_CONFIG = {
     },
     "filters": {
         "stdout_filter": {
-            "()": LevelFilter,
+            "()": _LevelFilter,
             "threshold": logging.WARNING,
         },
     },
@@ -71,7 +71,7 @@ def setup_cli_logging(level: int = logging.INFO) -> None:
         level: Logging level to use (e.g., ``logging.INFO`` or ``logging.DEBUG``).
     """
     root_log = logging.getLogger()
-    logging.config.dictConfig(LOGGING_CONFIG)
+    logging.config.dictConfig(_LOGGING_CONFIG)
     accepted_level = level not in [logging.ERROR, logging.CRITICAL]
     if not accepted_level:
         log.warning("WARNING is the least accepted logging level for the CLI.")
