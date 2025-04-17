@@ -1,5 +1,6 @@
-from pathlib import Path
-from typing import Optional, Union
+from typing import Optional
+
+from pyseasters.utils._typing import PathLike
 
 from ._ghcnd_data import generate_ghcnd_data_download_script
 from ._ghcnd_metadata import generate_ghcnd_metadata_download_script
@@ -14,7 +15,7 @@ _dispatcher = {
 
 def generate_download_script(
     key: str,
-    output: Optional[Union[str, Path]] = None,
+    output: Optional[PathLike] = None,
 ) -> str:
     """Generate a download script in bash for the provided ``key``.
 

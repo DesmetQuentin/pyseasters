@@ -1,7 +1,7 @@
 import logging
 import subprocess
 from pathlib import Path
-from typing import List, Optional, Tuple, Union
+from typing import List, Optional, Tuple
 
 import pandas as pd
 from dask import compute, delayed
@@ -12,6 +12,7 @@ from pyseasters.ghcnd import load_ghcnd_inventory
 from pyseasters.ghcnd.load_ghcnd_data import _load_ghcnd_single_station
 from pyseasters.utils._dependencies import require_tools
 from pyseasters.utils._logging import LoggingStack
+from pyseasters.utils._typing import LoggerLike
 
 __all__ = ["preprocess_ghcnd_data"]
 
@@ -24,7 +25,7 @@ def _clean_columns(
     output: Path,
     indices: List[int],
     names: List[str],  # used in case manual cleaning is needed
-    logger: Union[LoggingStack, logging.Logger],
+    logger: LoggerLike,
     expected_ncol: Optional[int] = None,
 ) -> None:
     """
@@ -84,9 +85,7 @@ def _clean_columns(
     logger.debug("Input -> output: %s -> %s", input, output)
 
 
-def _single_station_to_parquet(
-    station_id: str, logger: Union[LoggingStack, logging.Logger]
-) -> None:
+def _single_station_to_parquet(station_id: str, logger: LoggerLike) -> None:
     """Convert a single station csv file for ``station_id`` into parquet."""
     data = _load_ghcnd_single_station(station_id, from_parquet=False)
     data.to_parquet(paths.ghcnd_file(station_id))

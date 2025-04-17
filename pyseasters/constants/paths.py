@@ -13,9 +13,10 @@ import socket
 import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Union
 
 import yaml
+
+from pyseasters.utils._typing import PathLike
 
 __all__ = ["paths"]
 
@@ -146,7 +147,7 @@ class PathConfig:
         """Return a boolean to inform whether paths are accessible or not."""
         return self.root != self._dummy_root
 
-    def manual_config(self, root: Union[str, Path]) -> None:
+    def manual_config(self, root: PathLike) -> None:
         """Manually set up the data root directory for this session.
 
         Args:

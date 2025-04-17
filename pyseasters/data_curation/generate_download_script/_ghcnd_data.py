@@ -1,7 +1,7 @@
-from pathlib import Path
-from typing import Optional, Union
+from typing import Optional
 
 from pyseasters.ghcnd import get_ghcnd_station_list
+from pyseasters.utils._typing import PathLike
 
 DATA = (
     "https://www.ncei.noaa.gov/data/global-historical-climatology-network-daily"
@@ -10,7 +10,7 @@ DATA = (
 
 
 def generate_ghcnd_data_download_script(
-    output: Optional[Union[str, Path]] = None,
+    output: Optional[PathLike] = None,
 ) -> str:
     """Generate a download script in bash for GHCNd data files.
 

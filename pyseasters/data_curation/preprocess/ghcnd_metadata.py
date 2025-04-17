@@ -1,11 +1,11 @@
 import logging
 import subprocess
-from pathlib import Path
-from typing import List, Optional, Union
+from typing import List, Optional
 
 from pyseasters.constants import COUNTRIES, paths
 from pyseasters.ghcnd import load_ghcnd_inventory, load_ghcnd_stations
 from pyseasters.utils._dependencies import require_tools
+from pyseasters.utils._typing import PathLike
 
 __all__ = ["preprocess_ghcnd_metadata"]
 
@@ -13,7 +13,7 @@ log = logging.getLogger(__name__)
 
 
 @require_tools("awk")
-def _filter_countries(input: Union[str, Path], output: Union[str, Path]) -> None:
+def _filter_countries(input: PathLike, output: PathLike) -> None:
     """
     Filter input data by removing lines where the first column's first two characters
     do not match any FIPS code of the global ``COUNTRIES`` constant.
@@ -32,8 +32,8 @@ def _filter_countries(input: Union[str, Path], output: Union[str, Path]) -> None
 
 @require_tools("cat", "tr", "cut", "awk")
 def _clean_columns(
-    input: Union[str, Path],
-    output: Union[str, Path],
+    input: PathLike,
+    output: PathLike,
     indices: List[int],
     expected_ncol: Optional[int] = None,
 ) -> bool:
