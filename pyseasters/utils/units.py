@@ -48,9 +48,9 @@ def convert_dataframe_unit(df: pd.DataFrame, target_unit: str) -> pd.DataFrame:
         _standard_unit(source_unit),
         _standard_unit(target_unit),
     )
-    quantity = df * ureg(source_unit)
+    quantity = df.values * ureg(source_unit)
     df_converted = pd.DataFrame(
-        quantity.to(target_unit).magnitude, columns=df.columns, index=df.index  # type: ignore[operator]
+        quantity.to(target_unit).magnitude, columns=df.columns, index=df.index  # type: ignore[attr-defined]
     )
     df_converted.attrs["units"] = target_unit
 
