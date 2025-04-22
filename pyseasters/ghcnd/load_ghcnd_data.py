@@ -37,9 +37,11 @@ def _load_ghcnd_single_var_station(
     """Load ``var`` data from the single GHCNd file associated with ``station_id``."""
 
     if from_parquet:
-        data = pd.read_parquet(
-            paths.ghcnd_file(station_id), columns=["time", var]
-        ).dropna()
+        data = (
+            pd.read_parquet(paths.ghcnd_file(station_id), columns=[var])
+            .dropna()
+            .rename(columns={var: station_id})
+        )
 
     else:
         data = (
@@ -102,7 +104,7 @@ def load_ghcnd_data(
 
     # Select the list of stations matching ``time_range`` and ``filter_condition``
     if time_range is not None:
-        start, end = time_range[0].year, time_range[1].year + 1
+        start, end = time_range[0].year, time_range[1].year
 
         metadata = metadata[
             ((start >= metadata["start"]) & (start <= metadata["end"]))
@@ -124,7 +126,9 @@ def load_ghcnd_data(
         axis=1,
     )
     if time_range is not None:
-        data = data.loc[pd.Timestamp(time_range[0]) : pd.Timestamp(time_range[1])]  # noqa: E203
+        data = data.loc[
+            pd.Timestamp(time_range[0]) : pd.Timestamp(time_range[1])  # noqa: E203
+        ]
 
     # Add attributes
     data.attrs["units"] = "mm/day"
