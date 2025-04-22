@@ -6,3 +6,6 @@ tests/__pycache__
 pyseasters.egg-info
 .mypy_cache
 pyseasters/_version.py
+examples/*.png
+examples/*.pdf
+examples/*.eps
