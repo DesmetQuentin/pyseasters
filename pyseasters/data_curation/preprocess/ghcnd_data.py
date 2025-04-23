@@ -9,7 +9,7 @@ from dask.distributed import Client, LocalCluster
 
 from pyseasters.constants import paths
 from pyseasters.ghcnd import load_ghcnd_inventory
-from pyseasters.ghcnd.load_ghcnd_data import _load_ghcnd_single_station
+from pyseasters.ghcnd.data_loaders import _load_ghcnd_single_station
 from pyseasters.utils._dependencies import require_tools
 from pyseasters.utils._logging import LoggingStack
 from pyseasters.utils._typing import LoggerLike

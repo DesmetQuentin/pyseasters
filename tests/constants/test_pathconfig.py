@@ -7,7 +7,7 @@ from unittest.mock import mock_open, patch
 
 import pytest
 
-import pyseasters.constants.pathconfig
+import pyseasters.constants.pathconfig as module
 
 
 def td(i: int = 1):
@@ -51,79 +51,75 @@ def mock_pathsyaml(
 
 @contextmanager
 def secure_constants():
-    original_machine_to_root = pyseasters.constants.pathconfig._MACHINE_TO_ROOT.copy()
-    original_network_to_root = pyseasters.constants.pathconfig._NETWORK_TO_ROOT.copy()
+    original_machine_to_root = module._MACHINE_TO_ROOT.copy()
+    original_network_to_root = module._NETWORK_TO_ROOT.copy()
     try:
         yield
     finally:
-        pyseasters.constants.pathconfig._MACHINE_TO_ROOT.clear()
-        pyseasters.constants.pathconfig._MACHINE_TO_ROOT.update(
-            original_machine_to_root
-        )
-        pyseasters.constants.pathconfig._NETWORK_TO_ROOT.clear()
-        pyseasters.constants.pathconfig._NETWORK_TO_ROOT.update(
-            original_network_to_root
-        )
+        module._MACHINE_TO_ROOT.clear()
+        module._MACHINE_TO_ROOT.update(original_machine_to_root)
+        module._NETWORK_TO_ROOT.clear()
+        module._NETWORK_TO_ROOT.update(original_network_to_root)
 
 
 def test_pathsyaml_machine():
-    """Test behavior when a machine is found alone in paths.yaml."""
+    """Test when a machine is found alone in paths.yaml."""
 
     with secure_constants(), patch("importlib.resources.files") as mock_files:
         mock_file = mock_open(read_data=mock_pathsyaml(machine=True))
         mock_files.return_value.joinpath.return_value.open = mock_file
 
-        importlib.reload(pyseasters.constants.pathconfig)
+        importlib.reload(module)
 
-        assert len(pyseasters.constants.pathconfig._MACHINE_TO_ROOT) == 1
-        assert tm() in pyseasters.constants.pathconfig._MACHINE_TO_ROOT.keys()
-        assert pyseasters.constants.pathconfig._MACHINE_TO_ROOT[tm()] == Path(td())
+        assert len(module._MACHINE_TO_ROOT) == 1
+        assert tm() in module._MACHINE_TO_ROOT.keys()
+        assert module._MACHINE_TO_ROOT[tm()] == Path(td())
 
 
 def test_pathsyaml_network():
-    """Test behavior when a network is found alone in paths.yaml."""
+    """Test when a network is found alone in paths.yaml."""
 
     with secure_constants(), patch("importlib.resources.files") as mock_files:
         mock_file = mock_open(read_data=mock_pathsyaml(network=True))
         mock_files.return_value.joinpath.return_value.open = mock_file
 
-        importlib.reload(pyseasters.constants.pathconfig)
+        importlib.reload(module)
 
-        assert len(pyseasters.constants.pathconfig._NETWORK_TO_ROOT) == 1
-        assert tn() in pyseasters.constants.pathconfig._NETWORK_TO_ROOT.keys()
-        assert pyseasters.constants.pathconfig._NETWORK_TO_ROOT[tn()] == Path(td(3))
+        assert len(module._NETWORK_TO_ROOT) == 1
+        assert tn() in module._NETWORK_TO_ROOT.keys()
+        assert module._NETWORK_TO_ROOT[tn()] == Path(td(3))
 
 
 def test_pathsyaml_machine_list():
-    """Test behavior when a machine is found in a list in paths.yaml."""
+    """Test when a machine is found in a list in paths.yaml."""
 
     with secure_constants(), patch("importlib.resources.files") as mock_files:
         mock_file = mock_open(read_data=mock_pathsyaml(machine=True, sequence=True))
         mock_files.return_value.joinpath.return_value.open = mock_file
 
-        importlib.reload(pyseasters.constants.pathconfig)
+        importlib.reload(module)
 
-        assert len(pyseasters.constants.pathconfig._MACHINE_TO_ROOT) == 2
-        assert tm(1) in pyseasters.constants.pathconfig._MACHINE_TO_ROOT.keys()
-        assert tm(2) in pyseasters.constants.pathconfig._MACHINE_TO_ROOT.keys()
-        assert pyseasters.constants.pathconfig._MACHINE_TO_ROOT[tm(1)] == Path(td())
-        assert pyseasters.constants.pathconfig._MACHINE_TO_ROOT[tm(2)] == Path(td())
+        assert len(module._MACHINE_TO_ROOT) == 2
+        assert tm(1) in module._MACHINE_TO_ROOT.keys()
+        assert tm(2) in module._MACHINE_TO_ROOT.keys()
+        assert module._MACHINE_TO_ROOT[tm(1)] == Path(td())
+        assert module._MACHINE_TO_ROOT[tm(2)] == Path(td())
 
 
 def test_pathsyaml_network_list():
-    """Test behavior when a network is found in a list in paths.yaml."""
+    """Test when a network is found in a list in paths.yaml."""
 
     with secure_constants(), patch("importlib.resources.files") as mock_files:
         mock_file = mock_open(read_data=mock_pathsyaml(network=True, sequence=True))
         mock_files.return_value.joinpath.return_value.open = mock_file
 
-        importlib.reload(pyseasters.constants.pathconfig)
+        importlib.reload(module)
 
-        assert len(pyseasters.constants.pathconfig._NETWORK_TO_ROOT) == 2
-        assert tn(1) in pyseasters.constants.pathconfig._NETWORK_TO_ROOT.keys()
-        assert tn(2) in pyseasters.constants.pathconfig._NETWORK_TO_ROOT.keys()
-        assert pyseasters.constants.pathconfig._NETWORK_TO_ROOT[tn(1)] == Path(td(3))
-        assert pyseasters.constants.pathconfig._NETWORK_TO_ROOT[tn(2)] == Path(td(3))
+        assert len(module._NETWORK_TO_ROOT) == 2
+        assert tn(1) in module._NETWORK_TO_ROOT.keys()
+        assert tn(2) in module._NETWORK_TO_ROOT.keys()
+        assert module._NETWORK_TO_ROOT[tn(1)] == Path(td(3))
+        assert module._NETWORK_TO_ROOT[tn(2)] == Path(td(3))
 
 
 def test_error_pathsyaml_machine_duplicate():
@@ -134,7 +130,7 @@ def test_error_pathsyaml_machine_duplicate():
         mock_files.return_value.joinpath.return_value.open = mock_file
 
         with pytest.raises(RuntimeError):
-            importlib.reload(pyseasters.constants.pathconfig)
+            importlib.reload(module)
 
 
 def test_error_pathsyaml_network_duplicate():
@@ -145,7 +141,7 @@ def test_error_pathsyaml_network_duplicate():
         mock_files.return_value.joinpath.return_value.open = mock_file
 
         with pytest.raises(RuntimeError):
-            importlib.reload(pyseasters.constants.pathconfig)
+            importlib.reload(module)
 
 
 def test_error_pathsyaml_machine_list_duplicate():
@@ -158,7 +154,7 @@ def test_error_pathsyaml_machine_list_duplicate():
         mock_files.return_value.joinpath.return_value.open = mock_file
 
         with pytest.raises(RuntimeError):
-            importlib.reload(pyseasters.constants.pathconfig)
+            importlib.reload(module)
 
 
 def test_error_pathsyaml_network_list_duplicate():
@@ -171,18 +167,18 @@ def test_error_pathsyaml_network_list_duplicate():
         mock_files.return_value.joinpath.return_value.open = mock_file
 
         with pytest.raises(RuntimeError):
-            importlib.reload(pyseasters.constants.pathconfig)
+            importlib.reload(module)
 
 
 def test_error_missing_pathsyaml(caplog):
-    """Test behavior when paths.yaml is missing."""
+    """Test when paths.yaml is missing."""
 
     with secure_constants(), patch(
         "importlib.resources.files", side_effect=FileNotFoundError
     ):
         # Reload the module to trigger the import
         with caplog.at_level(logging.WARNING):
-            importlib.reload(pyseasters.constants.pathconfig)
+            importlib.reload(module)
 
         # Check if warning was logged
         assert (
@@ -193,23 +189,23 @@ def test_error_missing_pathsyaml(caplog):
 
 class TestPathConfig:
     def init(self):
-        return pyseasters.constants.pathconfig.PathConfig()
+        return module.PathConfig()
 
     def test_init_known_machine(self, monkeypatch):
         """Test initialization with a known machine."""
         with secure_constants():
-            pyseasters.constants.pathconfig._MACHINE_TO_ROOT.update({tm(): td()})
+            module._MACHINE_TO_ROOT.update({tm(): td()})
             monkeypatch.setattr(
                 "pyseasters.constants.pathconfig._CURRENT_MACHINE", tm()
             )
             paths = self.init()
-            assert paths.root == pyseasters.constants.pathconfig._MACHINE_TO_ROOT[tm()]
+            assert paths.root == module._MACHINE_TO_ROOT[tm()]
             assert paths.is_operational()
 
     def test_init_known_network(self, monkeypatch):
         """Test initialization with known machine and network."""
         with secure_constants():
-            pyseasters.constants.pathconfig._NETWORK_TO_ROOT.update({tn(): td()})
+            module._NETWORK_TO_ROOT.update({tn(): td()})
             monkeypatch.setattr(
                 "pyseasters.constants.pathconfig._CURRENT_MACHINE", tm()
             )
@@ -217,14 +213,14 @@ class TestPathConfig:
                 "pyseasters.constants.pathconfig._CURRENT_NETWORK", tn()
             )
             paths = self.init()
-            assert paths.root == pyseasters.constants.pathconfig._NETWORK_TO_ROOT[tn()]
+            assert paths.root == module._NETWORK_TO_ROOT[tn()]
             assert paths.is_operational()
 
     def test_init_known_machine_and_network(self, monkeypatch):
         """Test initialization with known machine and network."""
         with secure_constants():
-            pyseasters.constants.pathconfig._MACHINE_TO_ROOT.update({tm(): td(1)})
-            pyseasters.constants.pathconfig._NETWORK_TO_ROOT.update({tn(): td(2)})
+            module._MACHINE_TO_ROOT.update({tm(): td(1)})
+            module._NETWORK_TO_ROOT.update({tn(): td(2)})
             monkeypatch.setattr(
                 "pyseasters.constants.pathconfig._CURRENT_MACHINE", tm()
             )
@@ -232,7 +228,7 @@ class TestPathConfig:
                 "pyseasters.constants.pathconfig._CURRENT_NETWORK", tn()
             )
             paths = self.init()
-            assert paths.root == pyseasters.constants.pathconfig._MACHINE_TO_ROOT[tm()]
+            assert paths.root == module._MACHINE_TO_ROOT[tm()]
             assert paths.is_operational()
 
     def test_init_unknown(self, monkeypatch):
@@ -258,9 +254,9 @@ class TestPathConfig:
             paths.manual_config(str(non_existent_path))
 
     def test_manual_config_known_machine(self, tmp_path, monkeypatch):
-        """Test self.manual_config() when machine is known."""
+        """Test PathConfig.manual_config() when machine is known."""
         with secure_constants():
-            pyseasters.constants.pathconfig._MACHINE_TO_ROOT.update({tm(): td()})
+            module._MACHINE_TO_ROOT.update({tm(): td()})
             monkeypatch.setattr(
                 "pyseasters.constants.pathconfig._CURRENT_MACHINE", tm()
             )
@@ -270,9 +266,9 @@ class TestPathConfig:
             assert paths.is_operational()
 
     def test_manual_config_known_network(self, tmp_path, monkeypatch):
-        """Test self.manual_config() when network is known."""
+        """Test PathConfig.manual_config() when network is known."""
         with secure_constants():
-            pyseasters.constants.pathconfig._NETWORK_TO_ROOT.update({tn(): td()})
+            module._NETWORK_TO_ROOT.update({tn(): td()})
             monkeypatch.setattr(
                 "pyseasters.constants.pathconfig._CURRENT_MACHINE", tm()
             )
@@ -285,6 +281,7 @@ class TestPathConfig:
             assert paths.is_operational()
 
     def test_various_paths(self, tmp_path):
+        """Test simple path-returning single-line methods."""
         paths = self.init()
         paths.manual_config(tmp_path)
         assert paths.ghcnd() == tmp_path / "GHCNd"

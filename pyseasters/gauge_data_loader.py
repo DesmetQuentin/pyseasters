@@ -8,7 +8,7 @@ from .utils import check_dataframe_unit
 
 __all__ = ["load_gauge_data"]
 
-_gauge_data_sources = [
+_GAUGE_DATA_SOURCES = [
     "GHCNd",
 ]
 
@@ -59,12 +59,12 @@ def _dispatcher(source: str, **kwargs) -> Tuple[pd.DataFrame, pd.DataFrame]:
     else:
         raise ValueError(
             f"'{source}' is not a valid source. Please provide one of "
-            + f"""{",".join(["'%s'" % (key) for key in _gauge_data_sources])}."""
+            + f"""{",".join(["'%s'" % (key) for key in _GAUGE_DATA_SOURCES])}."""
         )
 
     # Add the source as a prefix to the station ID
     data = data.rename(_renamer(source), axis=1)
-    metadata.index = metadata.index.map(_renamer(source))
+    metadata = metadata.rename(_renamer(source))
 
     return data, metadata
 
@@ -72,7 +72,7 @@ def _dispatcher(source: str, **kwargs) -> Tuple[pd.DataFrame, pd.DataFrame]:
 def load_gauge_data(
     filter_condition: Optional[str] = None,
     time_range: Optional[Tuple[datetime, datetime]] = None,
-    usesources: List[str] = _gauge_data_sources,
+    usesources: List[str] = _GAUGE_DATA_SOURCES,
     units: str = "mm/day",
     from_parquet: bool = True,
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:

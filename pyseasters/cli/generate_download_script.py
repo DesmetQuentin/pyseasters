@@ -23,7 +23,7 @@ import argparse
 import sys
 
 from pyseasters.data_curation import generate_download_script
-from pyseasters.data_curation.generate_download_script.generate_download_script import (
+from pyseasters.data_curation.download.main import (
     _dispatcher,
 )
 

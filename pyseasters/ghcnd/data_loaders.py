@@ -5,7 +5,7 @@ import pandas as pd
 
 from pyseasters.constants import paths
 
-from .load_ghcnd_metadata import get_ghcnd_metadata, load_ghcnd_stations
+from .metadata_loaders import get_ghcnd_metadata, load_ghcnd_stations
 
 __all__ = ["load_ghcnd_data"]
 
@@ -53,6 +53,7 @@ def _load_ghcnd_single_var_station(
             )
             .dropna()
             .rename_axis("time")
+            .rename(columns={var: station_id})
         )
 
     return data
