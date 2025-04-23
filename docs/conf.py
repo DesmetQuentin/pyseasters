@@ -65,7 +65,7 @@ autodoc2_hidden_regexes = [
     "pyseasters.*log",
     "pyseasters.cli.*main",
     "pyseasters.constants.countries.COUNTRIES",
-    "pyseasters.constants.paths.paths",
+    "pyseasters.constants.pathconfig.paths",
     "pyseasters.utils.units.ureg",
 ]
 autodoc2_index_template = """API Reference

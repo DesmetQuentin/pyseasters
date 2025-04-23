@@ -1,5 +1,6 @@
 """
-This module provides the ``paths`` constant -- and defines its dataclass, ``PathConfig``.
+This module provides the ``paths`` constant
+-- and defines its dataclass, ``PathConfig``.
 
 ``paths`` aims at providing the paths to the external data employed in this package.
 It adapts to the session's machine/network based on the information provided in
@@ -95,14 +96,14 @@ class PathConfig:
     Class to handle data access based on the session's machine/network
     (takes no argument).
 
-    On instantiation, a ``PathConfig`` object attemps to assign its ``root`` attribute with
-    the data root path associated with the current session, based on the predefined
+    On instantiation, a ``PathConfig`` object attemps to assign its ``root`` attribute
+    with the data root path associated with the current session, based on the predefined
     mappings parsed from the 'paths.yaml' file located in 'pyseasters/constants/data/'.
     If the current session's machine or network does not match any predefined data root
     path, then the ``PathConfig`` object is considered not operational and a warning is
     emitted to notify the user that no data will be accessible unless configured
-    manually (see the ``manual_config()`` method to override or define the data root path
-    explicitly).
+    manually (see the ``manual_config()`` method to override or define the data root
+    path explicitly).
 
     Once operational, a ``PathConfig`` object provides plenty of paths to various data
     under the data root directory, accessible via methods.
