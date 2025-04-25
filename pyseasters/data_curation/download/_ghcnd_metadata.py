@@ -2,8 +2,10 @@ from typing import Optional
 
 from pyseasters.utils._typing import PathLike
 
-STATIONS = "https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt"
-INVENTORY = "https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-inventory.txt"
+__all__ = ["generate_ghcnd_metadata_download_script"]
+
+_STATIONS = "https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt"
+_INVENTORY = "https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-inventory.txt"
 
 
 def generate_ghcnd_metadata_download_script(
@@ -24,8 +26,8 @@ def generate_ghcnd_metadata_download_script(
 
     script = f"""#!/bin/bash
 
-wget {STATIONS}
-wget {INVENTORY}
+wget {_STATIONS}
+wget {_INVENTORY}
 """
 
     if output is not None:

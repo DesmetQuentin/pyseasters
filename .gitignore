@@ -2,7 +2,7 @@ __pycache__
 pyseasters/__pycache__
 tests/__pycache__
 .pytest_cache
-.coverage
+.coverage*
 pyseasters.egg-info
 .mypy_cache
 pyseasters/_version.py
