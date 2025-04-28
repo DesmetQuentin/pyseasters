@@ -1,17 +1,17 @@
-Installation
-============
+Install
+=======
 
 .. seealso::
 
-    Make sure first to clone PySEASTERS' Github repository,
-    as explained :doc:`here <../user_guide/installation>`.
+   Make sure first to clone PySEASTERS' Github repository,
+   as explained on :doc:`this page <../user_guide/install>`.
 
 
 If you are a developer who wishes to contribute to PySEASTERS in any way, you must
 follow a specific workflow which also has some tool dependendies. They are divided
 into pure development tools (``dev``) and tools for generating the documentation
-(``docs``). Install them using:
+(``docs``). Install them from the ``pyseasters`` environment and folder using:
 
 .. code:: bash
 
-    pip install -e </path/to/pyseasters>[dev,docs]
+   pip install -e .[dev,docs]

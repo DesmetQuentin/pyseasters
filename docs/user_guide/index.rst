@@ -6,4 +6,5 @@ A beautiful user guide.
 
 .. toctree::
 
-    installation
+    install
+    replicate_the_database

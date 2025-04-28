@@ -34,6 +34,7 @@ docs = [
   "myst-parser",
   "sphinx-autodoc2",
   "sphinx-copybutton",
+  "sphinx-design",
 ]
 cli = [
   "csvkit",

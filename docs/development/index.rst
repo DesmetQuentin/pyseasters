@@ -6,4 +6,4 @@ Some contributing guidelines.
 
 .. toctree::
 
-    installation
+    install

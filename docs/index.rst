@@ -7,14 +7,22 @@ scientific project.
 
 .. important::
 
-    This package is not entirely public and notably relies on several data and
-    configuration files which are kept private within the SEASTERS project.
+    This package is not entirely public: a number of functions actually rely
+    on the existence of **data and configuration files** which **are not provided**
+    with the Python code.
+
+    **However**, the fully functional SEASTERS framework **can be replicated** from
+    the PySEASTERS code alone and the present documentation.
+    All downloading and preprocessing functions are indeed transparently shared,
+    and a guide to reconsitude our database is accessible
+    :doc:`here <../user_guide/replicate_the_database>`.
 
 
 .. toctree::
-    :hidden:
+   :maxdepth: 2
+   :hidden:
 
-    user_guide/index
-    development/index
-    faq/index
-    release_notes/index
+   user_guide/index
+   development/index
+   faq/index
+   release_notes/index
