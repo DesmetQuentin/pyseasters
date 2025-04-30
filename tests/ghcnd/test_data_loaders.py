@@ -191,10 +191,6 @@ class TestLoadGHCNdData:
             }[station_id],
         )
         patch.setattr(
-            "pyseasters.ghcnd.data_loaders.load_ghcnd_stations",
-            lambda from_parquet=True: df_station,
-        )
-        patch.setattr(
             "pyseasters.ghcnd.data_loaders.get_ghcnd_metadata",
             lambda var="PRCP", from_parquet=True: df_meta,
         )
