@@ -87,5 +87,5 @@ def get_ghcnd_metadata(var: str = "PRCP", from_parquet: bool = True) -> pd.DataF
     """
     stations = load_ghcnd_stations(from_parquet=from_parquet)
     inventory = load_ghcnd_inventory(usevars=[var], from_parquet=from_parquet)
-    metadata = pd.concat([stations[inventory.index], inventory], axis=1)
+    metadata = pd.concat([stations.loc[inventory.index], inventory], axis=1)
     return metadata

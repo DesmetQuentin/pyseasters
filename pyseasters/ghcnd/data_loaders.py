@@ -98,10 +98,7 @@ def load_ghcnd_data(
     """
 
     # Load metadata
-    if time_range is None:  # no need to load inventory
-        metadata = load_ghcnd_stations()
-    else:
-        metadata = get_ghcnd_metadata(var=var)
+    metadata = get_ghcnd_metadata(var=var)
 
     # Select the list of stations matching ``time_range`` and ``filter_condition``
     if time_range is not None:
