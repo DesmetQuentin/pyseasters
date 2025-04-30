@@ -5,7 +5,7 @@ import pandas as pd
 
 from pyseasters.constants import paths
 
-from .metadata_loaders import get_ghcnd_metadata, load_ghcnd_stations
+from .metadata_loaders import get_ghcnd_metadata
 
 __all__ = ["load_ghcnd_data"]
 
