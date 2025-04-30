@@ -1,0 +1,8 @@
+{
+    "version": "v1.x (latest)",
+    "versions": [
+      {"version": "v1.x (latest)", "url": "https://pyseasters.readthedocs.io/en/latest/"},
+      {"version": "dev", "url": "https://pyseasters.readthedocs.io/en/dev"}
+    ]
+}
+  

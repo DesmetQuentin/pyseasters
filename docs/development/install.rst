@@ -1,10 +1,10 @@
-Install
-=======
+Installation
+============
 
 .. seealso::
 
    Make sure first to clone PySEASTERS' Github repository,
-   as explained on :doc:`this page <../user_guide/install>`.
+   as explained on :doc:`this page <../install>`.
 
 
 If you are a developer who wishes to contribute to PySEASTERS in any way, you must

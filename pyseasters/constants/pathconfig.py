@@ -2,10 +2,26 @@
 This module provides the ``paths`` constant
 -- and defines its dataclass, ``PathConfig``.
 
-``paths`` aims at providing the paths to the external data employed in this package.
-TODO It adapts to the session's machine/network based on the information provided in
-'paths.yaml', a personal configuration file that must be placed in
-'pyseasters/constants/data'.
+``paths`` aims at providing the paths to the external database employed in this package.
+By default, it is initialized reading the 'path.txt' file located at
+'pyseasters/constants/data/'. This file should contain a single line indicating
+the root directory of the database.
+
+.. note::
+
+   If the database has been constructed following :ref:`this guide <replicate>`,
+   then running the ``configure_api.py`` script located in the database root directory
+   should generate the 'path.txt' automatically.
+
+If 'path.txt' is not found when importing the
+package, a manual configuration is needed before attempting to load any data.
+To do this, users could type the following in their scripts' header:
+
+.. code:: python
+
+   import pyseasters
+   pyseasters.paths.manual_config(root="<path/to/database/root>")
+
 """
 
 import importlib.resources
@@ -81,15 +97,30 @@ def _parse_pathsyaml():
 class PathConfig:
     """Class to handle data access.
 
-    TODO
-    On instantiation, a ``PathConfig`` object attemps to assign its ``root`` attribute
-    with the data root path associated with the current session, based on the predefined
-    mappings parsed from the 'paths.yaml' file located in 'pyseasters/constants/data/'.
-    If the current session's machine or network does not match any predefined data root
-    path, then the ``PathConfig`` object is considered not operational and a warning is
-    emitted to notify the user that no data will be accessible unless configured
-    manually (see the ``manual_config()`` method to override or define the data root
-    path explicitly).
+    On instantiation, the ``init_mode`` argument enables specific initialization
+    streams:
+
+    * ``init_mode == "auto"``:
+      The ``PathConfig`` object attemps to assign its ``root`` attribute
+      with the data root path associated with the current session, based on the
+      predefined mappings parsed from the 'paths.yaml' file located in
+      'pyseasters/constants/data/'.
+      If the current session's machine or network does not match any predefined data
+      root path, then the ``PathConfig`` object is considered not operational and a
+      warning is emitted to notify the user that no data will be accessible unless
+      configured manually (see the ``manual_config()`` method to override or define the
+      data root path explicitly).
+
+    * ``init_mode == preconfig"``:
+      The object attempts to assign its ``root`` attribute with the data root path
+      stored in the 'path.txt' file located in 'pyseasters/constants/data/'. If the
+      directory does not exist, the object remains non operational, and the user
+      will also need to use the ``manual_config()`` method to define the data root
+      explicitly).
+
+    * ``init_mode == manual:<root_path>``:
+      In this mode, the ``manual_config()`` method is directly called, using the
+      ``root=<root_path>`` argument.
 
     Once operational, a ``PathConfig`` object provides plenty of paths to various data
     under the data root directory, accessible via methods.

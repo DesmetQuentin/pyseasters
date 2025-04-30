@@ -1,9 +1,7 @@
 FAQ
 ===
 
-Some questions and answers.
-
-
 .. toctree::
+   :maxdepth: 1
 
-    parquet
+   parquet

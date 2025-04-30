@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools", "setuptools-scm"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -8,6 +8,7 @@ dynamic = ["version"]
 description = "Python package to handle data in the SEASTERS project."
 authors = [{ name = "Quentin Desmet", email = "desmetque@gmail.com" }]
 dependencies = [
+  "pytz",
   "pandas",
   "pint",
   "pyyaml",
@@ -35,6 +36,7 @@ docs = [
   "sphinx-autodoc2",
   "sphinx-copybutton",
   "sphinx-design",
+  "sphinxcontrib-bibtex",
 ]
 cli = [
   "csvkit",

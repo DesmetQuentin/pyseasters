@@ -14,14 +14,12 @@ sys.path.insert(0, os.path.abspath(".."))
 project = "pyseasters"
 copyright = "2025, Quentin Desmet"
 author = "Quentin Desmet"
-release = "1.0.0-alpha.1"
+release = "1.0.0"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    #   "myst_parser",
-    #    "autodoc2",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
     "sphinx_copybutton",
@@ -29,6 +27,9 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.autodoc",
     "sphinx_design",
+    "sphinxcontrib.bibtex",
+    # "myst_parser",
+    # "autodoc2",
 ]
 
 templates_path = ["_templates"]
@@ -45,17 +46,51 @@ autodoc_typehints = "description"
 autodoc_typehints_description_target = "all"
 
 
+# -- Options for bibtex
+bibtex_bibfiles = ["_static/references.bib"]
+bibtex_default_style = "plain"
+bibtex_reference_style = "author_year"
+
+
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "pydata_sphinx_theme"
-html_static_path = ["_static"]
+html_theme_options = {
+    "github_url": "https://github.com/DesmetQuentin/pyseasters",
+    "icon_links": [],
+    "switcher": {
+        "json_url": "https://pyseasters.readthedocs.io/en/latest/versions.json",
+        "version_match": "v1.x (latest)",
+    },
+    "logo": {
+        "text": "PySEASTERS",
+    },
+}
+# html_extra_path = ["versions.json"]
 
-'''
+html_static_path = ["_static"]
+html_css_files = [
+    "custom.css",
+]
+html_sidebars = {
+    "database/*": ["sidebar-nav-bs"],
+    "user_guide/*": ["sidebar-nav-bs"],
+    "api/*": ["sidebar-nav-bs"],
+    "faq/*": ["sidebar-nav-bs"],
+    "development/*": ["sidebar-nav-bs"],
+    "install*": [],
+}
+
+# violet: #8045e5
+# blue: #0a7d91
+
+"""
 # -- Options for myst-parser -------------------------------------------------
 myst_enable_extensions = ["colon_fence"]
+"""
 
-
+'''
 # -- Options for autodoc2 ----------------------------------------------------
 autodoc2_packages = ["../pyseasters"]
 # autodoc2_packages = [{"path": "../pyseasters", "auto_mode": False}]  # disable auto api

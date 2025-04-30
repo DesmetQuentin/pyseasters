@@ -2,7 +2,9 @@
 PySEASTERS includes:
 
 #. A Python API aiming to manipulate the data stored internally.
-#. ``pyseasters.data_curation``: The scripts that served for data curation.
+
+#. ``pyseasters.data_curation``: The scripts that serve for
+   :ref:`constructing the database <replicate>`.
 
 
 Importing ``pyseasters`` does not import the ``data_curation`` subpackage by default,

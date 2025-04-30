@@ -1,11 +1,13 @@
-Install
-=======
+Installation
+============
 
 .. note::
 
    PySEASTERS is not distributed in any public collection like Conda or ``pip``.
    Thus, installation must be done manually as described on this page.
 
+
+.. _venv:
 
 Virtual environment
 -------------------
@@ -88,7 +90,7 @@ Follow the relevant tab below:
 
          git clone https://github.com/DesmetQuentin/pyseasters.git
 
-      This should have created a ``pyseasters`` folder. **Change directory**:
+      This should create a ``pyseasters`` folder. **Change directory**:
 
       .. code:: bash
 
@@ -99,6 +101,20 @@ Follow the relevant tab below:
       .. code:: bash
 
          pip install -e .
+      
+      Now, you need to **let PySEASTERS know where is the database** on your machine.
+      Contact your data maintainer to know the database root directory.
+      Change directory into it and it should contain a ``configure_api.py`` script.
+      Run it:
+
+      .. code:: bash
+
+         python configure_api.py
+      
+      .. note::
+
+         We assume here that the database on your machine has been set up
+         as guided throughout :ref:`this page <replicate>`.
 
 
    .. tab-item:: Update
@@ -137,7 +153,7 @@ Command-line tools (optional)
 Formally, the command-line interface (CLI) is already accessible after installing the
 main API. However you may not have all dependencies right.
 In fact, the ``pip install -e`` command can be decorated with optional keywords,
-and, in this case, CLI dependencies must be installed using:
+and, in this case, CLI dependencies can be installed using:
 
 .. code:: bash
 

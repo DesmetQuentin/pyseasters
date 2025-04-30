@@ -1,10 +1,7 @@
 User guide
 ==========
 
-A beautiful user guide.
-
-
 .. toctree::
+   :maxdepth: 1
 
-    install
-    replicate_the_database
+   rain_gauge
