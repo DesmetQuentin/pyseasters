@@ -107,7 +107,8 @@ def load_ghcnd_data(
         metadata = metadata[
             ((start >= metadata["start"]) & (start <= metadata["end"]))
             | ((end >= metadata["start"]) & (end <= metadata["end"]))
-        ].drop(["start", "end"], axis=1)
+        ]
+    metadata.drop(["start", "end"], axis=1, inplace=True)
 
     if filter_condition is not None:
         try:
