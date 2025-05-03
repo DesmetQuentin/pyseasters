@@ -69,6 +69,11 @@ bibtex_reference_style = "author_year"
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
+html_context = {
+    "display_github": False,
+    "display_version": False,  # disables the Read the Docs default version dropdown
+}
+
 html_theme = "pydata_sphinx_theme"
 html_theme_options = {
     "navbar_end": ["version-switcher", "navbar-icon-links", "theme-switcher"],
