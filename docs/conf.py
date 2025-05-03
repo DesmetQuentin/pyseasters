@@ -5,7 +5,6 @@
 
 import logging
 import os
-import subprocess
 import sys
 
 sys.path.insert(0, os.path.abspath(".."))
@@ -13,31 +12,13 @@ sys.path.insert(0, os.path.abspath(".."))
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger()
 
-
-def get_git_branch():
-    try:
-        result = subprocess.run(
-            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
-            text=True,
-            check=True,
-        )
-        branch = result.stdout.strip()
-        log.info("Found branch %s", branch)
-        return branch
-    except subprocess.CalledProcessError:
-        log.warning("Cannot find branch name")
-        return None  # Not in a git repo or error occurred
-
-
-branch = get_git_branch()
-
-if branch:
-    if branch == "dev":
-        switcher_version = "dev"
-    else:
-        switcher_version = "v1.x"
+rtd_version = os.environ.get("READTHEDOCS_VERSION_NAME", "")
+if rtd_version == "dev":
+    switcher_version = "dev"
+elif rtd_version == "stable":
+    switcher_version = "v1.x"
+else:
+    switcher_version = "v1.x"
 log.info("Set switcher version to %s", switcher_version)
 
 
