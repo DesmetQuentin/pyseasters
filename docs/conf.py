@@ -22,9 +22,11 @@ def get_git_branch():
             text=True,
             check=True,
         )
-        return result.stdout.strip()
+        branch = result.stdout.strip()
+        log.info("Found branch %s", branch)
+        return branch
     except subprocess.CalledProcessError:
-        logging.warning("Cannot find branch name")
+        log.warning("Cannot find branch name")
         return None  # Not in a git repo or error occurred
 
 
@@ -35,6 +37,7 @@ if branch:
         switcher_version = "dev"
     else:
         switcher_version = "v1.x"
+log.info("Set switcher version to %s", switcher_version)
 
 
 # -- Project information -----------------------------------------------------
