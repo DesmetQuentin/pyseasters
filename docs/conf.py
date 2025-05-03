@@ -37,7 +37,7 @@ if branch:
         switcher_version = "dev"
     else:
         switcher_version = "v1.x"
-log.info("Set switcher version to %s", switcher_version)
+log.warning("Set switcher version to %s", switcher_version)
 
 
 # -- Project information -----------------------------------------------------
