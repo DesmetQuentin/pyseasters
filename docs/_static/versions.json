@@ -1,8 +1,7 @@
 {
-    "version": "v1.x (stable)",
+    "active_version": "v1.x (stable)",
     "versions": [
       {"version": "v1.x (stable)", "url": "https://pyseasters.readthedocs.io/en/stable/"},
       {"version": "latest (dev)", "url": "https://pyseasters.readthedocs.io/en/dev"}
     ]
 }
-  
