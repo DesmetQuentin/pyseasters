@@ -57,11 +57,12 @@ bibtex_reference_style = "author_year"
 
 html_theme = "pydata_sphinx_theme"
 html_theme_options = {
+    "navbar_end": ["version-switcher", "navbar-icon-links"],
     "github_url": "https://github.com/DesmetQuentin/pyseasters",
     "icon_links": [],
     "switcher": {
-        "json_url": "https://pyseasters.readthedocs.io/en/latest/versions.json",
-        "version_match": "v1.x (latest)",
+        "json_url": "https://pyseasters.readthedocs.io/en/dev/_static/versions.json",
+        "version_match": "v1.x (stable)",
     },
     "logo": {
         "text": "PySEASTERS",
