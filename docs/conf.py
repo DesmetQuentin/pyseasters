@@ -3,10 +3,39 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
+import logging
 import os
+import subprocess
 import sys
 
 sys.path.insert(0, os.path.abspath(".."))
+
+log = logging.getLogger()
+
+
+def get_git_branch():
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            text=True,
+            check=True,
+        )
+        return result.stdout.strip()
+    except subprocess.CalledProcessError:
+        logging.warning("Cannot find branch name")
+        return None  # Not in a git repo or error occurred
+
+
+branch = get_git_branch()
+
+if branch:
+    if branch == "dev":
+        switcher_version = "dev"
+    else:
+        switcher_version = "v1.x"
+
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -62,7 +91,7 @@ html_theme_options = {
     "icon_links": [],
     "switcher": {
         "json_url": "https://pyseasters.readthedocs.io/en/dev/_static/versions.json",
-        "version_match": "v1.x",
+        "version_match": switcher_version,
     },
     "logo": {
         "text": "PySEASTERS",
