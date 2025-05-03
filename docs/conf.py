@@ -10,6 +10,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath(".."))
 
+logging.basicConfig(level=logging.INFO)
 log = logging.getLogger()
 
 
@@ -37,7 +38,7 @@ if branch:
         switcher_version = "dev"
     else:
         switcher_version = "v1.x"
-log.warning("Set switcher version to %s", switcher_version)
+log.info("Set switcher version to %s", switcher_version)
 
 
 # -- Project information -----------------------------------------------------
