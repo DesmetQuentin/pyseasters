@@ -18,10 +18,12 @@ Returned format
 Let us first have a look at the ``data`` and ``metadata`` DataFrames returned by the
 ``load_gauge_data()`` function. With the following, filters are applied to load a
 subset of the rain gauge database (more details in the next section on
-:ref:`Filtering <guide-gauge-filter>`), then we can see how the result is formatted:
+:ref:`filtering <guide-gauge-filter>`), then we can see how the result is formatted:
 
 .. code:: pycon
 
+   >>> from datetime import datetime
+   >>> import pyseasters as ps
    >>> data, metadata = ps.load_gauge_data(
    ...     filter_condition="lon > 100 and lon < 130 and lat > 15 and lat < 25",
    ...     time_range=[datetime(2017, 1, 1), datetime(2017, 12, 31)],
@@ -63,16 +65,19 @@ subset of the rain gauge database (more details in the next section on
    [63 rows x 4 columns]
 
 
-``data`` shows for each station across columns a time series of its precipitation data
-across a time axis in index that is shared for all stations (using ``NaN`` to fill
-the blanks). The DataFrame has one attribute "units" which contains unit information,
-in this case, "mm/day".
+* ``data`` shows for each station across columns a time series of its precipitation data
+  across a time axis in index that is shared for all stations (using ``NaN`` to fill
+  the blanks). The DataFrame has one attribute "units" which contains unit information,
+  in this case, "mm/day".
 
-``metadata`` contains station metadata for all the stations in ``data.columns``.
-This includes "lat" and "lon" for latitude and longitude, respectively, "elevation"
-and "station_name" which, depending on the source and the country, includes a standard
-name (e.g., the city), a postal code, etc. Note that the "station_id" is formatted as
-``<source>:<original_station_id>``.
+* ``metadata`` contains station metadata for all the stations in ``data.columns``.
+  This includes "lat" and "lon" for latitude and longitude, respectively, "elevation"
+  and "station_name" which, depending on the source and the country, includes a standard
+  name (e.g., the city), a postal code, etc.
+
+.. note::
+   
+   The "station_id" is formatted as ``<source>:<original_station_id>``.
 
 
 .. _guide-gauge-filter:
@@ -87,16 +92,16 @@ memory concerns.
 
 .. attention::
 
-   **Not recommended:**
-
    .. code:: python
 
+      """ NOT RECOMMENDED """
       import pyseasters as ps
       data, metadata = ps.load_gauge_data()  # <-- /!\ No argument!
 
 
 Instead, several arguments enable filtering the database.
-You can filter based on the **data source**:
+You can for instance filter based on the **data source**
+using the ``usesources`` keyword argument:
 
 .. code:: python
 
@@ -144,7 +149,21 @@ Naturally, all three types of filtering --
 i.e., based on the source with ``usesources``,
 on station metadata with ``filter_condition``
 and on a time interval with ``time_range`` --
-can be applied together.
+can be applied together:
+
+.. code:: python
+
+   from datetime import datetime
+
+   data, metadata = ps.load_gauge_data(
+       filter_condition="lon > 100 and lon < 130 and lat > 10 and lat < 30",
+       time_range=[
+           datetime(2018, 1, 1),
+           datetime(2018, 3, 31)
+       ],
+       usesources=["GHCNd"],
+   )
+
 
 .. note::
 
@@ -199,10 +218,44 @@ example of this page can be reran by changing units, as follows:
 Integration with ``xarray``
 ---------------------------
 
-Although xarray is not currently a dependency of PySEASTERS, using xarray tools
+Although ``xarray`` is not currently a dependency of PySEASTERS, using ``xarray`` tools
 can be done quite quickly based on the outputs of PySEASTERS functions.
-For instance, an xarray DataArray can be constructed using the ``data`` and ``metadata``
-results of the ``load_gauge_data()`` function.
+For instance, an ``xarray`` DataArray can be constructed using the data and metadata
+results of the ``load_gauge_data()`` function:
+
+.. code:: python
+
+   from datetime import datetime
+   
+   import pyseasters as ps
+   import xarray as xr
+
+
+   # Load
+   d, md = ps.load_gauge_data(
+       filter_condition="lon > 100 and lon < 130 and lat > 10 and lat < 30",
+       time_range=[
+           datetime(2018, 1, 1),
+           datetime(2018, 3, 31)
+       ],
+       usesources=["GHCNd"],
+   )
+
+   # Build the DataArray
+   da = xr.DataArray(
+       d.values,
+       dims=["time", "station_id"],
+       coords={
+           "time": d.index,
+           "station_id": d.columns,
+           "lat": ("station_id", md["lat"]),
+           "lon": ("station_id", md["lon"]),
+           "elevation": ("station_id", md["elevation"]),
+           "station_name": ("station_id", md["station_name"]),
+       },
+       attrs=d.attrs,
+       name="precipitation",
+   )
 
 
 Integration with ``matplotlib``
@@ -219,8 +272,8 @@ then plotting one day's data over a map, using ``matplotlib`` and ``cartopy``.
    import cartopy.crs as ccrs
    import matplotlib.pyplot as plt
    import numpy as np
+   import pyseasters as ps
 
-   import pyseasters as pys
 
    # Input
    lonmin, lonmax = 115, 135
@@ -231,12 +284,12 @@ then plotting one day's data over a map, using ``matplotlib`` and ``cartopy``.
    query = f"lon >= {lonmin} and lon <= {lonmax} and lat >= {latmin} and lat <= {latmax}"
    units = "mm/day"
 
-   # Loading
-   data, metadata = pys.load_gauge_data(
+   # Load
+   data, metadata = ps.load_gauge_data(
       filter_condition=query, time_range=(beg, end), units=units
    )
 
-   # Plotting
+   # Plot
    prj_ = ccrs.PlateCarree()  # source projection
    _prj = ccrs.Orthographic(
       central_longitude=(lonmax + lonmin) / 2,

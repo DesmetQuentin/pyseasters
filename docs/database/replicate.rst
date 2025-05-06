@@ -23,7 +23,7 @@ Thus, it must be generated manually prior to following anything else in this gui
 (e.g., ``/your/working/directory/PySEASTERS_DATA``;
 if you work in a group, using a shared storage is generally a good idea).
 
-**ii.** Then, from the chosen data directory,
+**ii.** Then, from the chosen directory,
 type:
 
 .. code:: bash
