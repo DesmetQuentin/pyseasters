@@ -143,7 +143,9 @@ class TestCleanColumns:
     def test_expected_ncol(self, tmp_path, tmp_indices, monkeypatch):
         """Test behavior when `expected_ncol` matches actual ncol."""
         monkeypatch.setattr(
-            subprocess, "run", patch_subprocess_run(f"count:{len(tmp_indices)}")
+            subprocess,
+            "run",
+            patch_subprocess_run(f"count:{len(tmp_indices)}"),  # noqa: E231
         )
         file_in = tmp_path / "input.csv"
         file_out = tmp_path / "output.csv"
@@ -171,7 +173,9 @@ class TestCleanColumns:
     def test_wrong_expected_ncol(self, tmp_path, tmp_indices, monkeypatch):
         """Test when providing a wrong `expected_ncol`."""
         monkeypatch.setattr(
-            subprocess, "run", patch_subprocess_run(f"count:{len(tmp_indices)}")
+            subprocess,
+            "run",
+            patch_subprocess_run(f"count:{len(tmp_indices)}"),  # noqa: E231
         )
         file_in = tmp_path / "input.csv"
         file_out = tmp_path / "output.csv"

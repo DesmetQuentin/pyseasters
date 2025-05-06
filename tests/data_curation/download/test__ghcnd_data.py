@@ -25,7 +25,9 @@ class TestGenerateGHCNdDataDownloadScript:
         self.patch_station_list(tmp_station_list, monkeypatch)
         script = generate_ghcnd_data_download_script()
         assert "#!/bin/bash" in script
-        assert f"for station in {' '.join(tmp_station_list)}; do" in script
+        assert (
+            f"for station in {' '.join(tmp_station_list)}; do" in script  # noqa: E702
+        )
         assert f"wget {_DATA % ('${station}')}" in script
         assert "done" in script
 
