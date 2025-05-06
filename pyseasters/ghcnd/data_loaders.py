@@ -132,4 +132,7 @@ def load_ghcnd_data(
     # Add attributes
     data.attrs["units"] = "mm/day"
 
+    # Match station order
+    data = data.loc[:, metadata.index.to_list()]
+
     return data, metadata

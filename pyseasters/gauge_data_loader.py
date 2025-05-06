@@ -129,5 +129,6 @@ def load_gauge_data(
 
     combined_data = pd.concat(all_data, axis=1)
     combined_metadata = pd.concat(all_metadata, axis=0)
+    combined_data = combined_data.loc[:, combined_metadata.index.to_list()]
 
     return combined_data, combined_metadata
