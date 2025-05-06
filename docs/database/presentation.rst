@@ -22,10 +22,9 @@ They are all listed below.
 .. tip::
 
    Download all references as a ``.bib`` file:
-   :download:`Download references.bib <../_static/references.bib>`.
+   :download:`references.bib <../_static/references.bib>`.
 
 
 .. bibliography::
    :all:
    :list: bullet
-
