@@ -80,7 +80,7 @@ in the data directory root, containing the following Python script:
 
        # Write data directory in 'pyseasters/constants/data/path.txt'
        file = Path(spec.origin).parent / "constants" / "data" / "path.txt"
-       file.write_text(str(Path(__name__).parent))
+       file.write_text(str(Path(__name__).parent.resolve()))
        sys.stdout.write("API configuration completed!\n")
        sys.exit(0)
 
