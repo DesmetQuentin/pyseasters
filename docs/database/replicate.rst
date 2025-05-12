@@ -141,7 +141,7 @@ command. Running a help does the following:
    Generate a download bash script for the desired data.
 
    positional arguments:
-   key                   key associated with the desired data (one of 'GHCNd','GHCNd metadata')
+   key                   key associated with the desired data (one of 'GHCNd', 'GHCNd metadata')
 
    options:
    -h, --help            show this help message and exit
