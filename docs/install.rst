@@ -142,7 +142,7 @@ For instance:
 
    >>> import pyseasters as ps
    >>> ps.VERSION
-   1.0.0
+   '1.0.0'
 
 
 .. _install-cli:

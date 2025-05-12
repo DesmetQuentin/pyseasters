@@ -15,6 +15,7 @@ Subpackages
    pyseasters.constants
    pyseasters.data_curation
    pyseasters.ghcnd
+   pyseasters.ghcnh
    pyseasters.utils
 
 Submodules

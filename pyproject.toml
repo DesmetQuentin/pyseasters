@@ -37,6 +37,7 @@ docs = [
   "sphinx-copybutton",
   "sphinx-design",
   "sphinxcontrib-bibtex",
+  "sphinx-hoverxref",
 ]
 cli = [
   "csvkit",

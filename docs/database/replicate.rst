@@ -28,7 +28,7 @@ type:
 
 .. code:: bash
 
-   mkdir -p GHCNd/{data,metadata}
+   mkdir -p {GHCNd,GHCNh}/{data,metadata}
 
 
 **iii.** As a result,
@@ -39,6 +39,9 @@ you should now get the following when running ``tree``:
    $ tree -d .
    .
    └── GHCNd
+       ├── data
+       └── metadata
+   └── GHCNh
        ├── data
        └── metadata
 

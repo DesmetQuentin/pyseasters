@@ -1,3 +1,5 @@
+.. _parquet:
+
 Why the ``parquet`` format?
 ===========================
 

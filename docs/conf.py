@@ -42,6 +42,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx_design",
     "sphinxcontrib.bibtex",
+    "hoverxref.extension",
     # "myst_parser",
     # "autodoc2",
 ]

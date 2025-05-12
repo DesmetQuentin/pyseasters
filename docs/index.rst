@@ -26,7 +26,7 @@ scientific project.
       :img-top: _static/svg/install.svg
       :class-card: intro-card
 
-      How to install pyseasters with ``pip`` or ``conda``. 
+      How to install PySEASTERS with ``pip`` or ``conda``. 
 
    .. grid-item-card:: Database
       :link: database/index

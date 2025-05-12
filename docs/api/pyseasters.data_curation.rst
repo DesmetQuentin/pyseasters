@@ -13,4 +13,5 @@ Subpackages
    :maxdepth: 1
 
    pyseasters.data_curation.download
+   pyseasters.data_curation.extra
    pyseasters.data_curation.preprocess
