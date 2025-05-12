@@ -2,8 +2,9 @@ import logging
 import subprocess
 from typing import List, Optional
 
+import pandas as pd
+
 from pyseasters.constants import COUNTRIES, paths
-from pyseasters.ghcnd import load_ghcnd_inventory, load_ghcnd_stations
 from pyseasters.utils._dependencies import require_tools
 from pyseasters.utils._typing import PathLike
 
@@ -85,8 +86,19 @@ def _clean_columns(
 
 def _stations_to_parquet() -> None:
     """Convert the 'ghcnd-stations' ASCII file into parquet."""
-    data = load_ghcnd_stations(from_parquet=False)
-    data.to_parquet(paths.ghcnd_stations())
+    # TODO: look in the doc precisions on the station_name
+    col_names = ["station_id", "lat", "lon", "elevation", "station_name"]
+    colspecs = [
+        (0, 11),
+        (12, 20),
+        (21, 30),
+        (31, 37),
+        (38, 85),
+    ]
+    stations = pd.read_fwf(
+        paths.ghcnd_stations(ext="txt"), colspecs=colspecs, names=col_names
+    ).set_index(col_names[0])
+    stations.to_parquet(paths.ghcnd_stations())
     log.info("Conversion to parquet completed.")
     log.debug(
         "Input -> output: %s -> %s",
@@ -97,8 +109,14 @@ def _stations_to_parquet() -> None:
 
 def _inventory_to_parquet() -> None:
     """Convert the 'ghcnd-inventory' ASCII file into parquet."""
-    data = load_ghcnd_inventory(from_parquet=False, multiindex=False)
-    data.to_parquet(paths.ghcnd_inventory())
+    col_names = ["station_id", "var", "start", "end"]
+    inventory = pd.read_csv(
+        paths.ghcnd_inventory(ext="txt"),
+        sep=r"\s+",
+        header=None,
+        names=col_names,
+    ).set_index(["station_id", "var"])
+    inventory.to_parquet(paths.ghcnd_inventory())
     log.info("Conversion to parquet completed.")
     log.debug(
         "Input -> output: %s -> %s",
@@ -107,7 +125,7 @@ def _inventory_to_parquet() -> None:
     )
 
 
-def preprocess_ghcnd_metadata(to_parquet: bool = True) -> None:
+def preprocess_ghcnd_metadata() -> None:
     """Filter countries, remove duplicate columns and compress GHCNd metadata files."""
 
     buffer = "tmp.txt"
@@ -139,10 +157,9 @@ def preprocess_ghcnd_metadata(to_parquet: bool = True) -> None:
             check=True,
         )
 
-    if to_parquet:
-        _stations_to_parquet()
-        subprocess.run(f"rm {paths.ghcnd_stations(ext='txt')}", shell=True, check=True)
-        _inventory_to_parquet()
-        subprocess.run(f"rm {paths.ghcnd_inventory(ext='txt')}", shell=True, check=True)
+    _stations_to_parquet()
+    subprocess.run(f"rm {paths.ghcnd_stations(ext='txt')}", shell=True, check=True)
+    _inventory_to_parquet()
+    subprocess.run(f"rm {paths.ghcnd_inventory(ext='txt')}", shell=True, check=True)
 
     log.info("GHCNd metadata preprocessing completed.")

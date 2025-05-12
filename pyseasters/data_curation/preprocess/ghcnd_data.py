@@ -9,7 +9,6 @@ from dask.distributed import Client, LocalCluster
 
 from pyseasters.constants import paths
 from pyseasters.ghcnd import load_ghcnd_inventory
-from pyseasters.ghcnd.data_loaders import _load_ghcnd_single_station
 from pyseasters.utils._dependencies import require_tools
 from pyseasters.utils._logging import LoggingStack
 from pyseasters.utils._typing import LoggerLike
@@ -87,7 +86,17 @@ def _clean_columns(
 
 def _single_station_to_parquet(station_id: str, logger: LoggerLike) -> None:
     """Convert a single station csv file for ``station_id`` into parquet."""
-    data = _load_ghcnd_single_station(station_id, from_parquet=False)
+    data = (
+        pd.read_csv(
+            paths.ghcnd_file(station_id, ext="csv"),
+            usecols=["DATE", "PRCP"],
+            index_col="DATE",
+            parse_dates=["DATE"],
+        )
+        .dropna()
+        .rename_axis("time")
+        .rename(columns={"PRCP": station_id})
+    )
     data.to_parquet(paths.ghcnd_file(station_id))
     logger.info("Conversion to parquet completed.")
     logger.debug(
@@ -99,7 +108,7 @@ def _single_station_to_parquet(station_id: str, logger: LoggerLike) -> None:
 
 @delayed
 def _preprocess_single_station(
-    station_id: str, expected_ncol: int, to_parquet: bool = True
+    station_id: str, expected_ncol: int
 ) -> Tuple[str, List[Tuple[str, ...]]]:
     """Dask task preprocessing a single station file."""
 
@@ -135,23 +144,20 @@ def _preprocess_single_station(
         return logger.picklable()
 
     # Convert to parquet
-    if to_parquet:
-        try:
-            _single_station_to_parquet(station_id, logger=logger)
-            subprocess.run(f"rm {file}", shell=True, check=True)
-        except Exception as e:
-            logger.error("Problem while converting to parquet: %s", e)
-            logger.error("Abort task for station %s.", station_id)
-            return logger.picklable()
+    try:
+        _single_station_to_parquet(station_id, logger=logger)
+        subprocess.run(f"rm {file}", shell=True, check=True)
+    except Exception as e:
+        logger.error("Problem while converting to parquet: %s", e)
+        logger.error("Abort task for station %s.", station_id)
+        return logger.picklable()
 
     logger.info("Task completed for station %s", station_id)
 
     return logger.picklable()
 
 
-def preprocess_ghcnd_data(
-    ntasks: Optional[int] = None, to_parquet: bool = True
-) -> None:
+def preprocess_ghcnd_data(ntasks: Optional[int] = None) -> None:
     """Remove duplicate columns and compress GHCNd data files."""
 
     # Calculate expected number of columns per station based on the inventory
@@ -169,7 +175,7 @@ def preprocess_ghcnd_data(
     client = Client(cluster)
     log.info("Dask cluster is running.")
     tasks = [
-        _preprocess_single_station(station_id, expected_ncol, to_parquet=to_parquet)
+        _preprocess_single_station(station_id, expected_ncol)
         for station_id, expected_ncol in station_to_ncol.items()
     ]
 

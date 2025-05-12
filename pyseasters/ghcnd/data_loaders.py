@@ -10,52 +10,16 @@ from .metadata_loaders import get_ghcnd_metadata
 __all__ = ["load_ghcnd_data"]
 
 
-def _load_ghcnd_single_station(
-    station_id: str,
-    from_parquet: bool = True,
-) -> pd.DataFrame:
-    """Load data from the single GHCNd file associated with ``station_id``."""
-
-    if from_parquet:
-        data = pd.read_parquet(paths.ghcnd_file(station_id))
-
-    else:
-        data = pd.read_csv(
-            paths.ghcnd_file(station_id, ext="csv"),
-            index_col="DATE",
-            parse_dates=["DATE"],
-        ).rename_axis("time")
-
-    return data
-
-
 def _load_ghcnd_single_var_station(
     station_id: str,
     var: str = "PRCP",
-    from_parquet: bool = True,
 ) -> pd.DataFrame:
     """Load ``var`` data from the single GHCNd file associated with ``station_id``."""
-
-    if from_parquet:
-        data = (
-            pd.read_parquet(paths.ghcnd_file(station_id), columns=[var])
-            .dropna()
-            .rename(columns={var: station_id})
-        )
-
-    else:
-        data = (
-            pd.read_csv(
-                paths.ghcnd_file(station_id, ext="csv"),
-                usecols=["DATE", var],
-                index_col="DATE",
-                parse_dates=["DATE"],
-            )
-            .dropna()
-            .rename_axis("time")
-            .rename(columns={var: station_id})
-        )
-
+    data = (
+        pd.read_parquet(paths.ghcnd_file(station_id), columns=[var])
+        .dropna()
+        .rename(columns={var: station_id})
+    )
     return data
 
 
@@ -63,7 +27,6 @@ def load_ghcnd_data(
     var: str = "PRCP",
     filter_condition: Optional[str] = None,
     time_range: Optional[Tuple[datetime, datetime]] = None,
-    from_parquet: bool = True,
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """Load daily GHCNd data and associated station metadata for a given variable.
 
@@ -82,8 +45,6 @@ def load_ghcnd_data(
         and 'station_name'.
     time_range
         An optional time range for selecting time coverage.
-    from_parquet
-        Whether the data to load is stored in the parquet format.
 
     Returns
     -------

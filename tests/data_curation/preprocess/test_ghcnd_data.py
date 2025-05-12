@@ -184,10 +184,6 @@ class TestSingleStationToParquet:
         file_in = tmp_path / "input.csv"
         file_out = tmp_path / "output.parquet"
         monkeypatch.setattr(
-            "pyseasters.data_curation.preprocess.ghcnd_data._load_ghcnd_single_station",
-            lambda sid=tmp_sid, from_parquet=False: tmp_df,
-        )
-        monkeypatch.setattr(
             paths,
             "ghcnd_file",
             lambda sid=tmp_sid, ext="parquet": dict(csv=file_in, parquet=file_out)[ext],
@@ -304,7 +300,7 @@ class TestPreprocessSingleStation:
             self.patch_failure(RuntimeError),
         )
         name, messages = _preprocess_single_station(
-            station_id=tmp_sid, expected_ncol=10, to_parquet=True
+            station_id=tmp_sid, expected_ncol=10
         ).compute()
         assert (
             (len(messages[-2]) == 3)
@@ -330,7 +326,7 @@ class TestPreprocessSingleStation:
         )
         monkeypatch.setattr(subprocess, "run", self.patch_subprocess_dual())
         name, messages = _preprocess_single_station(
-            station_id=tmp_sid, expected_ncol=10, to_parquet=True
+            station_id=tmp_sid, expected_ncol=10
         ).compute()
         assert (
             (len(messages[-2]) == 3)
@@ -356,7 +352,7 @@ class TestPreprocessSingleStation:
         )
         monkeypatch.setattr(subprocess, "run", patch_subprocess_run("no_run"))
         name, messages = _preprocess_single_station(
-            station_id=tmp_sid, expected_ncol=10, to_parquet=True
+            station_id=tmp_sid, expected_ncol=10
         ).compute()
         assert (
             (len(messages[-1]) == 3)
@@ -403,4 +399,4 @@ class TestPreprocessGHCNdData:
             "pyseasters.data_curation.preprocess.ghcnd_data._preprocess_single_station",
             patch_task,
         )
-        preprocess_ghcnd_data(ntasks=2, to_parquet=True)
+        preprocess_ghcnd_data(ntasks=2)

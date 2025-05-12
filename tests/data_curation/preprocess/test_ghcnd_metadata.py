@@ -191,7 +191,7 @@ class TestStationsToParquet:
         file_out = tmp_path / "output.parquet"
         monkeypatch.setattr(
             "pyseasters.data_curation.preprocess.ghcnd_metadata.load_ghcnd_stations",
-            lambda from_parquet=False: tmp_station_df,
+            lambda: tmp_station_df,
         )
         monkeypatch.setattr(
             paths,
@@ -208,7 +208,7 @@ class TestInventoryToParquet:
         file_out = tmp_path / "output.parquet"
         monkeypatch.setattr(
             "pyseasters.data_curation.preprocess.ghcnd_metadata.load_ghcnd_inventory",
-            lambda from_parquet=False, multiindex=False: tmp_inventory_df,
+            lambda: tmp_inventory_df,
         )
         monkeypatch.setattr(
             paths,
@@ -269,4 +269,4 @@ class TestPreprocessGHCNdMetadata:
             self.patch_no_run(),
         )
         monkeypatch.setattr(subprocess, "run", patch_subprocess_run("no_run"))
-        preprocess_ghcnd_metadata(to_parquet=True)
+        preprocess_ghcnd_metadata()

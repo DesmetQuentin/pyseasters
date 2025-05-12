@@ -4,7 +4,6 @@ import pandas as pd
 import pytest
 
 from pyseasters.ghcnd.data_loaders import (
-    _load_ghcnd_single_station,
     _load_ghcnd_single_var_station,
     load_ghcnd_data,
 )
@@ -77,44 +76,6 @@ def tmp_metadata_prcp_df():
     return df
 
 
-class TestLoadGHCNdSingleStation:
-    def test_from_parquet(self, tmp_path, tmp_data1_df, monkeypatch):
-        """Test when loading from parquet."""
-        # Save dummy DataFrame as parquet
-        station_id = "ID000000001"
-        fn = tmp_path / f"{station_id}.parquet"
-        tmp_data1_df.to_parquet(fn)
-
-        # Patch paths.ghcnd_stations() to return this path
-        from pyseasters.constants import paths
-
-        monkeypatch.setattr(
-            paths, "ghcnd_file", lambda station_id=station_id, ext="parquet": fn
-        )
-
-        # Assert
-        result = _load_ghcnd_single_station(station_id=station_id, from_parquet=True)
-        pd.testing.assert_frame_equal(result, tmp_data1_df)
-
-    def test_from_csv(self, tmp_path, tmp_data1_df, monkeypatch):
-        """Test when loading from csv."""
-        # Save dummy DataFrame as parquet
-        station_id = "ID000000001"
-        fn = tmp_path / f"{station_id}.csv"
-        tmp_data1_df.rename_axis("DATE").to_csv(fn)
-
-        # Patch paths.ghcnd_stations() to return this path
-        from pyseasters.constants import paths
-
-        monkeypatch.setattr(
-            paths, "ghcnd_file", lambda station_id=station_id, ext="csv": fn
-        )
-
-        # Assert
-        result = _load_ghcnd_single_station(station_id=station_id, from_parquet=False)
-        pd.testing.assert_frame_equal(result, tmp_data1_df)
-
-
 class TestLoadGHCNdSingleVarStation:
     def test_from_parquet(self, tmp_path, tmp_data1_df, monkeypatch):
         """Test when loading from parquet."""
@@ -131,35 +92,7 @@ class TestLoadGHCNdSingleVarStation:
         )
 
         # Assert
-        result = _load_ghcnd_single_var_station(
-            station_id=station_id, var="PRCP", from_parquet=True
-        )
-        expected = (
-            tmp_data1_df.loc[:, "PRCP"]
-            .to_frame()
-            .dropna()
-            .rename(columns={"PRCP": station_id})
-        )
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_from_csv(self, tmp_path, tmp_data1_df, monkeypatch):
-        """Test when loading from csv."""
-        # Save dummy DataFrame as parquet
-        station_id = "ID000000001"
-        fn = tmp_path / f"{station_id}.csv"
-        tmp_data1_df.rename_axis("DATE").to_csv(fn)
-
-        # Patch paths.ghcnd_stations() to return this path
-        from pyseasters.constants import paths
-
-        monkeypatch.setattr(
-            paths, "ghcnd_file", lambda station_id=station_id, ext="csv": fn
-        )
-
-        # Assert
-        result = _load_ghcnd_single_var_station(
-            station_id=station_id, var="PRCP", from_parquet=False
-        )
+        result = _load_ghcnd_single_var_station(station_id=station_id, var="PRCP")
         expected = (
             tmp_data1_df.loc[:, "PRCP"]
             .to_frame()
@@ -192,7 +125,7 @@ class TestLoadGHCNdData:
         )
         patch.setattr(
             "pyseasters.ghcnd.data_loaders.get_ghcnd_metadata",
-            lambda var="PRCP", from_parquet=True: df_meta,
+            lambda var="PRCP": df_meta,
         )
 
     def test(
@@ -213,7 +146,7 @@ class TestLoadGHCNdData:
             tmp_metadata_prcp_df,
             monkeypatch,
         )
-        data, metadata = load_ghcnd_data(var="PRCP", from_parquet=True)
+        data, metadata = load_ghcnd_data(var="PRCP")
         assert data.shape == (5, 2)
         assert "units" in data.attrs
         assert data.attrs["units"] == "mm/day"
@@ -239,9 +172,7 @@ class TestLoadGHCNdData:
             monkeypatch,
         )
         filter_condition = "lat > 15"
-        data, metadata = load_ghcnd_data(
-            var="PRCP", filter_condition=filter_condition, from_parquet=True
-        )
+        data, metadata = load_ghcnd_data(var="PRCP", filter_condition=filter_condition)
         assert data.shape == (3, 1)
         assert not data.empty
         assert not metadata.empty
@@ -266,9 +197,7 @@ class TestLoadGHCNdData:
         )
         filter_condition = "lattitude > 15"
         with pytest.raises(RuntimeError):
-            load_ghcnd_data(
-                var="PRCP", filter_condition=filter_condition, from_parquet=True
-            )
+            load_ghcnd_data(var="PRCP", filter_condition=filter_condition)
 
     def test_with_time_range(
         self,
@@ -289,9 +218,7 @@ class TestLoadGHCNdData:
             monkeypatch,
         )
         time_range = (datetime(2000, 1, 1), datetime(2002, 1, 1))
-        data, metadata = load_ghcnd_data(
-            var="PRCP", time_range=time_range, from_parquet=True
-        )
+        data, metadata = load_ghcnd_data(var="PRCP", time_range=time_range)
         assert data.shape == (3, 2)
         assert not data.empty
         assert not metadata.empty

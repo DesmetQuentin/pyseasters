@@ -7,13 +7,12 @@ The command has a help option:
 .. code-block:: console
 
     $ preprocess_ghcnd_metadata --help
-    usage: preprocess_ghcnd_metadata [-h] [-m] [-v] [-s] [-f]
+    usage: preprocess_ghcnd_metadata [-h] [-v] [-s] [-f]
 
     Preprocess GHCNd metadata files (filter countries, remove duplicate columns and compress).
 
     options:
     -h, --help     show this help message and exit
-    -m, --minimal  keep orignial csv format (default: convert to parquet)
     -v, --verbose  enable debug output
     -s, --silent   disable info output (priority to --verbose)
     -f, --force    disable confirmation prompt
@@ -33,12 +32,6 @@ def main():
             "Preprocess GHCNd metadata files "
             + "(filter countries, remove duplicate columns and compress)."
         )
-    )
-    parser.add_argument(
-        "-m",
-        "--minimal",
-        action="store_true",
-        help="keep orignial csv format (default: convert to parquet)",
     )
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="enable debug output"
@@ -75,7 +68,7 @@ def main():
         if args.verbose
         else (logging.INFO if not args.silent else logging.WARNING)
     )
-    preprocess_ghcnd_metadata(to_parquet=not args.minimal)
+    preprocess_ghcnd_metadata()
 
 
 if __name__ == "__main__":

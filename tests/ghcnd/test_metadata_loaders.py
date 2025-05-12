@@ -49,7 +49,7 @@ class TestLoadGHCNdStations:
         monkeypatch.setattr(paths, "ghcnd_stations", lambda ext="parquet": fn)
 
         # Assert
-        result = load_ghcnd_stations(from_parquet=True)
+        result = load_ghcnd_stations()
         pd.testing.assert_frame_equal(result, tmp_station_df)
 
     def test_from_txt(self, tmp_path, tmp_station_df, monkeypatch):
@@ -68,7 +68,7 @@ class TestLoadGHCNdStations:
         monkeypatch.setattr(paths, "ghcnd_stations", lambda ext="txt": fn)
 
         # Assert
-        result = load_ghcnd_stations(from_parquet=False)
+        result = load_ghcnd_stations()
         pd.testing.assert_frame_equal(result, tmp_station_df)
 
 
@@ -104,37 +104,14 @@ class TestLoadGHCNdInventory:
     def test_from_parquet(self, tmp_path, tmp_inventory_df, monkeypatch):
         """Test when loading from parquet."""
         self.setup_dummy_file(tmp_path, tmp_inventory_df, monkeypatch)
-        result = load_ghcnd_inventory(from_parquet=True, multiindex=False)
-        pd.testing.assert_frame_equal(result, tmp_inventory_df)
-
-    def test_from_txt(self, tmp_path, tmp_inventory_df, monkeypatch):
-        """Test when loading from txt."""
-        # Save dummy DataFrame as space-separated text
-        txt = (
-            "ID000000001 TMAX 1950 1960\n"
-            "ID000000001 TAVG 1980 1990\n"
-            "ID000000001 PRCP 2000 2010\n"
-            "ID000000002 PRCP 2020 2021\n"
-        )
-        fn = tmp_path / "ghcnd-inventory.txt"
-        fn.write_text(txt)
-
-        # Patch paths.ghcnd_inventory() to return this path
-        from pyseasters.constants import paths
-
-        monkeypatch.setattr(paths, "ghcnd_inventory", lambda ext="txt": fn)
-
-        # Assert
-        result = load_ghcnd_inventory(from_parquet=False, multiindex=False)
+        result = load_ghcnd_inventory()
         pd.testing.assert_frame_equal(result, tmp_inventory_df)
 
     def test_use_two_vars(self, tmp_path, tmp_inventory_df, monkeypatch):
         """Test when selecting two variables."""
         self.setup_dummy_file(tmp_path, tmp_inventory_df, monkeypatch)
         twovars = ["TMAX", "PRCP"]
-        result = load_ghcnd_inventory(
-            usevars=twovars, from_parquet=True, multiindex=False
-        )
+        result = load_ghcnd_inventory(usevars=twovars)
         pd.testing.assert_frame_equal(
             result, tmp_inventory_df[tmp_inventory_df["var"].isin(twovars)]
         )
@@ -143,9 +120,7 @@ class TestLoadGHCNdInventory:
         """Test when selecting one single variable."""
         self.setup_dummy_file(tmp_path, tmp_inventory_df, monkeypatch)
         onevar = ["PRCP"]
-        result = load_ghcnd_inventory(
-            usevars=onevar, from_parquet=True, multiindex=False
-        )
+        result = load_ghcnd_inventory(usevars=onevar)
         pd.testing.assert_frame_equal(
             result,
             tmp_inventory_df[tmp_inventory_df["var"].isin(onevar)]
@@ -157,12 +132,12 @@ class TestLoadGHCNdInventory:
         """Test error raising when usevars is an empty list."""
         self.setup_dummy_file(tmp_path, tmp_inventory_df, monkeypatch)
         with pytest.raises(ValueError):
-            load_ghcnd_inventory(usevars=[], from_parquet=True, multiindex=False)
+            load_ghcnd_inventory(usevars=[])
 
     def test_multiindex(self, tmp_path, tmp_inventory_df, monkeypatch):
         """Test when asking for multiindex formatting."""
         self.setup_dummy_file(tmp_path, tmp_inventory_df, monkeypatch)
-        result = load_ghcnd_inventory(from_parquet=True, multiindex=True)
+        result = load_ghcnd_inventory()
         pd.testing.assert_frame_equal(
             result, tmp_inventory_df.set_index(["station_id", "var"])
         )
@@ -186,7 +161,7 @@ class TestGetGHCNdMetadata:
         )
 
         # Assert
-        result = get_ghcnd_metadata(var="PRCP", from_parquet=True)
+        result = get_ghcnd_metadata(var="PRCP")
         expected = pd.concat(
             [
                 tmp_station_df,

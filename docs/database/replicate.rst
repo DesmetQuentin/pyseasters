@@ -186,13 +186,12 @@ As an example:
 .. code:: console
 
    $ preprocess_ghcnd_metadata --help
-   usage: preprocess_ghcnd_metadata [-h] [-m] [-v] [-s] [-f]
+   usage: preprocess_ghcnd_metadata [-h] [-v] [-s] [-f]
 
    Preprocess GHCNd metadata files (filter countries, remove duplicate columns and compress).
 
    options:
    -h, --help     show this help message and exit
-   -m, --minimal  keep orignial csv format (default: convert to parquet)
    -v, --verbose  enable debug output
    -s, --silent   disable info output (priority to --verbose)
    -f, --force    disable confirmation prompt
