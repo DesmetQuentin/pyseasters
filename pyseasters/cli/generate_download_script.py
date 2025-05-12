@@ -6,7 +6,7 @@ Entry point for the ``generate_download_script`` command. The command has a help
 .. code-block:: console
 
     $ generate_download_script --help
-    usage: generate_download_script [-h] [-o OUTPUT] key
+    usage: generate_download_script [-h] key
 
     Generate a download bash script for the desired data.
 
@@ -15,17 +15,17 @@ Entry point for the ``generate_download_script`` command. The command has a help
 
     options:
     -h, --help            show this help message and exit
-    -o OUTPUT, --output OUTPUT
-                          path to output file (default: print to stdout)
 """
 
 import argparse
+import logging
 import sys
 
 from pyseasters.data_curation import generate_download_script
 from pyseasters.data_curation.download.main import (
     _dispatcher,
 )
+from pyseasters.utils._logging import setup_cli_logging
 
 
 def main():
@@ -37,19 +37,10 @@ def main():
         help="key associated with the desired data "
         + f"""(one of {",".join(["'%s'" % (key) for key in _dispatcher.keys()])})""",
     )
-    parser.add_argument(
-        "-o",
-        "--output",
-        default="",
-        help="path to output file (default: print to stdout)",
-    )
-
     args = parser.parse_args()
-    script = generate_download_script(
-        args.key, args.output if args.output != "" else None
-    )
-    if args.output == "":
-        sys.stdout.write(script)
+
+    setup_cli_logging(logging.INFO)
+    generate_download_script(args.key)
 
 
 if __name__ == "__main__":

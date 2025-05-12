@@ -1,28 +1,20 @@
-from typing import Optional
+import logging
 
-from pyseasters.utils._typing import PathLike
+from pyseasters.constants import paths
 
 __all__ = ["generate_ghcnd_metadata_download_script"]
+
+log = logging.getLogger(__name__)
 
 _STATIONS = "https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt"
 _INVENTORY = "https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-inventory.txt"
 
 
-def generate_ghcnd_metadata_download_script(
-    output: Optional[PathLike] = None,
-) -> str:
-    """Generate a download script in bash for GHCNd stations and inventory files.
+def generate_ghcnd_metadata_download_script() -> None:
+    """Generate a download script in bash for GHCNd stations and inventory files."""
 
-    Parameters
-    ----------
-    output
-        Optional path to an output file to write the script in.
-
-    Returns
-    -------
-    script : str
-        The download script.
-    """
+    folder = paths.ghcnd() / "metadata"
+    folder.mkdir(parents=True, exist_ok=True)
 
     script = f"""#!/bin/bash
 
@@ -30,8 +22,7 @@ wget {_STATIONS}
 wget {_INVENTORY}
 """
 
-    if output is not None:
-        with open(output, "w") as file:
-            file.write(script)
-
-    return script
+    fn = folder / "download.sh"
+    with open(fn, "w") as file:
+        file.write(script)
+    log.info("Script written in %s", fn)

@@ -1,7 +1,3 @@
-from typing import Optional
-
-from pyseasters.utils._typing import PathLike
-
 from ._ghcnd_data import generate_ghcnd_data_download_script
 from ._ghcnd_metadata import generate_ghcnd_metadata_download_script
 
@@ -13,10 +9,7 @@ _dispatcher = {
 }
 
 
-def generate_download_script(
-    key: str,
-    output: Optional[PathLike] = None,
-) -> str:
+def generate_download_script(key: str) -> None:
     """Generate a download script in bash for the provided ``key``.
 
     Parameters
@@ -24,13 +17,6 @@ def generate_download_script(
     key
         The key associated with the desired download script.
         Available keys are: 'GHCNd' and 'GHCNd metadata'.
-    output: PathLike, default None
-        Optional path to an output file to write the script in.
-
-    Returns
-    -------
-    script : str
-        The download script.
 
     Raises
     ------
@@ -39,11 +25,9 @@ def generate_download_script(
     """
 
     try:
-        script = _dispatcher[key](output)
+        _dispatcher[key]()
     except KeyError:
         raise ValueError(
             f"Provided key ('{key}') invalid. Please provide one of "
             + f"""{",".join(["'%s'" % (key) for key in _dispatcher.keys()])}."""
         )
-
-    return script

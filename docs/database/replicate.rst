@@ -136,7 +136,7 @@ command. Running a help does the following:
 .. code:: console
 
    $ generate_download_script --help
-   usage: generate_download_script [-h] [-o OUTPUT] key
+   usage: generate_download_script [-h] key
 
    Generate a download bash script for the desired data.
 
@@ -145,53 +145,20 @@ command. Running a help does the following:
 
    options:
    -h, --help            show this help message and exit
-   -o OUTPUT, --output OUTPUT
-                         path to output file (default: print to stdout)
 
 
-For example, for generating a download script to get GHCNd metadata,
+For example, for generating the download script to get GHCNd metadata,
 you could run:
 
 .. code:: console
 
    $ generate_download_script 'GHCNd metadata'
-   #!/bin/bash
-
-   wget https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt
-   wget https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-inventory.txt
+   INFO: Script written in /path/to/SEASTERS/database/GHCNd/metadata/download.sh
 
 
-The download script must later be ran in the destination directory.
-Thus, let ``$file`` be your destination file for containing the script
-(that is, something like ``${PySEASTERS_DATA}/GHCNd/metadata/download.sh``),
-you may type one of the two equivalent commands to generate it:
-
-.. code:: bash
-
-   generate_download_script 'GHCNd metadata' > $file
-
-
-or
-
-.. code:: bash
-
-   generate_download_script -o $file 'GHCNd metadata'
-
-
-Then, in the directory of your file, run ``bash $file``
-(or something like ``nohup bash $file &`` for running it in background).
-This will start downloading the corresponding files.
-
-
-.. note::
-
-   It is quite intuitive, but just making sure it's understood:
-   files from a certain source must be downloaded in the directory named after it,
-   e.g., GHCNd metadata files in ``${PySEASTERS_DATA}/GHCNd/metadata``, GHCNd data files
-   in ``${PySEASTERS_DATA}/GHCNd/data``, etc.
-   This then allows PySEASTERS API to locate everything from the data root directory
-   as configured in :ref:`Step 2<replicate-2>`,
-   without reccurringly asking for specific data locations.
+The download script must later be ran **from its own directory**,
+using ``bash download.sh``, or something like
+``nohup bash download.sh > download.out 2>&1 &`` for running it in background.
 
 
 .. _preprocess:
