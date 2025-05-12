@@ -76,9 +76,17 @@ def _station_list_to_parquet() -> None:
     ).set_index(col_names[0])
 
     def parse_station_name(row):
+        field = {
+            "4": "US",
+            "6": "GSN",
+            "7": "HCN",
+            "8": "WMO",
+        }
         name = row[col_names[5]].strip()
         details = [
-            row[col_names[i]].strip() for i in [4, 6, 7, 8] if row[col_names[i]].strip()
+            f"{field[str(i)]}={row[col_names[i]].strip()}"
+            for i in [4, 6, 7, 8]
+            if row[col_names[i]].strip()
         ]
         return f"{name} [{', '.join(details)}]" if details else name
 

@@ -86,18 +86,53 @@ def _clean_columns(
 
 def _stations_to_parquet() -> None:
     """Convert the 'ghcnd-stations' ASCII file into parquet."""
-    # TODO: look in the doc precisions on the station_name
-    col_names = ["station_id", "lat", "lon", "elevation", "station_name"]
+    col_names = [
+        "station_id",
+        "lat",
+        "lon",
+        "elevation",
+        "state",
+        "name",
+        "GSN flag",
+        "HCN/CRN flag",
+        "WMO ID",
+    ]
     colspecs = [
         (0, 11),
         (12, 20),
         (21, 30),
         (31, 37),
-        (38, 85),
+        (38, 40),
+        (41, 71),
+        (72, 75),
+        (76, 79),
+        (80, 85),
     ]
     stations = pd.read_fwf(
-        paths.ghcnd_stations(ext="txt"), colspecs=colspecs, names=col_names
+        paths.ghcnd_stations(ext="txt"),
+        colspecs=colspecs,
+        names=col_names,
+        na_values={"elevation": -999.9},
     ).set_index(col_names[0])
+    stations["WMO ID"] = stations["WMO ID"].astype("Int64")
+
+    def parse_station_name(row):
+        field = {
+            "4": "US",
+            "6": "GSN",
+            "7": "HCN",
+            "8": "WMO",
+        }
+        name = row[col_names[5]].strip()
+        details = [
+            f"{field[str(i)]}={row[col_names[i]]}"
+            for i in [4, 6, 7, 8]
+            if not pd.isna(row[col_names[i]])
+        ]
+        return f"{name} [{', '.join(details)}]" if details else name
+
+    stations["station_name"] = stations.apply(parse_station_name, axis=1)
+    stations.drop(columns=col_names[4:], inplace=True)
     stations.to_parquet(paths.ghcnd_stations())
     log.info("Conversion to parquet completed.")
     log.debug(
