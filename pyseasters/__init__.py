@@ -24,4 +24,9 @@ from .ghcnd import (
     load_ghcnd_inventory,
     load_ghcnd_stations,
 )
+from .ghcnh import (
+    get_ghcnh_station_list,
+    load_ghcnh_inventory,
+    load_ghcnh_station_list,
+)
 from .utils import check_dataframe_unit, convert_dataframe_unit

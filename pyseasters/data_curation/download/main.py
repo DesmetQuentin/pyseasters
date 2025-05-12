@@ -1,11 +1,15 @@
 from ._ghcnd_data import generate_ghcnd_data_download_script
 from ._ghcnd_metadata import generate_ghcnd_metadata_download_script
+from ._ghcnh_data import generate_ghcnh_data_download_script
+from ._ghcnh_metadata import generate_ghcnh_metadata_download_script
 
 __all__ = ["generate_download_script"]
 
 _dispatcher = {
     "GHCNd": generate_ghcnd_data_download_script,
     "GHCNd metadata": generate_ghcnd_metadata_download_script,
+    "GHCNh": generate_ghcnh_data_download_script,
+    "GHCNh metadata": generate_ghcnh_metadata_download_script,
 }
 
 
@@ -16,7 +20,7 @@ def generate_download_script(key: str) -> None:
     ----------
     key
         The key associated with the desired download script.
-        Available keys are: 'GHCNd' and 'GHCNd metadata'.
+        Available keys are: 'GHCNd', 'GHCNd metadata' and 'GHCNh metadata'.
 
     Raises
     ------

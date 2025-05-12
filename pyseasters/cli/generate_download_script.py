@@ -11,7 +11,7 @@ Entry point for the ``generate_download_script`` command. The command has a help
     Generate a download bash script for the desired data.
 
     positional arguments:
-    key                   key associated with the desired data (one of 'GHCNd', 'GHCNd metadata')
+    key                   key associated with the desired data (one of 'GHCNd', 'GHCNd metadata', 'GHCNh', 'GHCNh metadata')
 
     options:
     -h, --help            show this help message and exit

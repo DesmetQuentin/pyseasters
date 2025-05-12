@@ -164,13 +164,14 @@ But the above command only deals with Python dependencies.
 The CLI also depends on several common system tools:
 
 .. hlist::
-   :columns: 5
+   :columns: 6
 
    * awk
    * cat
    * tr
    * cut
    * wc
+   * column
 
 
 You may check whether you have them already installed on your machine using the

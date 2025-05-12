@@ -141,7 +141,7 @@ command. Running a help does the following:
    Generate a download bash script for the desired data.
 
    positional arguments:
-   key                   key associated with the desired data (one of 'GHCNd', 'GHCNd metadata')
+   key                   key associated with the desired data (one of 'GHCNd', 'GHCNd metadata', 'GHCNh', 'GHCNh metadata')
 
    options:
    -h, --help            show this help message and exit
@@ -178,6 +178,7 @@ All preprocessing commands are listed below:
 
 * ``preprocess_ghcnd_metadata``
 * ``preprocess_ghcnd_data``
+* ``preprocess_ghcnh_metadata``
 
 Each command can generate a helping page when ran with the ``--help`` option.
 You may then proceed to running the commands adequately, until all data is ready.
