@@ -78,4 +78,3 @@ They are all listed below.
 .. bibliography::
    :all:
    :list: bullet
-

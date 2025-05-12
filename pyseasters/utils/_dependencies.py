@@ -40,7 +40,7 @@ def require_tools(*tools: str) -> Callable:
                         _checked_tools.add(tool)
             if missing:
                 raise RuntimeError(
-                    f"Required tools not found in `PATH`: {', '.join(missing)}"
+                    f"Required tools not found in `PATH`: {', '.join(missing)}"  # noqa: E713
                 )
             return func(*args, **kwargs)
 

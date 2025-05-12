@@ -125,7 +125,9 @@ class TestCleanColumns:
     ):
         """Test behavior when `expected_ncol` matches actual ncol."""
         monkeypatch.setattr(
-            subprocess, "run", patch_subprocess_run(f"count:{len(tmp_indices)}")
+            subprocess,
+            "run",
+            patch_subprocess_run(f"count:{len(tmp_indices)}"),  # noqa: E231
         )
         file_in = tmp_path / "input.csv"
         file_out = tmp_path / "output.csv"
@@ -162,7 +164,9 @@ class TestCleanColumns:
         Test manual cleaning, i.e., when `expected_ncol` does not matches actual ncol.
         """
         monkeypatch.setattr(
-            subprocess, "run", patch_subprocess_run(f"count:{len(tmp_indices)}")
+            subprocess,
+            "run",
+            patch_subprocess_run(f"count:{len(tmp_indices)}"),  # noqa: E231
         )
         file_in = tmp_path / "input.csv"
         tmp_df.to_csv(file_in, index=False)

@@ -18,7 +18,7 @@ Database
       :class-card: intro-card
 
       Presentation of the database, how-to-cite, link to data providers...
-   
+
    .. grid-item-card:: Construct / Replicate
       :link: replicate
       :link-type: doc

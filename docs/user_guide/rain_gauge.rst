@@ -31,7 +31,7 @@ subset of the rain gauge database (more details in the next section on
    ... )
    >>> data
                GHCNd:CHM00056951  GHCNd:CHM00056964  ...  GHCNd:VMM00048848  GHCNd:VMM00048855
-   time                                              ...                                      
+   time                                              ...
    2017-01-01                NaN                NaN  ...                0.0              297.0
    2017-01-02                NaN               58.0  ...                0.0              104.0
    2017-01-03              325.0              564.0  ...               43.0               33.0
@@ -43,13 +43,13 @@ subset of the rain gauge database (more details in the next section on
    2017-12-29                NaN                NaN  ...                0.0                8.0
    2017-12-30                NaN                NaN  ...                0.0               23.0
    2017-12-31                NaN              213.0  ...              147.0                0.0
-   
+
    [365 rows x 63 columns]
    >>> data.attrs
    {'units': 'mm/day'}
    >>> metadata
                          lat      lon  elevation                                  station_name
-   station_id                                                                                 
+   station_id
    GHCNd:CHM00056951  23.950  100.217     1503.0  LINCANG                                56951
    GHCNd:CHM00056964  22.767  100.983     1303.0  SIMAO                                  56964
    GHCNd:CHM00056985  23.383  103.383     1302.0  MENGZI                         GSN     56985
@@ -76,7 +76,7 @@ subset of the rain gauge database (more details in the next section on
   name (e.g., the city), a postal code, etc.
 
 .. note::
-   
+
    The "station_id" is formatted as ``<source>:<original_station_id>``.
 
 
@@ -189,7 +189,7 @@ example of this page can be reran by changing units, as follows:
    ... )
    >>> data
                GHCNd:CHM00056951  GHCNd:CHM00056964  ...  GHCNd:VMM00048848  GHCNd:VMM00048855
-   time                                              ...                                      
+   time                                              ...
    2017-01-01                NaN                NaN  ...             0.0000          9039.9375
    2017-01-02                NaN          1765.3750  ...             0.0000          3165.5000
    2017-01-03          9892.1875         17166.7500  ...          1308.8125          1004.4375
@@ -226,7 +226,7 @@ results of the ``load_gauge_data()`` function:
 .. code:: python
 
    from datetime import datetime
-   
+
    import pyseasters as ps
    import xarray as xr
 

@@ -54,7 +54,7 @@ scientific project.
       :class-card: intro-card
 
       Technical reference guide of every public component in the code.
-   
+
    .. grid-item-card:: FAQ
       :link: faq/index
       :link-type: doc

@@ -101,7 +101,7 @@ Follow the relevant tab below:
       .. code:: bash
 
          pip install -e .
-      
+
       Now, you need to **let PySEASTERS know where is the database** on your machine.
       Contact your data maintainer to know the database root directory.
       Change directory into it and it should contain a ``configure_api.py`` script.
@@ -110,7 +110,7 @@ Follow the relevant tab below:
       .. code:: bash
 
          python configure_api.py
-      
+
       .. note::
 
          We assume here that the database on your machine has been set up
