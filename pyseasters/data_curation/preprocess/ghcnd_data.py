@@ -89,13 +89,11 @@ def _single_station_to_parquet(station_id: str, logger: LoggerLike) -> None:
     data = (
         pd.read_csv(
             paths.ghcnd_file(station_id, ext="csv"),
-            usecols=["DATE", "PRCP"],
             index_col="DATE",
             parse_dates=["DATE"],
         )
         .dropna()
         .rename_axis("time")
-        .rename(columns={"PRCP": station_id})
     )
     data.to_parquet(paths.ghcnd_file(station_id))
     logger.info("Conversion to parquet completed.")
