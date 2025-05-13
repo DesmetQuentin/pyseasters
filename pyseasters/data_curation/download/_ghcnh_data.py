@@ -1,4 +1,7 @@
+import importlib.resources
 import logging
+
+import pandas as pd
 
 from pyseasters.constants import paths
 from pyseasters.ghcnh import load_ghcnh_inventory
@@ -10,6 +13,10 @@ log = logging.getLogger(__name__)
 _DATA = (
     "https://www.ncei.noaa.gov/oa/global-historical-climatology-network"
     + "/hourly/access/by-year/%s/parquet/GHCNh_%s_%s.parquet"
+)
+_DATA_PSV = (
+    "https://www.ncei.noaa.gov/oa/global-historical-climatology-network"
+    + "/hourly/access/by-station/GHCNh_%s_por.psv"
 )
 
 
@@ -31,9 +38,25 @@ def generate_ghcnh_data_download_script() -> None:
     with open(fn_years, "w") as file:
         file.write("\n".join(list(map(str, years))) + "\n")
 
+    # Get station_id-year tuples from the inventory
     station_year = inv.index.to_frame(index=False)
-    fn_station_year = folder / "station_year.txt"
+    # Get station_id-year tuples we know are not available by year
+    with importlib.resources.files("pyseasters.data_curation.data").joinpath(
+        "ghcnh_station-year_psv.parquet"
+    ).open("rb") as file:
+        station_year_psv = pd.read_parquet(file)
+    # Filter station_id-year tuples to download by year and in parquet
+    merged = station_year.merge(
+        station_year_psv, on=["station_id", "year"], how="left", indicator=True
+    )
+    station_year = merged[merged["_merge"] == "left_only"].drop(columns="_merge")
+    # Record unique stations to download by station and in psv
+    station_psv = station_year_psv[["station_id"]].drop_duplicates()
+    # Save
+    fn_station_year = folder / "station-year_parquet.txt"
     station_year.to_csv(fn_station_year, sep=" ", index=False, header=False)
+    fn_station_psv = folder / "station_psv.txt"
+    station_psv.to_csv(fn_station_psv, index=False, header=False)
 
     prefix = "by-year/${year}/"
     script = f"""#!/bin/bash
@@ -47,17 +70,24 @@ cd ..
 
 while read station year; do
     wget -P {prefix} {_DATA % ('${year}', '${station}', '${year}')}
-done < station_year.txt
+done < station-year_parquet.txt
+
+mkdir -p by-station
+
+while read station; do
+    wget -P by-station/ {_DATA_PSV % ('${station}')}
+done < station_psv.txt
 
 """
-    # noqa: E272, E702
 
     fn_script = folder / "download.sh"
     with open(fn_script, "w") as file:
         file.write(script)
     log.info(
-        "Script written in %s (with years in %s and station-year tuples in %s)",
+        "Script written in %s (with years in %s, station-year tuples in %s, "
+        + "and station for psv file download in %s)",
         fn_script,
         fn_years,
         fn_station_year,
+        fn_station_psv,
     )
