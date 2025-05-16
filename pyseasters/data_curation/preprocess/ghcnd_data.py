@@ -1,7 +1,7 @@
 import logging
 import subprocess
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
 import pandas as pd
 from dask import compute, delayed
@@ -11,7 +11,7 @@ from pyseasters.constants import paths
 from pyseasters.ghcnd import load_ghcnd_inventory
 from pyseasters.utils._dependencies import require_tools
 from pyseasters.utils._logging import LoggingStack
-from pyseasters.utils._typing import LoggerLike
+from pyseasters.utils._typing import LoggerLike, LoggingStackPickle
 
 __all__ = ["preprocess_ghcnd_data"]
 
@@ -107,7 +107,7 @@ def _single_station_to_parquet(station_id: str, logger: LoggerLike) -> None:
 @delayed
 def _preprocess_single_station(
     station_id: str, expected_ncol: int
-) -> Tuple[str, List[Tuple[str, ...]]]:
+) -> LoggingStackPickle:
     """Dask task preprocessing a single station file."""
 
     logger = LoggingStack(

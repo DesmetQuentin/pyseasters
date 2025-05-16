@@ -4,7 +4,7 @@ import logging
 import pandas as pd
 
 from pyseasters.constants import paths
-from pyseasters.ghcnh import load_ghcnh_inventory
+from pyseasters.ghcnh import load_ghcnh_inventory, load_ghcnh_station_list
 
 __all__ = ["generate_ghcnh_data_download_script"]
 
@@ -32,6 +32,7 @@ def generate_ghcnh_data_download_script() -> None:
             + " Please download and preprocess GHCNh metadata before running this script."
         )
     inv = load_ghcnh_inventory()
+    station_list = load_ghcnh_station_list().index.to_frame(index=False)
 
     years = inv.index.get_level_values("year").unique().to_list()
     fn_years = folder / "years.txt"
@@ -42,19 +43,47 @@ def generate_ghcnh_data_download_script() -> None:
     station_year = inv.index.to_frame(index=False)
     # Get station_id-year tuples we know are not available by year
     with importlib.resources.files("pyseasters.data_curation.data").joinpath(
-        "ghcnh_station-year_psv.parquet"
+        "ghcnh_station-year_missing_by-year.parquet"
     ).open("rb") as file:
-        station_year_psv = pd.read_parquet(file)
-    # Filter station_id-year tuples to download by year and in parquet
+        station_year_missing_by_year = pd.read_parquet(file)
+    # Determine station_id-year tuples to download by year (in parquet)
     merged = station_year.merge(
-        station_year_psv, on=["station_id", "year"], how="left", indicator=True
+        station_year_missing_by_year,
+        on=["station_id", "year"],
+        how="left",
+        indicator=True,
     )
-    station_year = merged[merged["_merge"] == "left_only"].drop(columns="_merge")
-    # Record unique stations to download by station and in psv
-    station_psv = station_year_psv[["station_id"]].drop_duplicates()
+    station_year_parquet = merged[merged["_merge"] == "left_only"].drop(
+        columns="_merge"
+    )
+    # Determine stations to download by station (in psv)
+    merged = (
+        station_year[["station_id"]]
+        .drop_duplicates()
+        .merge(
+            station_list,
+            on=["station_id"],
+            how="left",
+            indicator=True,
+        )
+    )
+    station_psv = (
+        pd.concat(
+            [
+                merged[merged["_merge"] == "left_only"].drop(
+                    columns="_merge"
+                ),  # stations in inventory but not in station-list
+                station_year_missing_by_year[["station_id"]].drop_duplicates(),
+            ]
+        )
+        .drop_duplicates()
+        .reset_index(drop=True)
+    )
     # Save
-    fn_station_year = folder / "station-year_parquet.txt"
-    station_year.to_csv(fn_station_year, sep=" ", index=False, header=False)
+    fn_station_year_parquet = folder / "station-year_parquet.txt"
+    station_year_parquet.to_csv(
+        fn_station_year_parquet, sep=" ", index=False, header=False
+    )
     fn_station_psv = folder / "station_psv.txt"
     station_psv.to_csv(fn_station_psv, index=False, header=False)
 
@@ -88,6 +117,6 @@ done < station_psv.txt
         + "and station for psv file download in %s)",
         fn_script,
         fn_years,
-        fn_station_year,
+        fn_station_year_parquet,
         fn_station_psv,
     )

@@ -308,18 +308,24 @@ class PathConfig:
         """Return path to the GHCNh station metadata file."""
         return self.ghcnh() / "metadata" / ("ghcnh-station-list." + ext)
 
-    def ghcnh_inventory(self, ext: str = "parquet") -> Path:
+    def ghcnh_inventory(self, var: str = "", ext: str = "parquet") -> Path:
         """Return path to the GHCNh inventory file."""
-        return self.ghcnh() / "metadata" / ("ghcnh-inventory." + ext)
+        return (
+            self.ghcnh()
+            / "metadata"
+            / (f"ghcnh-inventory{('-' + var) if var else ''}.{ext}")
+        )
 
-    def ghcnh_file(self, station_id: str, year: int, ext: str = "parquet") -> Path:
+    def ghcnh_file(
+        self, station_id: str, year: int, var: str, ext: str = "parquet"
+    ) -> Path:
         """Return path to the GHCNh file associate with the station ``station_id``."""
         return (
             self.ghcnh()
             / "data"
-            / "by-year"
+            / var
             / str(year)
-            / (f"GHCNh_{station_id}_{year}.{ext}")
+            / (f"GHCNh_{station_id}_{year}-{var}.{ext}")
         )
 
 

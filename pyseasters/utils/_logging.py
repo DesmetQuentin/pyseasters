@@ -4,6 +4,8 @@ import sys
 from dataclasses import dataclass, field
 from typing import Callable, List, Tuple
 
+from pyseasters.utils._typing import LoggingStackPickle
+
 __all__ = ["setup_cli_logging", "LoggingStack"]
 
 log = logging.getLogger(__name__)
@@ -148,6 +150,6 @@ class LoggingStack:
                 f"[{self.name}] {params[1]}", *params[2:]
             )
 
-    def picklable(self) -> Tuple[str, List[Tuple[str, ...]]]:
+    def picklable(self) -> LoggingStackPickle:
         """Return a tuple representation for pickling or serialization."""
         return self.name, self.messages
