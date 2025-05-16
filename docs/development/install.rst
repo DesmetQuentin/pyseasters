@@ -1,10 +1,11 @@
-Installation
-============
+Installation for developers
+===========================
 
 .. seealso::
 
-   Make sure first to clone PySEASTERS' Github repository,
-   as explained on :doc:`this page <../install>`.
+   :doc:`Installation <../install>`
+      Make sure first to clone PySEASTERS' Github
+      repository as in the main installation guide.
 
 
 If you are a developer who wishes to contribute to PySEASTERS in any way, you must

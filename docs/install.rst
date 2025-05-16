@@ -51,7 +51,7 @@ Follow the adequate tab below according to your virtual environment manager:
 
          python -m venv pyseasters
 
-      Activate (you may need to adapt directories below):
+      Activate (you may need to adapt the directory below):
 
       .. code:: bash
 
@@ -75,7 +75,8 @@ Main procedure
 
 As mentionned while creating the environment above, we now rely on Git and ``pip``:
 
-* Git is used to retrieve the package from its online repository and get its most updated version later on.
+* Git is used to retrieve the package from its online repository and get its most
+  updated version later on.
 * ``pip`` serves to install the downloaded package on your local machine.
 
 Follow the relevant tab below:
@@ -152,7 +153,7 @@ Command-line tools (optional)
 
 Formally, the command-line interface (CLI) is already accessible after installing the
 main API. However you may not have all dependencies right.
-In fact, the ``pip install -e`` command can be decorated with optional keywords,
+In fact, the ``pip install -e .`` command can be decorated with optional keywords,
 and, in this case, CLI dependencies can be installed using:
 
 .. code:: bash
@@ -180,5 +181,5 @@ You may check whether you have them already installed on your machine using the
 
 .. seealso::
 
-   Installation for developers is explained
-   :doc:`here <../development/install>`.
+   :doc:`Installation for developers <../development/install>`
+      Installation of development tools.
