@@ -1,0 +1,18 @@
+PRCP:
+  name: Precipitation
+  units: mm
+SNOW:
+  name: Snowfall
+  units: mm
+SNWD:
+  name: Snow depth
+  units: mm
+TMAX:
+  name: Maximum temperature
+  units: decicelsius
+TMIN:
+  name: Minimum temperature
+  units: decicelsius
+TAVG:
+  name: Average temperature
+  units: decicelsius

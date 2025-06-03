@@ -19,7 +19,7 @@ with importlib.resources.files("pyseasters.ghcnd.data").joinpath(
 
 def _load_ghcnd_single_var_station(
     station_id: str,
-    var: str = "PRCP",
+    var: str,
 ) -> pd.DataFrame:
     """Load ``var`` data from the single GHCNd file associated with ``station_id``."""
     data = (
@@ -45,7 +45,6 @@ def load_ghcnd_data(
     ----------
     var
         The variable code to load.
-        Available variables are: 'PRCP', 'TMAX', 'TMIN' and 'TAVG'.
     filter_condition
         An optional query string to filter the station metadata.
         Available attributes are 'station_id', 'lon', 'lat', 'elevation'
@@ -61,9 +60,18 @@ def load_ghcnd_data(
 
     Raises
     ------
+    ValueError
+        If ``var`` is not valid.
     RuntimeError
         If the filter condition is invalid or raises an exception.
     """
+
+    # Check arguments
+    if var not in _VAR_TO_META.keys():
+        raise ValueError(
+            f"Provided `var` ({var!r}) is not valid."
+            + f" Accepted values are in {list(_VAR_TO_META.keys())!r}."
+        )
 
     # Load metadata
     metadata = get_ghcnd_metadata(var=var)
