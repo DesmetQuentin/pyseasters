@@ -10,8 +10,8 @@ from dask.distributed import Client, LocalCluster
 from pyseasters.constants import paths
 from pyseasters.ghcnd import load_ghcnd_inventory
 from pyseasters.utils._dependencies import require_tools
-from pyseasters.utils._logging import LoggingStack
-from pyseasters.utils._typing import LoggerLike, LoggingStackPickle
+from pyseasters.utils._logging import LoggingStack, LoggingStackPickle
+from pyseasters.utils._typing import LoggerLike
 
 __all__ = ["preprocess_ghcnd_data"]
 
