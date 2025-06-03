@@ -90,12 +90,12 @@ def load_ghcnh_data(
 
     # Load the station list
     station_list = load_ghcnh_station_list()
-    inventory = load_ghcnh_inventory(var=var).unstack()
+    inventory = load_ghcnh_inventory(var=var).unstack()["count"]
 
     # Select the list of stations matching ``time_range`` and ``filter_condition``
     if time_range is not None:
         year_list = list(np.arange(time_range[0].year, time_range[1].year + 1))
-        inventory = inventory[list(map(str, year_list))]
+        inventory = inventory[list(map(str, year_list))].dropna()
         station_list = station_list.loc[inventory.index]
 
     if filter_condition is not None:
@@ -108,7 +108,7 @@ def load_ghcnh_data(
     data = pd.concat(
         [
             _load_ghcnh_single_var_station(
-                var, station, year_list=inventory.loc[station].dropna().to_list()
+                station, var, year_list=inventory.loc[station].dropna().index.to_list()
             )
             for station in station_list.index
         ],
