@@ -26,6 +26,7 @@ from .ghcnd import (
 )
 from .ghcnh import (
     get_ghcnh_station_list,
+    load_ghcnh_data,
     load_ghcnh_inventory,
     load_ghcnh_station_list,
 )

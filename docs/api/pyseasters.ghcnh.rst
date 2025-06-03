@@ -12,4 +12,5 @@ Submodules
 .. toctree::
    :maxdepth: 1
 
+   pyseasters.ghcnh.data_loaders
    pyseasters.ghcnh.metadata_loaders

@@ -4,12 +4,14 @@ from typing import Callable, List, Optional, Tuple
 import pandas as pd
 
 from .ghcnd import load_ghcnd_data
+from .ghcnh import load_ghcnh_data
 from .utils import check_dataframe_unit
 
 __all__ = ["load_gauge_data"]
 
 _GAUGE_DATA_SOURCES = [
     "GHCNd",
+    "GHCNh",
 ]
 
 
@@ -34,7 +36,8 @@ def _dispatcher(source: str, **kwargs) -> Tuple[pd.DataFrame, pd.DataFrame]:
     Parameters
     ----------
     source
-        The keyword associated with the desired source. Available sources are 'GHCNd'.
+        The keyword associated with the desired source.
+        Available sources are 'GHCNd', 'GHCNh'.
     **kwargs
         Kwargs to pass to the loader.
 
@@ -51,7 +54,13 @@ def _dispatcher(source: str, **kwargs) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """
     if source == "GHCNd":
         data, metadata = load_ghcnd_data(
-            var=kwargs.get("var", "PRCP"),
+            var="PRCP",
+            filter_condition=kwargs.get("filter_condition"),
+            time_range=kwargs.get("time_range"),
+        )
+    elif source == "GHCNh":
+        data, metadata = load_ghcnh_data(
+            var="precipitation",
             filter_condition=kwargs.get("filter_condition"),
             time_range=kwargs.get("time_range"),
         )
@@ -94,7 +103,7 @@ def load_gauge_data(
     usesources
         A list of the sources to include in the search (default is all available
         sources).
-        Available sources are 'GHCNd'.
+        Available sources are 'GHCNd', 'GHCNh'.
     units
         The output unit for the rain gauge data.
 
@@ -114,7 +123,6 @@ def load_gauge_data(
     for source in usesources:
         data, metadata = _dispatcher(
             source=source,
-            var="PRCP",
             filter_condition=filter_condition,
             time_range=time_range,
         )

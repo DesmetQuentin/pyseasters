@@ -14,4 +14,5 @@ Submodules
 
    pyseasters.data_curation.preprocess.ghcnd_data
    pyseasters.data_curation.preprocess.ghcnd_metadata
+   pyseasters.data_curation.preprocess.ghcnh
    pyseasters.data_curation.preprocess.ghcnh_metadata

@@ -21,6 +21,6 @@ def get_ghcnh_station_list() -> List[str]:
     return load_ghcnh_station_list().index.to_list()
 
 
-def load_ghcnh_inventory() -> pd.DataFrame:
+def load_ghcnh_inventory(var: str = "") -> pd.DataFrame:
     """Load the 'ghcnh-inventory' parquet file into a pandas DataFrame."""
-    return pd.read_parquet(paths.ghcnh_inventory())
+    return pd.read_parquet(paths.ghcnh_inventory(var=var))

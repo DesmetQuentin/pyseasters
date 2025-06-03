@@ -1,0 +1,147 @@
+temperature:
+  name: Temperature
+  long_name: 2 meter (circa) Above Ground Level Air (dry bulb) Temperature
+  units: decicelsius
+dew_point_temperature:
+  name: Dew point temperature
+  units: decicelsius
+station_level_pressure:
+  name: Station level pressure
+  long_name: "Pressure observed at a specific elevation (true barometric pressure of a location). It is the pressure exerted by the atmosphere at a point as a result of gravity acting upon the 'column' of air that lies directly above the point."
+  units: hPa
+sea_level_pressure:
+  name: Sea level pressure
+  long_name: Estimates the pressure that would exist at sea level at a point directly below the station using a temperature profile based on temperatures that actually exist at the station
+  units: hPa
+wind_direction:
+  name: Wind direction
+  long_name: Wind Direction from true north using compass directions (e.g. 360 = true north, 180 = south, 270 = west, etc.)
+  note: "A direction of '000' is given for calm winds."
+  units: degree
+wind_speed:
+  name: Wind speed
+  units: meter per second
+wind_gust:
+  name: Wind gust
+  long_name: Peak short duration (usually < 20 seconds) wind speed (meters per second) that exceeds the wind_speed average
+precipitation:
+  name: Total liquid precipitation
+  long_name: Total liquid precipitation (rain or melted snow). Totals are nominally for the hour, but may include intermediate reports within the hour.
+  note: "A 'T' in the measurement code column indicates a trace amount of precipitation."
+  units: millimeter
+relative_humidity:
+  name: Relative humidity
+  long_name: Depending on the source, relative humidity is either measured directly or calculated from air (dry bulb) temperature and dew point temperature
+  units: percent
+wet_bulb_temperature:
+  name: Wet bulb temperature
+  long_name: Depending on the source, wet bulb temperature is either measured directly or calculated from air (dry bulb) temperature, dew point temperature, and station pressure
+  units: decicelsius
+pres_wx_MW1:
+  name: Present weather observation
+  long_name: Sourced from manual reports (1 of maximum 3 observations)
+pres_wx_MW2:
+  name: Present weather observation
+  long_name: Sourced from manual reports (2 of maximum 3 observations)
+pres_wx_MW3:
+  name: Present weather observation
+  long_name: Sourced from manual reports (3 of maximum 3 observations)
+pres_wx_AU1:
+  name: Present weather observation
+  long_name: Sourced from automated ASOS/AWOS sensors (1 of maximum 3 observations)
+pres_wx_AU2:
+  name: Present weather observation
+  long_name: Sourced from automated ASOS/AWOS sensors (2 of maximum 3 observations)
+pres_wx_AU3:
+  name: Present weather observation
+  long_name: Sourced from automated ASOS/AWOS sensors (3 of maximum 3 observations)
+pres_wx_AW1:
+  name: Present weather observation
+  long_name: Sourced from automated sensors (1 of maximum 3 observations)
+pres_wx_AW2:
+  name: Present weather observation
+  long_name: Sourced from automated sensors (2 of maximum 3 observations)
+pres_wx_AW3:
+  name: Present weather observation
+  long_name: Sourced from automated sensors (3 of maximum 3 observations)
+snow_depth:
+  name: Snow depth
+  long_name: Depth of snowpack on the ground
+  units: millimeter
+visibility:
+  name: Visibility
+  long_name: Horizontal distance at which an object can be seen and identified
+  units: kilometer
+altimeter:
+  name: Altimeter
+  long_name: "The pressure 'reduced' to mean sea level using the temperature profile of the 'standard' atmosphere, which is representative of average conditions over the United States at 40 degrees north latitude"
+  units: millibar/hPa
+pressure_3hr_change:
+  name: 3-hour pressure change
+  long_name: Change in atmospheric pressure measured at the beginning and end of a three hour period; accompanied by tendency code in measurement code field
+  units: millibar/hPa
+sky_cover_1:
+  name: Sky cover
+  long_name: Fraction of total celestial dome with sky coverage (1 of maximum 3 layers)
+sky_cover_2:
+  name: Sky cover
+  long_name: Fraction of total celestial dome with sky coverage (2 of maximum 3 layers)
+sky_cover_3:
+  name: Sky cover
+  long_name: Fraction of total celestial dome with sky coverage (3 of maximum 3 layers)
+sky_cover_baseht_1:
+  name: Cloud base height
+  long_name: Discrete cloud base heights at lowest point of layer (1 of maximum 3 reported layers)
+  units: meter
+sky_cover_baseht_2:
+  name: Cloud base height
+  long_name: Discrete cloud base heights at lowest point of layer (2 of maximum 3 reported layers)
+  units: meter
+sky_cover_baseht_3:
+  name: Cloud base height
+  long_name: Discrete cloud base heights at lowest point of layer (3 of maximum 3 reported layers)
+  units: meter
+precipitation_3_hour:
+  name: 3-hour total liquid precipitation
+  long_name: 3-hour total liquid precipitation (rain or melted snow) accumulation from FM12/SYNOP reports
+  note: "A 'T' in the measurement code column indicates a trace amount of precipitation."
+  units: millimeter
+precipitation_6_hour:
+  name: 3-hour total liquid precipitation
+  long_name: 3-hour total liquid precipitation (rain or melted snow) accumulation from FM12/SYNOP reports
+  note: "A 'T' in the measurement code column indicates a trace amount of precipitation."
+  units: millimeter
+precipitation_9_hour:
+  name: 3-hour total liquid precipitation
+  long_name: 3-hour total liquid precipitation (rain or melted snow) accumulation from FM12/SYNOP reports
+  note: "A 'T' in the measurement code column indicates a trace amount of precipitation."
+  units: millimeter
+precipitation_12_hour:
+  name: 3-hour total liquid precipitation
+  long_name: 3-hour total liquid precipitation (rain or melted snow) accumulation from FM12/SYNOP reports
+  note: "A 'T' in the measurement code column indicates a trace amount of precipitation."
+  units: millimeter
+precipitation_15_hour:
+  name: 3-hour total liquid precipitation
+  long_name: 3-hour total liquid precipitation (rain or melted snow) accumulation from FM12/SYNOP reports
+  note: "A 'T' in the measurement code column indicates a trace amount of precipitation."
+  units: millimeter
+precipitation_18_hour:
+  name: 3-hour total liquid precipitation
+  long_name: 3-hour total liquid precipitation (rain or melted snow) accumulation from FM12/SYNOP reports
+  note: "A 'T' in the measurement code column indicates a trace amount of precipitation."
+  units: millimeter
+precipitation_21_hour:
+  name: 3-hour total liquid precipitation
+  long_name: 3-hour total liquid precipitation (rain or melted snow) accumulation from FM12/SYNOP reports
+  note: "A 'T' in the measurement code column indicates a trace amount of precipitation."
+  units: millimeter
+precipitation_24_hour:
+  name: 3-hour total liquid precipitation
+  long_name: 3-hour total liquid precipitation (rain or melted snow) accumulation from FM12/SYNOP reports
+  note: "A 'T' in the measurement code column indicates a trace amount of precipitation."
+  units: millimeter
+remarks:
+  name: Hourly remarks
+  long_name: Raw surface observation data in the original format encoded into ICAO-standardized METAR (FM15) or FM12 (SYNOP), FM16 (SPECI), etc. format for global dissemination.
+  note: Further information on decoding these observations can be found in the Federal Meteorological Handbook (FMH) No. 1, Surface Weather Observations & Reports.

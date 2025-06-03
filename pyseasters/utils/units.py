@@ -8,6 +8,22 @@ __all__ = ["convert_dataframe_unit", "check_dataframe_unit"]
 log = logging.getLogger(__name__)
 ureg = pint.UnitRegistry()
 
+# TODO: Define okta
+"""
+Values in oktas:
+CLR:00 None, SKC or CLR
+FEW:01 One okta - 1/10 or less but not zero
+FEW:02 Two oktas - 2/10 - 3/10, or FEW
+SCT:03 Three oktas - 4/10
+SCT:04 Four oktas - 5/10, or SCT
+BKN:05 Five oktas - 6/10
+BKN:06 Six oktas - 7/10 - 8/10
+BKN:07 Seven oktas - 9/10 or more but not 10/10, or BKN
+OVC:08 Eight oktas - 10/10, or OVC
+VV:09 Sky obscured, or cloud amount cannot be estimated
+X:10 Partial obscuration
+"""
+
 
 def _standard_unit(unit: str) -> str:
     """Return the unique string equivalent to ``unit``."""
