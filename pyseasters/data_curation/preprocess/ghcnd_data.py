@@ -117,7 +117,7 @@ def _preprocess_single_station(
     # File existence check
     file = paths.ghcnd_file(station_id, ext="csv")
     if not file.exists():
-        logger.error("File %s not found", file)
+        logger.error("File %s not found.", file)
         logger.error("Abort task for station %s.", station_id)
         return logger.picklable()
 
@@ -150,7 +150,7 @@ def _preprocess_single_station(
         logger.error("Abort task for station %s.", station_id)
         return logger.picklable()
 
-    logger.info("Task completed for station %s", station_id)
+    logger.info("Task completed for station %s.", station_id)
 
     return logger.picklable()
 
