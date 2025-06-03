@@ -48,19 +48,19 @@ subset of the rain gauge database (more details in the next section on
    >>> data.attrs
    {'name': 'Precipitation', 'units': 'mm'}
    >>> metadata
-                         lat      lon  elevation                                  station_name
+                      lat      lon  elevation                      station_name
    station_id
-   GHCNd:CHM00056951  23.950  100.217     1503.0  LINCANG                                56951
-   GHCNd:CHM00056964  22.767  100.983     1303.0  SIMAO                                  56964
-   GHCNd:CHM00056985  23.383  103.383     1302.0  MENGZI                         GSN     56985
-   GHCNd:CHM00059023  24.700  108.050      214.0  HECHI                                  59023
-   GHCNd:CHM00059082  24.667  113.600       68.0  SHAOGUAN                               59082
-   ...                   ...      ...        ...                                           ...
-   GHCNd:VMM00048830  21.833  106.767      263.0  LANG SON                               48830
-   GHCNd:VMM00048840  19.750  105.783        5.0  THANH HOA                              48840
-   GHCNd:VMM00048845  18.737  105.671        5.2  VINH                                   48845
-   GHCNd:VMM00048848  17.483  106.600        8.0  DONG HOI                               48848
-   GHCNd:VMM00048855  16.044  108.199       10.1  DANANG INTL                    GSN     48855
+   GHCNd:CHM00056951  23.950  100.217     1503.0               LINCANG [WMO=56951]
+   GHCNd:CHM00056964  22.767  100.983     1303.0                 SIMAO [WMO=56964]
+   GHCNd:CHM00056985  23.383  103.383     1302.0       MENGZI [GSN=GSN, WMO=56985]
+   GHCNd:CHM00059023  24.700  108.050      214.0                 HECHI [WMO=59023]
+   GHCNd:CHM00059082  24.667  113.600       68.0              SHAOGUAN [WMO=59082]
+   ...                   ...      ...        ...                               ...
+   GHCNd:VMM00048830  21.833  106.767      263.0              LANG SON [WMO=48830]
+   GHCNd:VMM00048840  19.750  105.783        5.0             THANH HOA [WMO=48840]
+   GHCNd:VMM00048845  18.737  105.671        5.2                  VINH [WMO=48845]
+   GHCNd:VMM00048848  17.483  106.600        8.0              DONG HOI [WMO=48848]
+   GHCNd:VMM00048855  16.044  108.199       10.1  DANANG INTL [GSN=GSN, WMO=48855]
 
    [63 rows x 4 columns]
 
@@ -73,8 +73,9 @@ subset of the rain gauge database (more details in the next section on
 
 * ``metadata`` contains station metadata for all the stations in ``data.columns``.
   This includes "lat" and "lon" for latitude and longitude, respectively, "elevation"
-  and "station_name" which, depending on the source and the country, includes a standard
-  name (e.g., the city), a postal code, etc.
+  and "station_name" which, depending on the source and the station, may contain more
+  specific information than just a city name, between square brackets (for this example,
+  you may refer to this documentation's page on the :ref:`GHCNd dataset <ghcnd>`).
 
 .. note::
 
