@@ -6,12 +6,13 @@ Entry point for the ``preprocess_ghcnd_data`` command. The command has a help op
 .. code-block:: console
 
     $ preprocess_ghcnd_data --help
-    usage: preprocess_ghcnd_data [-h] [-v] [-s] [-f]
+    usage: preprocess_ghcnd_data [-h] [-n NTASKS] [-v] [-s] [-f]
 
     Preprocess GHCNd data files (remove duplicate columns and compress).
 
     options:
     -h, --help     show this help message and exit
+    -n, --ntasks NTASKS   number of tasks to run in parallel (default: auto)
     -v, --verbose  enable debug output
     -s, --silent   disable info output (priority to --verbose)
     -f, --force    disable confirmation prompt
