@@ -10,8 +10,8 @@ from dask.distributed import Client, LocalCluster
 from pyseasters.constants import paths
 from pyseasters.ghcnd import load_ghcnd_inventory
 from pyseasters.utils._dependencies import require_tools
-from pyseasters.utils._logging import LoggingStack
-from pyseasters.utils._typing import LoggerLike, LoggingStackPickle
+from pyseasters.utils._logging import LoggingStack, LoggingStackPickle
+from pyseasters.utils._typing import LoggerLike
 
 __all__ = ["preprocess_ghcnd_data"]
 
@@ -117,7 +117,7 @@ def _preprocess_single_station(
     # File existence check
     file = paths.ghcnd_file(station_id, ext="csv")
     if not file.exists():
-        logger.error("File %s not found", file)
+        logger.error("File %s not found.", file)
         logger.error("Abort task for station %s.", station_id)
         return logger.picklable()
 
@@ -150,7 +150,7 @@ def _preprocess_single_station(
         logger.error("Abort task for station %s.", station_id)
         return logger.picklable()
 
-    logger.info("Task completed for station %s", station_id)
+    logger.info("Task completed for station %s.", station_id)
 
     return logger.picklable()
 

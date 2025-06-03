@@ -2,13 +2,13 @@ import logging
 import logging.config
 import sys
 from dataclasses import dataclass, field
-from typing import Callable, List, Tuple
+from typing import Callable, List, Tuple, TypeAlias
 
-from pyseasters.utils._typing import LoggingStackPickle
-
-__all__ = ["setup_cli_logging", "LoggingStack"]
+__all__ = ["setup_cli_logging", "LoggingStack", "LoggingStackPickle"]
 
 log = logging.getLogger(__name__)
+
+LoggingStackPickle: TypeAlias = Tuple[str, List[Tuple[str, ...]]]
 
 
 class _LevelFilter(logging.Filter):
