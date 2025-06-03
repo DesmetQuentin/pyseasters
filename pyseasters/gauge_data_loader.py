@@ -72,7 +72,7 @@ def load_gauge_data(
     filter_condition: Optional[str] = None,
     time_range: Optional[Tuple[datetime, datetime]] = None,
     usesources: List[str] = _GAUGE_DATA_SOURCES,
-    units: str = "mm/day",
+    units: str = "mm",
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """Load rain gauge data and associated station metadata from multiple sources.
 

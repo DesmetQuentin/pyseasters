@@ -1,13 +1,20 @@
+import importlib.resources
 from datetime import datetime
 from typing import Optional, Tuple
 
 import pandas as pd
+import yaml
 
 from pyseasters.constants import paths
 
 from .metadata_loaders import get_ghcnd_metadata
 
 __all__ = ["load_ghcnd_data"]
+
+with importlib.resources.files("pyseasters.ghcnd.data").joinpath(
+    "var_metadata.yaml"
+).open("r") as file:
+    _VAR_TO_META = yaml.safe_load(file)
 
 
 def _load_ghcnd_single_var_station(
@@ -91,7 +98,7 @@ def load_ghcnd_data(
         ]
 
     # Add attributes
-    data.attrs["units"] = "mm/day"
+    data.attrs.update(_VAR_TO_META[var])
 
     # Match station order
     data = data.loc[:, metadata.index.to_list()]

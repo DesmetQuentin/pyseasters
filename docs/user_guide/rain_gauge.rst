@@ -46,7 +46,7 @@ subset of the rain gauge database (more details in the next section on
 
    [365 rows x 63 columns]
    >>> data.attrs
-   {'units': 'mm/day'}
+   {'name': 'Precipitation', 'units': 'mm'}
    >>> metadata
                          lat      lon  elevation                                  station_name
    station_id
@@ -67,8 +67,9 @@ subset of the rain gauge database (more details in the next section on
 
 * ``data`` shows for each station across columns a time series of its precipitation data
   across a time axis in index that is shared for all stations (using ``NaN`` to fill
-  the blanks). The DataFrame has one attribute "units" which contains unit information,
-  in this case, "mm/day".
+  the blanks). The DataFrame has two attributes: "name", containing the standard
+  variable name for the data, here "Precipitation", and "units" which contains unit
+  information, in this case, "mm".
 
 * ``metadata`` contains station metadata for all the stations in ``data.columns``.
   This includes "lat" and "lon" for latitude and longitude, respectively, "elevation"
@@ -185,34 +186,34 @@ example of this page can be reran by changing units, as follows:
    ...     filter_condition="lon > 100 and lon < 130 and lat > 15 and lat < 25",
    ...     time_range=[datetime(2017, 1, 1), datetime(2017, 12, 31)],
    ...     usesources=["GHCNd"],
-   ...     units="mm/month",
+   ...     units="cm",
    ... )
    >>> data
                GHCNd:CHM00056951  GHCNd:CHM00056964  ...  GHCNd:VMM00048848  GHCNd:VMM00048855
    time                                              ...
-   2017-01-01                NaN                NaN  ...             0.0000          9039.9375
-   2017-01-02                NaN          1765.3750  ...             0.0000          3165.5000
-   2017-01-03          9892.1875         17166.7500  ...          1308.8125          1004.4375
-   2017-01-04          1156.6250          1948.0000  ...           304.3750          2313.2500
-   2017-01-05           700.0625          1461.0000  ...           243.5000          2313.2500
+   2017-01-01                NaN                NaN  ...                0.0               29.7
+   2017-01-02                NaN                5.8  ...                0.0               10.4
+   2017-01-03               32.5               56.4  ...                4.3                3.3
+   2017-01-04                3.8                6.4  ...                1.0                7.6
+   2017-01-05                2.3                4.8  ...                0.8                7.6
    ...                       ...                ...  ...                ...                ...
-   2017-12-27                NaN           243.5000  ...           304.3750          4565.6250
-   2017-12-28                NaN                NaN  ...             0.0000             0.0000
-   2017-12-29                NaN                NaN  ...             0.0000           243.5000
-   2017-12-30                NaN                NaN  ...             0.0000           700.0625
-   2017-12-31                NaN          6483.1875  ...          4474.3125             0.0000
+   2017-12-27                NaN                0.8  ...                1.0               15.0
+   2017-12-28                NaN                NaN  ...                0.0                0.0
+   2017-12-29                NaN                NaN  ...                0.0                0.8
+   2017-12-30                NaN                NaN  ...                0.0                2.3
+   2017-12-31                NaN               21.3  ...               14.7                0.0
 
    [365 rows x 63 columns]
    >>> data.attrs
-   {'units': 'mm/month'}
+   {'name': 'Precipitation', 'units': 'cm'}
 
 
 .. note::
 
    This feature relies on
    `Pint Python library <https://pint.readthedocs.io/en/stable/>`_, notably for parsing
-   unit strings, making it quite **flexible**: e.g., "mm/day" is equivalent to
-   "millimeter / day".
+   unit strings, making it quite **flexible**: e.g., "mm" is equivalent to
+   "millimeter".
 
 
 Integration with ``xarray``
@@ -282,7 +283,7 @@ then plotting one day's data over a map, using ``matplotlib`` and ``cartopy``.
    beg = date.fromisoformat("2015-01-01")
    end = date.fromisoformat("2017-12-31")
    query = f"lon >= {lonmin} and lon <= {lonmax} and lat >= {latmin} and lat <= {latmax}"
-   units = "mm/day"
+   units = "mm"
 
    # Load
    data, metadata = ps.load_gauge_data(
