@@ -87,9 +87,9 @@ Filtering
 ~~~~~~~~~
 
 Calling ``load_gauge_data()`` without any argument would load **all time** rain gauge
-data from **every station** in the database (i.e. from the extended Southeast Asian
-region). Such a call can take minutes or more: **it is not recommended** for obvious
-memory concerns.
+data from **every station** in the database (i.e. from the
+:ref:`extended Southeast Asian region <SEA>`). Such a call can take minutes or more:
+**it is not recommended** for obvious memory concerns.
 
 .. attention::
 

@@ -2,7 +2,7 @@
 This module provides the ``COUNTRIES`` constant.
 
 ``COUNTRIES`` is a pandas DataFrame containing ISO and FIPS codes associated with the
-countries considered for the extended Southeast Asian region.
+countries considered for the :ref:`extended Southeast Asian region <SEA>`.
 
 The data is loaded from an ASCII file stored at
 'pyseasters/constants/data/countries.txt'.
