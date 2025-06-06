@@ -12,6 +12,7 @@ They are listed below:
 
    ghcnd
    ghcnh
+   gsdr
 
 
 .. _SEA:

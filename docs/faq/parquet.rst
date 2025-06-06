@@ -47,3 +47,14 @@ Loading the same data from a parquet file is between five and six times faster.
    30.48204466793686
    >>> timeit("pd.read_parquet('ASN00010150.parquet', columns=['PRCP'])", number=1000)
    5.669616661034524
+
+
+.. note::
+
+   For the case of :ref:`GSDR <gsdr>` data, which are originally stored in "efficient"
+   ASCII files (only precipitation values are stored, and the time index is to be
+   inferred from the starting date and timestep), while ``parquet`` format files obtained
+   after preprocessing can be up to **two times heavier**, they are **between 10 and 60
+   times faster to read**, when taking into account the time needed to build the time
+   index. Since the entire GSDR dataset makes only about 5 Gb (in ``parquet``), the
+   higher reading speed is prioritized.

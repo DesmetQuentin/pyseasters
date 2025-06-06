@@ -328,5 +328,21 @@ class PathConfig:
             / f"GHCNh_{station_id}_{year}-{var}.{ext}"
         )
 
+    def gsdr(self) -> Path:
+        """Return GSDR data root directory."""
+        return self.root / "GSDR"
+
+    def gsdr_stations(self) -> Path:
+        """Return path to the GSDR station metadata file."""
+        return self.gsdr() / "metadata" / "gsdr-stations.parquet"
+
+    def gsdr_inventory(self) -> Path:
+        """Return path to the GSDR inventory file."""
+        return self.gsdr() / "metadata" / "gsdr-inventory.parquet"
+
+    def gsdr_file(self, station_id: str) -> Path:
+        """Return path to the GSDR file associated with the station ``station_id``."""
+        return self.gsdr() / "data" / f"{station_id}.parquet"
+
 
 paths = PathConfig(init_mode="preconfig")

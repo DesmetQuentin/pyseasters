@@ -9,4 +9,5 @@ from .preprocess import (
     preprocess_ghcnd_metadata,
     preprocess_ghcnh,
     preprocess_ghcnh_metadata,
+    preprocess_gsdr,
 )
