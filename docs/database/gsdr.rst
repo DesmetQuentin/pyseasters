@@ -34,6 +34,28 @@ Description
    this page's :ref:`How to cite <gsdr-cite>` section.
 
 
+Station names and IDs
+---------------------
+
+Station IDs
+~~~~~~~~~~~
+
+Station IDs are quite diverse across countries. In GSDR, they have been formatted as
+``<ISO_alpha-2>_<national_station_id>``, where ``<ISO_alpha-2>`` refers to a 2 character
+country code of the `ISO 3166 standard <https://en.wikipedia.org/wiki/ISO_3166>`_.
+
+For instance, ``IN_33`` is the ID of a station located in India, and
+``MY_pahang_4023001`` that of a station located in Malaysia.
+
+
+Station names
+~~~~~~~~~~~~~
+
+There's nothing fancy about station names. Simply note that their source country is
+indicated between parentheses, e.g., with ``IKEDA (Japan)`` for the ``JP_20441``
+Japanese station.
+
+
 About quality checks
 --------------------
 
