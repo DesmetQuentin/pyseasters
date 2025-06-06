@@ -313,19 +313,19 @@ class PathConfig:
         return (
             self.ghcnh()
             / "metadata"
-            / (f"ghcnh-inventory{('-' + var) if var else ''}.{ext}")
+            / f"ghcnh-inventory{('-' + var) if var else ''}.{ext}"
         )
 
     def ghcnh_file(
         self, station_id: str, year: int, var: str, ext: str = "parquet"
     ) -> Path:
-        """Return path to the GHCNh file associate with the station ``station_id``."""
+        """Return path to the GHCNh file associated with the station ``station_id``."""
         return (
             self.ghcnh()
             / "data"
             / var
             / str(year)
-            / (f"GHCNh_{station_id}_{year}-{var}.{ext}")
+            / f"GHCNh_{station_id}_{year}-{var}.{ext}"
         )
 
 
