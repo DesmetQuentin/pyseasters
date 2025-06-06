@@ -84,6 +84,8 @@ def _preprocess_single_parquet_station_year(
         )
         return {}
     df.set_index("time", inplace=True)
+    assert isinstance(df.index, pd.DatetimeIndex)
+    df.index = df.index.tz_localize("UTC")
 
     # Clean columns
     try:
@@ -207,6 +209,7 @@ def _preprocess_single_psv_station(
         )
         df_my.set_index("time", inplace=True)
         assert isinstance(df_my.index, pd.DatetimeIndex)
+        df_my.index = df_my.index.tz_localize("UTC")
     except Exception as e:
         logger.error("Problem while parsing datetime: %s", e)
         logger.error("Abort task for station %s (`psv` version).", station_id)

@@ -1,5 +1,6 @@
 import logging
 import subprocess
+from datetime import timedelta
 from pathlib import Path
 from typing import List, Optional
 
@@ -95,6 +96,8 @@ def _single_station_to_parquet(station_id: str, logger: LoggerLike) -> None:
         .dropna()
         .rename_axis("time")
     )
+    assert isinstance(data.index, pd.DatetimeIndex)
+    data.index = data.index.tz_localize("UTC") + timedelta(days=1)
     data.to_parquet(paths.ghcnd_file(station_id))
     logger.info("Conversion to parquet completed.")
     logger.debug(
