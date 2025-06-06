@@ -36,8 +36,8 @@ Station names and IDs
 
 .. _ghcnd-station-id:
 
-``station_id``
-~~~~~~~~~~~~~~
+Station IDs
+~~~~~~~~~~~
 
 Station IDs are eleven-character long, in the following form:
 
@@ -69,19 +69,19 @@ e.g., ``ASM00094299``, where (the following is derived from GHCNd documentation)
      * - Network code
        - Meaning
      * - 0
-       - Unspecified (station identified by up to eight 
+       - Unspecified (station identified by up to eight
          alphanumeric characters)
      * - 1
        - Community Collaborative Rain, Hail,and Snow (CoCoRaHS)
          based identification number.  To ensure consistency with
          with GHCN Daily, all numbers in the original CoCoRaHS IDs
-         have been left-filled to make them all four digits long. 
-         In addition, the characters ``-`` and ``_`` have been removed 
-         to ensure that the IDs do not exceed 11 characters when 
-         preceded by ``US1``. For example, the CoCoRaHS ID 
+         have been left-filled to make them all four digits long.
+         In addition, the characters ``-`` and ``_`` have been removed
+         to ensure that the IDs do not exceed 11 characters when
+         preceded by ``US1``. For example, the CoCoRaHS ID
          ``AZ-MR-156`` becomes ``US1AZMR0156`` in GHCN-Daily
      * - C
-       - U.S. Cooperative Network identification number (last six 
+       - U.S. Cooperative Network identification number (last six
          characters of the GHCN-Daily ID)
      * - E
        - Identification number used in the ECA&D non-blended
@@ -90,12 +90,12 @@ e.g., ``ASM00094299``, where (the following is derived from GHCNd documentation)
        - World Meteorological Organization ID (last five
          characters of the GHCN-Daily ID)
      * - N
-       - Identification number used in data supplied by a 
+       - Identification number used in data supplied by a
          National Meteorological or Hydrological Center
      * - P
        - "Pre-Coop" (an internal identifier assigned by NCEI for station
          records collected prior to the establishment of the U.S. Weather
-         Bureau and their management of the U.S. Cooperative (Coop) 
+         Bureau and their management of the U.S. Cooperative (Coop)
          Observer Program
      * - R
        - U.S. Interagency Remote Automatic Weather Station (RAWS)
@@ -104,13 +104,13 @@ e.g., ``ASM00094299``, where (the following is derived from GHCNd documentation)
        - U.S. Natural Resources Conservation Service SNOwpack
          TELemtry (SNOTEL) station identifier
      * - W
-       - WBAN identification number (last five characters of the 
+       - WBAN identification number (last five characters of the
          GHCN-Daily ID)
 
 
 * ``IIIIIIII`` is the actual 8 character ID of the station, to be read based on the
   associated network ``N`` (``00094299`` in the example, meaning that, since the network
-  code was ``W``, the first three zeros are to be ignored, and the last five characters
+  code was ``M``, the first three zeros are to be ignored, and the last five characters
   constitude the WMO ID, i.e., ``94299``).
 
 
@@ -124,8 +124,8 @@ e.g., ``ASM00094299``, where (the following is derived from GHCNd documentation)
 
 .. _ghcnd-station-name:
 
-``station_name``
-~~~~~~~~~~~~~~~~
+Station names
+~~~~~~~~~~~~~
 
 Station names are formatted as follows:
 
