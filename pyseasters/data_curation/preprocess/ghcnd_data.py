@@ -181,6 +181,7 @@ def preprocess_ghcnd_data(ntasks: Optional[int] = None) -> None:
     try:
         stacked_messages = compute(*tasks)
     finally:
+        client.shutdown()
         client.close()
         cluster.close()
         log.info("Dask cluster has been properly shut down.")

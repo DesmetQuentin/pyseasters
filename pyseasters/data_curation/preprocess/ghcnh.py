@@ -400,6 +400,7 @@ def preprocess_ghcnh(
             [stacked_messages_psv, inv_by_var_psv, metadata] = list(zip(*results_psv))
             del results_psv
     finally:
+        client.shutdown()
         client.close()
         cluster.close()
         log.info("Dask cluster has been properly shut down.")
