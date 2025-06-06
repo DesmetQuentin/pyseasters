@@ -304,7 +304,7 @@ def preprocess_gsdr(
     if paths.gsdr_stations().exists():
         log.info("Update existing station metadata file.")
         metadata = metadata.combine_first(pd.read_parquet(paths.gsdr_stations()))
-    metadata.to_parquet(paths.gsdr_stations())
+    metadata.sort_index().to_parquet(paths.gsdr_stations())
 
     # Process and write station inventory
     inventory = pd.concat(
@@ -313,7 +313,7 @@ def preprocess_gsdr(
     if paths.gsdr_inventory().exists():
         log.info("Update existing inventory file.")
         inventory = inventory.combine_first(pd.read_parquet(paths.gsdr_inventory()))
-    inventory.to_parquet(paths.gsdr_inventory())
+    inventory.sort_index().to_parquet(paths.gsdr_inventory())
 
     # Delete original files
     completed_stations = metadata.index.intersection(inventory.index).to_list()
