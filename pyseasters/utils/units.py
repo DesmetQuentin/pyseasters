@@ -1,12 +1,12 @@
 import logging
 
 import pandas as pd
-import pint
+from pint import UnitRegistry
 
 __all__ = ["convert_dataframe_unit", "check_dataframe_unit"]
 
 log = logging.getLogger(__name__)
-ureg = pint.UnitRegistry()
+ureg = UnitRegistry()
 
 # TODO: Define okta
 """
