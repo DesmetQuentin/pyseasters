@@ -32,7 +32,6 @@ dev = [
 docs = [
   "sphinx",
   "pydata-sphinx-theme",
-  "myst-parser",
   "sphinx-autodoc2",
   "sphinx-copybutton",
   "sphinx-design",
@@ -48,6 +47,7 @@ preprocess_ghcnd_metadata = "pyseasters.cli.preprocess_ghcnd_metadata:main"
 preprocess_ghcnd_data = "pyseasters.cli.preprocess_ghcnd_data:main"
 preprocess_ghcnh_metadata = "pyseasters.cli.preprocess_ghcnh_metadata:main"
 preprocess_ghcnh = "pyseasters.cli.preprocess_ghcnh:main"
+preprocess_gsdr = "pyseasters.cli.preprocess_gsdr:main"
 
 [tool.setuptools_scm]
 write_to = "pyseasters/_version.py"
