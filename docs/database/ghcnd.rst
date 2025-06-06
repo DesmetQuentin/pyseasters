@@ -174,8 +174,8 @@ Below are explanations on the flags, derived from from GHCNd documentation:
 How to cite?
 ------------
 
-This data provider do not provide any dataset-type citation.
-We suggest simply including the references below.
+This is GHCNd **version 3.32**, **accessed April 9th, 2025**.
+The documentation indicates to cite the dataset using Menne et al. (2012a,b).
 
 
 References
