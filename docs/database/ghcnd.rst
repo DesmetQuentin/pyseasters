@@ -31,66 +31,8 @@ Description
    unaffected.
 
 
-SEASTERS database version
--------------------------
-
-When :ref:`constructing <replicate>` SEASTERS database,
-:ref:`preprocessing <preprocess>` is undergone to optimize storage space and
-accessibility. Specificities of the preprocessed files in SEASTERS database relative
-to the original data are listed below:
-
-* **Country filtering:** Only stations located in countries of the
-  :ref:`extended Southeast Asian region <SEA>` are included, whether in
-  metadata or data files.
-
-* **No duplicate columns:** The original inventory file repeats station coordinate
-  information in the ``ghcnd-inventory`` and ``ghcnd-stations`` files. Coordinates in
-  the inventory file were removed. Similarly, since one station has one single
-  data file named after its station ID, and that station metadata are
-  already recorded in the ``ghcnd-stations`` file, the ``'STATION'``, ``'LONGITUDE'``,
-  ``'LATITUDE'``, ``'ELEVATION'`` and ``'NAME'`` columns were removed from all data
-  files.
-
-* **Invalid value parsing:** Following the documentation, elevations of -999.9 were
-  parsed to ``NaN``.
-
-* **Renaming:** For consistency throughout the database, the following labels were
-  renamed:
-
-  .. list-table::
-     :header-rows: 1
-
-     * - Original label
-       - SEASTERS equivalent
-     * - ``'DATE'``
-       - ``'time'``
-     * - ``'STATION'``
-       - ``'station_id'``
-     * - ``'LONGITUDE'``
-       - ``'lon'``
-     * - ``'LATITUDE'``
-       - ``'lat'``
-     * - ``'ELEVATION'``
-       - ``'elevation'``
-
-
-* **Station name refactoring:** For consistency throughout the database, the several
-  columns of the ``stations`` file relating to station names were grouped into
-  one single ``'station_name'`` column using the following format
-  (more information :ref:`below <ghcnd-station-name>`):
-
-  .. code:: console
-  
-     <name> [US=<US state>, GSN=<GSN flag>, HCN=<HCN/CRN flag>, WMO=<WMO ID>]
-
-
-* **Compression:** Original files are in the ``csv`` format (station data files)
-  or in the ``txt`` format (metadata). They were  all converted to the
-  more efficient :ref:`parquet <parquet>` format.
-
-
-Understanding GHCNd station names and IDs
------------------------------------------
+Station names and IDs
+---------------------
 
 .. _ghcnd-station-id:
 

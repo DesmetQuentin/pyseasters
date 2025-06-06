@@ -28,47 +28,13 @@ Description
    unaffected.
 
 
-SEASTERS database version
--------------------------
-
-When :ref:`constructing <replicate>` SEASTERS database,
-:ref:`preprocessing <preprocess>` is undergone to optimize storage space and
-accessibility. Specificities of the preprocessed files in SEASTERS database relative
-to the original data are listed below:
-
-* **Country filtering:** Only stations located in countries of the
-  :ref:`extended Southeast Asian region <SEA>` are included, whether in
-  metadata or data files.
-
-* **Simplified inventory:** The original inventory file contains monthly record
-  counts per station, while data files are station- and year-wise. Monthly counts
-  were considered unnecessary and thus removed, and yearly counts were computed instead.
-
-* **Invalid value parsing:** Following the documentation, elevations of -999.9 were
-  parsed to ``NaN``.
-
-* **Station name refactoring:** For consistency throughout the database, the several
-  columns of the ``station-list`` file relating to station names were grouped into
-  one single ``'station_name'`` column using the following format
-  (more information :ref:`below <ghcnh-station-name>`):
-
-  .. code:: console
-  
-     <name> [US=<US state>, GSN=<GSN flag>, HCN=<HCN/CRN flag>, WMO=<WMO ID>]
-
-
-* **Compression:** Original metadata files are in the ``csv`` or ``txt`` format. They
-  were  converted to the  more efficient :ref:`parquet <parquet>` format (data files
-  were already downloaded in the ``parquet`` format).
-
-
-Understanding GHCNh station names and IDs
------------------------------------------
+Station names and IDs
+---------------------
 
 .. _ghcnh-station-id:
 
-``station_id``
-~~~~~~~~~~~~~~
+Station IDs
+~~~~~~~~~~~
 
 Station IDs are eleven-character long, in the following form:
 
@@ -84,9 +50,9 @@ e.g., ``GQW00041406``, where (the following is derived from GHCNh documentation)
 
   .. seealso::
 
-     :doc:`pyseasters.COUNTRIES <../api/pyseasters.constants.countries>`: PySEASTERS
-     provides the ``COUNTRIES`` constant ``pandas`` DataFrame that relates country names
-     with ISO and FIPS codes.
+     :doc:`pyseasters.COUNTRIES <../api/pyseasters.constants.countries>`:
+        PySEASTERS provides the ``COUNTRIES`` constant ``pandas`` DataFrame that relates
+        country names with ISO and FIPS codes.
 
 
 * ``N`` is a 1 character "network" code indicating how to interpret the following eight
@@ -135,8 +101,8 @@ e.g., ``GQW00041406``, where (the following is derived from GHCNh documentation)
 
 .. _ghcnh-station-name:
 
-``station_name``
-~~~~~~~~~~~~~~~~
+Station names
+~~~~~~~~~~~~~
 
 Station names are formatted as follows:
 
