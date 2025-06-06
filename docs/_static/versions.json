@@ -5,7 +5,7 @@
     "url": "https://pyseasters.readthedocs.io/en/stable/"
   },
   {
-    "name": "latest (dev)",
+    "name": "dev (latest)",
     "version": "dev",
     "url": "https://pyseasters.readthedocs.io/en/dev"
   }
