@@ -29,7 +29,7 @@ Description
 .. attention::
 
    The GSDR dataset is **not publicly distributed!** Before using this data for
-   published work, please first contact **Erwan Cornillault** at CNRM -- who we got
+   published work, please first contact the CNRM branch of SEASTERS -- who we got
    this data from -- to get the approval of the team behind the dataset. Also check
    this page's :ref:`How to cite <gsdr-cite>` section.
 
@@ -40,23 +40,23 @@ About quality checks
 .. epigraph::
 
    We consider three additional checks to remove dubious records or rain gauges ;
-   
+
    #. Hourly records >= 300 mm;
    #. Very long sequences of zeros rainfall which could indicate spurious filling of
       missing data;
    #. Long sequences of the same hourly amounts which could indicate spurious
       repetitions.
-   
+
    We considered first any hourly record >= 300 mm as dubious, since it is close to the
    official WMO world record of 305 mm recorded at Holt (Missouri, USA) on June 22, 1947
    (`source <https://wmo.int/sites/default/files/2024-01/Table_Extreme_Records_30Jan2024.pdf>`_).
    We also checked if the surrounding stations within a radius of 50 km (if there are
    some available stations) receive significant hourly rainfall >= 10 mm.
-   
+
    The second criteria about the consecutive zeros may be a priori irrelevant for our
    main purpose, which is the analysis of wet spells, but any spurious sequence of zeros
    will bias any monthly or seasonal amounts, which are also analyzed.
-   
+
    The main theoretical issue related to the second and third criteria is the lack of
    any predefined and unique threshold to decide if a dry or a constant sequence is
    spurious or not. The second criteria depends clearly on the mean annual cycle and the
@@ -64,10 +64,10 @@ About quality checks
    rainfall is highly probable for central Australia or NW India, while it would be
    highly dubious for a rain gauge located either on the windward side of a tropical
    island, along the western Ghats in India, or close to the equator in Malaysia.
-   
+
    About the third criteria, we decided that any sequence of constant rainfall >= 1 mm
    lasting at least 6 consecutive hours is dubious.
-   
+
    We detailed in the following each of the network:
 
    **India.** The Indian database includes 62 stations having at least 8760 x 5 hourly
@@ -86,7 +86,7 @@ About quality checks
    <= 100 mm, so compatible with such long dry sequences. 0.0015 % of the available
    hourly data are included in wet spells with a constant value and lasting at least 6
    hours and the corresponding hours have been replaced by missing entries. The highest
-   hourly rainfall is 272 mm. 
+   hourly rainfall is 272 mm.
 
    **Malaysia.** The Malaysian database is the most problematic. There are 200 stations
    with at least 8760 x 5 available hours. There are 5155 hourly records >= 300 mm but
@@ -105,12 +105,12 @@ About quality checks
    station does not fill anymore the criteria of the 8760 x 5 available entries and is
    discarded. 0.25 % of the available hourly data are included in wet spells with a
    constant value and lasting at least 6 hours and the corresponding hours have been
-   replaced by missing entries. 
+   replaced by missing entries.
 
    **Japan.** The Japan network contains 37 stations with a maximum hourly record of
    152 mm and a longest dry spell of 49 days. Only 0.0076 % of the available hourly
    records are included in a wet spell with constant values and lasting at least 6 hours
-   and are replaced with missing entries. 
+   and are replaced with missing entries.
 
    **Source:** Adpated from the supplementary of Moron et al. (2024).
 
@@ -120,13 +120,13 @@ About quality checks
 How to cite?
 ------------
 
-This data provider do not provide any dataset-type citation.
+The documentation does not indicate any version, doi or dataset-type citation.
 We suggest simply citing Lewis et al. (2019).
 
 .. attention::
 
    The GSDR dataset is **not publicly distributed!** Before using this data for
-   published work, please first contact **Erwan Cornillault** at CNRM -- who we got
+   published work, please first contact the CNRM branch of SEASTERS -- who we got
    this data from -- to get the approval of the team behind the dataset.
 
 
