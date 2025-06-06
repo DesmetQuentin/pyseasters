@@ -6,12 +6,13 @@ Entry point for the ``preprocess_ghcnh`` command. The command has a help option:
 .. code-block:: console
 
     $ preprocess_ghcnh --help
-    usage: preprocess_ghcnh [-h] [-n NTASKS] [-m MEMORY_PER_TASK] [-v] [-s] [-f]
+    usage: preprocess_ghcnh [-h] [-S STEP] [-n NTASKS] [-m MEMORY_PER_TASK] [-v] [-s] [-f]
 
     Preprocess GHCNh data files.
 
     options:
     -h, --help            show this help message and exit
+    -S, --step STEP       choose preprocessing step without prompting (1 or 2; default: prompt)
     -n, --ntasks NTASKS   number of tasks to run in parallel (default: auto)
     -m, --memory-per-task MEMORY_PER_TASK
                           memory limit per task (default: auto)
