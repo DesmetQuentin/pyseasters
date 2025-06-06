@@ -37,82 +37,101 @@ Description
 About quality checks
 --------------------
 
-.. epigraph::
+This section is adpated from the supplementary of Moron et al. (2024). The "We" refers
+to the team behind the dataset.
 
-   We consider three additional checks to remove dubious records or rain gauges ;
 
-   #. Hourly records >= 300 mm;
-   #. Very long sequences of zeros rainfall which could indicate spurious filling of
-      missing data;
-   #. Long sequences of the same hourly amounts which could indicate spurious
-      repetitions.
+Criteria of dubious records
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-   We considered first any hourly record >= 300 mm as dubious, since it is close to the
-   official WMO world record of 305 mm recorded at Holt (Missouri, USA) on June 22, 1947
-   (`source <https://wmo.int/sites/default/files/2024-01/Table_Extreme_Records_30Jan2024.pdf>`_).
-   We also checked if the surrounding stations within a radius of 50 km (if there are
-   some available stations) receive significant hourly rainfall >= 10 mm.
+We consider three additional checks to remove dubious records or rain gauges ;
 
-   The second criteria about the consecutive zeros may be a priori irrelevant for our
-   main purpose, which is the analysis of wet spells, but any spurious sequence of zeros
-   will bias any monthly or seasonal amounts, which are also analyzed.
+#. Hourly records >= 300 mm;
+#. Very long sequences of zeros rainfall which could indicate spurious filling of
+   missing data;
+#. Long sequences of the same hourly amounts which could indicate spurious
+   repetitions.
 
-   The main theoretical issue related to the second and third criteria is the lack of
-   any predefined and unique threshold to decide if a dry or a constant sequence is
-   spurious or not. The second criteria depends clearly on the mean annual cycle and the
-   length of the usual dry season. For example, 9 or 10 consecutive months without any
-   rainfall is highly probable for central Australia or NW India, while it would be
-   highly dubious for a rain gauge located either on the windward side of a tropical
-   island, along the western Ghats in India, or close to the equator in Malaysia.
+We considered first any hourly record >= 300 mm as dubious, since it is close to the
+official WMO world record of 305 mm recorded at Holt (Missouri, USA) on June 22, 1947
+(`source <https://wmo.int/sites/default/files/2024-01/Table_Extreme_Records_30Jan2024.pdf>`_).
+We also checked if the surrounding stations within a radius of 50 km (if there are
+some available stations) receive significant hourly rainfall >= 10 mm.
 
-   About the third criteria, we decided that any sequence of constant rainfall >= 1 mm
-   lasting at least 6 consecutive hours is dubious.
+The second criteria about the consecutive zeros may be a priori irrelevant for our
+main purpose, which is the analysis of wet spells, but any spurious sequence of zeros
+will bias any monthly or seasonal amounts, which are also analyzed.
 
-   We detailed in the following each of the network:
+The main theoretical issue related to the second and third criteria is the lack of
+any predefined and unique threshold to decide if a dry or a constant sequence is
+spurious or not. The second criteria depends clearly on the mean annual cycle and the
+length of the usual dry season. For example, 9 or 10 consecutive months without any
+rainfall is highly probable for central Australia or NW India, while it would be
+highly dubious for a rain gauge located either on the windward side of a tropical
+island, along the western Ghats in India, or close to the equator in Malaysia.
 
-   **India.** The Indian database includes 62 stations having at least 8760 x 5 hourly
-   records and the highest hourly rainfall is 150 mm. The longest sequence of zeros
-   rainfall lasts 7700 hours and occurs at Jaisalmer, which is the driest rain gauge
-   (mean annual amount = 225 mm) and thus appears reasonable. There are two occurrences
-   of 7 and 11 consecutive hours with a constant amount, which are replaced by missing
-   entries.
+About the third criteria, we decided that any sequence of constant rainfall >= 1 mm
+lasting at least 6 consecutive hours is dubious.
 
-   **Australia.** The Australian database includes 531 stations having at least 8760 x 5
-   hourly records. A single station has hourly records >= 300 mm, and the three records
-   are consecutive, which is impossible. So, these records are replaced by missing
-   entries. 6 stations have at least one year without any rainfall (maximum is 480
-   days), but these stations receive less than 50 mm of annual rainfall in mean. 13
-   stations have at least ¾ of a year fully dry. Again, their mean annual rainfall is
-   <= 100 mm, so compatible with such long dry sequences. 0.0015 % of the available
-   hourly data are included in wet spells with a constant value and lasting at least 6
-   hours and the corresponding hours have been replaced by missing entries. The highest
-   hourly rainfall is 272 mm.
+We detail in the following each of the network.
 
-   **Malaysia.** The Malaysian database is the most problematic. There are 200 stations
-   with at least 8760 x 5 available hours. There are 5155 hourly records >= 300 mm but
-   they are heavily concentrated in 2 rain gauges (with respectively 4832 and 283 cases)
-   with a repetition of the same (very high) values. Both stations are removed from the
-   database. In the remaining 11 stations containing between 1 and 10 hourly records >=
-   300 mm, we checked the hourly amounts recorded at stations within a radius of 50 km.
-   Only 4 cases (out of 40) have at least one surrounding station receiving >= 10 mm
-   (maximum = 62 mm) during a >= 300 mm event. We choose a conservative approach to
-   replace all these records >= 300 mm by missing entries. Only 25 hourly records are >=
-   200 mm after this first cleaning. 11.35 % of available hourly records are included in
-   an absolute dry spell lasting at least 6 consecutive months -- sometimes 10
-   consecutive years are dry--, which is highly spurious in a wet country as Malaysia,
-   especially with two wet seasons even if they are not equally abundant across the
-   country. After having replaced the corresponding values by missing entries, one
-   station does not fill anymore the criteria of the 8760 x 5 available entries and is
-   discarded. 0.25 % of the available hourly data are included in wet spells with a
-   constant value and lasting at least 6 hours and the corresponding hours have been
-   replaced by missing entries.
 
-   **Japan.** The Japan network contains 37 stations with a maximum hourly record of
-   152 mm and a longest dry spell of 49 days. Only 0.0076 % of the available hourly
-   records are included in a wet spell with constant values and lasting at least 6 hours
-   and are replaced with missing entries.
+India
+~~~~~
 
-   **Source:** Adpated from the supplementary of Moron et al. (2024).
+The Indian database includes 62 stations having at least 8760 x 5 hourly
+records and the highest hourly rainfall is 150 mm. The longest sequence of zeros
+rainfall lasts 7700 hours and occurs at Jaisalmer, which is the driest rain gauge
+(mean annual amount = 225 mm) and thus appears reasonable. There are two occurrences
+of 7 and 11 consecutive hours with a constant amount, which are replaced by missing
+entries.
+
+
+Australia
+~~~~~~~~~
+
+The Australian database includes 531 stations having at least 8760 x 5
+hourly records. A single station has hourly records >= 300 mm, and the three records
+are consecutive, which is impossible. So, these records are replaced by missing
+entries. 6 stations have at least one year without any rainfall (maximum is 480
+days), but these stations receive less than 50 mm of annual rainfall in mean. 13
+stations have at least ¾ of a year fully dry. Again, their mean annual rainfall is
+<= 100 mm, so compatible with such long dry sequences. 0.0015 % of the available
+hourly data are included in wet spells with a constant value and lasting at least 6
+hours and the corresponding hours have been replaced by missing entries. The highest
+hourly rainfall is 272 mm.
+
+
+Malaysia
+~~~~~~~~
+
+The Malaysian database is the most problematic. There are 200 stations
+with at least 8760 x 5 available hours. There are 5155 hourly records >= 300 mm but
+they are heavily concentrated in 2 rain gauges (with respectively 4832 and 283 cases)
+with a repetition of the same (very high) values. Both stations are removed from the
+database. In the remaining 11 stations containing between 1 and 10 hourly records >=
+300 mm, we checked the hourly amounts recorded at stations within a radius of 50 km.
+Only 4 cases (out of 40) have at least one surrounding station receiving >= 10 mm
+(maximum = 62 mm) during a >= 300 mm event. We choose a conservative approach to
+replace all these records >= 300 mm by missing entries. Only 25 hourly records are >=
+200 mm after this first cleaning. 11.35 % of available hourly records are included in
+an absolute dry spell lasting at least 6 consecutive months -- sometimes 10
+consecutive years are dry--, which is highly spurious in a wet country as Malaysia,
+especially with two wet seasons even if they are not equally abundant across the
+country. After having replaced the corresponding values by missing entries, one
+station does not fill anymore the criteria of the 8760 x 5 available entries and is
+discarded. 0.25 % of the available hourly data are included in wet spells with a
+constant value and lasting at least 6 hours and the corresponding hours have been
+replaced by missing entries.
+
+
+Japan
+~~~~~
+
+The Japanese network contains 37 stations with a maximum hourly record of
+152 mm and a longest dry spell of 49 days. Only 0.0076 % of the available hourly
+records are included in a wet spell with constant values and lasting at least 6 hours
+and are replaced with missing entries.
 
 
 .. _gsdr-cite:
