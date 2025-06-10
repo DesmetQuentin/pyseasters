@@ -192,7 +192,7 @@ def _preprocess_single_psv_station(
                 for var, attr in itertools.product(_VAR_TO_META.keys(), _ATTRIBUTES)
             }
         )
-        df_my = pd.read_csv(file, sep="|", dtype=col_dtype)
+        df_my = pd.read_csv(file, sep="|", na_values="-None", dtype=col_dtype)
         del col_dtype
     except Exception as e:
         logger.error("Problem while parsing dtypes: %s", e)
