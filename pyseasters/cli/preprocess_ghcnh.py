@@ -8,7 +8,7 @@ Entry point for the ``preprocess_ghcnh`` command. The command has a help option:
     $ preprocess_ghcnh --help
     usage: preprocess_ghcnh [-h] [-S STEP] [-n NTASKS] [-m MEMORY_PER_TASK] [-v] [-s] [-f]
 
-    Preprocess GHCNh data files.
+    Preprocess GHCNh data files (note: step 2 requires 15G mem. per task).
 
     options:
     -h, --help            show this help message and exit
@@ -30,7 +30,7 @@ from pyseasters.utils._logging import setup_cli_logging
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Preprocess GHCNh data files.")
+    parser = argparse.ArgumentParser(description="Preprocess GHCNh data files (note: step 2 requires 15G mem. per task).")
     parser.add_argument(
         "-S",
         "--step",
