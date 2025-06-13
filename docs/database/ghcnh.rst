@@ -94,7 +94,7 @@ e.g., ``GQW00041406``, where (the following is derived from GHCNh documentation)
 .. tip::
 
    Such station ID formatting can be used to filter stations when loading data,
-   e.g., with PySEASTERS :doc:`load_gauge_data() <../api/pyseasters.gauge_data_loader>`
+   e.g., with PySEASTERS :doc:`load_1h_gauge_data() <../api/pyseasters.gauge_data_loader>`
    function. For instance, Indonesian stations could be selected using the following
    ``filter_condition`` argument: ``filter_condition='station_id[:2] == "ID"'``.
 
@@ -143,7 +143,7 @@ Below are explanations on the flags, derived from from GHCNh documentation:
 
    As for station IDs, station names can be used in the ``filter_condition`` argument
    of several PySEASTERS loading functions such as
-   :doc:`load_gauge_data() <../api/pyseasters.gauge_data_loader>`. For example, stations
+   :doc:`load_1h_gauge_data() <../api/pyseasters.gauge_data_loader>`. For example, stations
    with a WMO ID could be selected using ``filter_condition='"WMO=" in station_name'``.
 
 

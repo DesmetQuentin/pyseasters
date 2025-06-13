@@ -5,7 +5,7 @@ from pyseasters.gauge_data_loader import (
     _GAUGE_DATA_SOURCES,
     _dispatcher,
     _renamer,
-    load_gauge_data,
+    load_1h_gauge_data,
 )
 
 
@@ -49,7 +49,7 @@ def patch_source_functions(data, metadata, patch):
     for source in _GAUGE_DATA_SOURCES:
         if source == "GHCNd":
             patch.setattr(
-                "pyseasters.gauge_data_loader.load_ghcnd_data",
+                "pyseasters.gauge_data_loader.load_ghcnd",
                 lambda *args, **kwargs: (data, metadata),
             )
 
@@ -84,6 +84,6 @@ class TestLoadGaugeData:
     def test(self, tmp_data_df, tmp_metadata_df, monkeypatch):
         """Single test for this function."""
         patch_source_functions(tmp_data_df, tmp_metadata_df, monkeypatch)
-        data, metadata = load_gauge_data()
+        data, metadata = load_1h_gauge_data()
         assert data.shape[1] == tmp_data_df.shape[1] * len(_GAUGE_DATA_SOURCES)
         assert metadata.shape[0] == tmp_metadata_df.shape[0] * len(_GAUGE_DATA_SOURCES)

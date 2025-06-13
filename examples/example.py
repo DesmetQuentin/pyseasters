@@ -19,7 +19,7 @@ units = "mm/day"
 # Loading
 print("Loading data...")
 time1 = time()
-data, metadata = pys.load_gauge_data(
+data, metadata = pys.load_1h_gauge_data(
     filter_condition=query, time_range=(beg, end), units=units
 )
 time2 = time()

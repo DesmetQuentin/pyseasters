@@ -1,18 +1,25 @@
 PRCP:
   name: Precipitation
+  long_name: Precipitation
   units: mm
 SNOW:
   name: Snowfall
+  long_name: Snowfall
   units: mm
 SNWD:
   name: Snow depth
+  long_name: Snow depth
   units: mm
 TMAX:
   name: Maximum temperature
+  long_name: Maximum temperature
   units: decicelsius
 TMIN:
   name: Minimum temperature
+  long_name: Minimum temperature
   units: decicelsius
 TAVG:
   name: Average temperature
+  long_name: Average temperature
+  note: TAVG is computed in a variety of ways depending on the station, including traditional fixed hours of the day.
   units: decicelsius

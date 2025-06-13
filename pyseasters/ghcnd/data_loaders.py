@@ -1,6 +1,6 @@
 import importlib.resources
 from datetime import datetime
-from typing import Optional, Tuple
+from typing import Any, Dict, Optional, Tuple
 
 import pandas as pd
 import yaml
@@ -9,7 +9,7 @@ from pyseasters.constants import paths
 
 from .metadata_loaders import get_ghcnd_metadata
 
-__all__ = ["load_ghcnd_data"]
+__all__ = ["load_ghcnd", "load_ghcnd_single_var_station"]
 
 with importlib.resources.files("pyseasters.ghcnd.data").joinpath(
     "var_metadata.yaml"
@@ -17,20 +17,18 @@ with importlib.resources.files("pyseasters.ghcnd.data").joinpath(
     _VAR_TO_META = yaml.safe_load(file)
 
 
-def _load_ghcnd_single_var_station(
+def load_ghcnd_single_var_station(
     station_id: str,
     var: str,
+    load_attributes: bool = True,
 ) -> pd.DataFrame:
     """Load ``var`` data from the single GHCNd file associated with ``station_id``."""
-    data = (
-        pd.read_parquet(paths.ghcnd_file(station_id), columns=[var])
-        .dropna()
-        .rename(columns={var: station_id})
-    )
+    kws: Dict[str, Any] = {} if load_attributes else dict(columns=[var])
+    data = pd.read_parquet(paths.ghcnd_file(station_id), **kws).dropna()
     return data
 
 
-def load_ghcnd_data(
+def load_ghcnd(
     var: str = "PRCP",
     filter_condition: Optional[str] = None,
     time_range: Optional[Tuple[datetime, datetime]] = None,
@@ -95,7 +93,9 @@ def load_ghcnd_data(
     # Load data for the selected stations and refine the time range filtering
     data = pd.concat(
         [
-            _load_ghcnd_single_var_station(station, var=var)
+            load_ghcnd_single_var_station(
+                station, var=var, load_attributes=False
+            ).rename(columns={var: station})
             for station in metadata.index
         ],
         axis=1,

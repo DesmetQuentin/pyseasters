@@ -28,7 +28,7 @@ type:
 
 .. code:: bash
 
-   mkdir -p {GHCNd,GHCNh}/{data,metadata}
+   mkdir -p {GHCNd,GHCNh,GSDR}/{data,metadata}
 
 
 **iii.** As a result,
@@ -38,14 +38,18 @@ you should now get the following when running ``tree``:
 
    $ tree -d .
    .
-   └── GHCNd
-       ├── data
-       └── metadata
-   └── GHCNh
+   ├── GHCNd
+   │   ├── data
+   │   └── metadata
+   ├── GHCNh
+   │   ├── data
+   │   └── metadata
+   └── GSDR
        ├── data
        └── metadata
 
-   3 directories
+   9 directories
+
 
 
 .. _replicate-2:
@@ -162,6 +166,28 @@ you could run:
 The download script must later be ran **from its own directory**,
 using ``bash download.sh``, or something like
 ``nohup bash download.sh > download.out 2>&1 &`` for running it in background.
+
+.. important::
+
+   For the case of the :ref:`GSDR dataset<gsdr>`, which is **not publicly distributed**,
+   there is no specific program to download it, and you need to get it manually from
+   the data owners at CNRM. Before running the preprocessing programs below, make sure
+   you have the data stored by country in ``GSDR/data``, in the form of one ``.txt``
+   per station, with ``GSDR/metadata`` empty. You should get the following output with
+   the ``tree -d`` command:
+
+   .. code:: console
+
+      $ tree -d GSDR
+      GSDR
+      ├── data
+      │  ├── Australia
+      │  ├── India
+      │  ├── Japan
+      │  └── Malaysia
+      └── metadata
+
+      6 directories
 
 
 .. _preprocess:

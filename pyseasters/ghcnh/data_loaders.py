@@ -1,7 +1,7 @@
 import importlib.resources
 import logging
 from datetime import datetime
-from typing import List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -11,7 +11,7 @@ from pyseasters.constants import paths
 
 from .metadata_loaders import load_ghcnh_inventory, load_ghcnh_station_list
 
-__all__ = ["load_ghcnh_data"]
+__all__ = ["load_ghcnh", "load_ghcnh_single_var_station"]
 
 log = logging.getLogger(__name__)
 
@@ -29,17 +29,17 @@ _ATTRIBUTES = [
 ]
 
 
-def _load_ghcnh_single_var_station(
+def load_ghcnh_single_var_station(
     station_id: str,
     var: str,
     year_list: List[int],
+    load_attributes: bool = True,
 ) -> pd.DataFrame:
     """Load ``var`` data GHCNh file associated with ``station_id`` and ``year_list``."""
+    kws: Dict[str, Any] = {} if load_attributes else dict(columns=[var])
     data = pd.concat(
         [
-            pd.read_parquet(
-                paths.ghcnh_file(station_id, year, var), columns=[var]
-            ).rename(columns={var: station_id})
+            pd.read_parquet(paths.ghcnh_file(station_id, year, var), **kws)
             for year in year_list
         ],
         axis=0,
@@ -47,7 +47,7 @@ def _load_ghcnh_single_var_station(
     return data
 
 
-def load_ghcnh_data(
+def load_ghcnh(
     var: str = "precipitation",
     filter_condition: Optional[str] = None,
     time_range: Optional[Tuple[datetime, datetime]] = None,
@@ -107,9 +107,12 @@ def load_ghcnh_data(
     # Load data for the selected stations and refine the time range filtering
     data = pd.concat(
         [
-            _load_ghcnh_single_var_station(
-                station, var, year_list=inventory.loc[station].dropna().index.to_list()
-            )
+            load_ghcnh_single_var_station(
+                station,
+                var,
+                year_list=inventory.loc[station].dropna().index.to_list(),
+                load_attributes=False,
+            ).rename(columns={var: station})
             for station in station_list.index
         ],
         axis=1,

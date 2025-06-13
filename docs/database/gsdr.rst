@@ -47,6 +47,12 @@ country code of the `ISO 3166 standard <https://en.wikipedia.org/wiki/ISO_3166>`
 For instance, ``IN_33`` is the ID of a station located in India, and
 ``MY_pahang_4023001`` that of a station located in Malaysia.
 
+.. seealso::
+
+   :doc:`pyseasters.COUNTRIES <../api/pyseasters.constants.countries>`:
+      PySEASTERS provides the ``COUNTRIES`` constant ``pandas`` DataFrame that relates
+      country names with ISO and FIPS codes.
+
 
 Station names
 ~~~~~~~~~~~~~

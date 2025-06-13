@@ -3,10 +3,7 @@ from datetime import datetime
 import pandas as pd
 import pytest
 
-from pyseasters.ghcnd.data_loaders import (
-    _load_ghcnd_single_var_station,
-    load_ghcnd_data,
-)
+from pyseasters.ghcnd.data_loaders import _load_ghcnd_single_var_station, load_ghcnd
 
 
 @pytest.fixture
@@ -146,7 +143,7 @@ class TestLoadGHCNdData:
             tmp_metadata_prcp_df,
             monkeypatch,
         )
-        data, metadata = load_ghcnd_data(var="PRCP")
+        data, metadata = load_ghcnd(var="PRCP")
         assert data.shape == (5, 2)
         assert "units" in data.attrs
         assert data.attrs["units"] == "mm/day"
@@ -172,7 +169,7 @@ class TestLoadGHCNdData:
             monkeypatch,
         )
         filter_condition = "lat > 15"
-        data, metadata = load_ghcnd_data(var="PRCP", filter_condition=filter_condition)
+        data, metadata = load_ghcnd(var="PRCP", filter_condition=filter_condition)
         assert data.shape == (3, 1)
         assert not data.empty
         assert not metadata.empty
@@ -197,7 +194,7 @@ class TestLoadGHCNdData:
         )
         filter_condition = "lattitude > 15"
         with pytest.raises(RuntimeError):
-            load_ghcnd_data(var="PRCP", filter_condition=filter_condition)
+            load_ghcnd(var="PRCP", filter_condition=filter_condition)
 
     def test_with_time_range(
         self,
@@ -218,7 +215,7 @@ class TestLoadGHCNdData:
             monkeypatch,
         )
         time_range = (datetime(2000, 1, 1), datetime(2002, 1, 1))
-        data, metadata = load_ghcnd_data(var="PRCP", time_range=time_range)
+        data, metadata = load_ghcnd(var="PRCP", time_range=time_range)
         assert data.shape == (3, 2)
         assert not data.empty
         assert not metadata.empty

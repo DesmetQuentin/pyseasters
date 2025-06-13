@@ -30,7 +30,9 @@ from pyseasters.utils._logging import setup_cli_logging
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Preprocess GHCNh data files (note: step 2 requires 15G mem. per task).")
+    parser = argparse.ArgumentParser(
+        description="Preprocess GHCNh data files (note: step 2 requires 15G mem. per task)."
+    )
     parser.add_argument(
         "-S",
         "--step",

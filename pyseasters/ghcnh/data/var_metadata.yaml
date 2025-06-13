@@ -4,6 +4,7 @@ temperature:
   units: decicelsius
 dew_point_temperature:
   name: Dew point temperature
+  long_name: Dew point temperature
   units: decicelsius
 station_level_pressure:
   name: Station level pressure
@@ -20,10 +21,12 @@ wind_direction:
   units: degree
 wind_speed:
   name: Wind speed
+  long_name: Wind speed
   units: meter per second
 wind_gust:
   name: Wind gust
   long_name: Peak short duration (usually < 20 seconds) wind speed (meters per second) that exceeds the wind_speed average
+  units: meter per second
 precipitation:
   name: Total liquid precipitation
   long_name: Total liquid precipitation (rain or melted snow). Totals are nominally for the hour, but may include intermediate reports within the hour.

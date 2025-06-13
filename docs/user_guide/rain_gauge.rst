@@ -1,10 +1,10 @@
 Rain gauge data
 ===============
 
-The ``load_gauge_data()`` function
+The ``load_1h_gauge_data()`` function
 ----------------------------------
 
-PySEASTERS provides the ``load_gauge_data()`` function to load rain gauge daily data,
+PySEASTERS provides the ``load_1h_gauge_data()`` function to load rain gauge daily data,
 optionally applying spatio-temporal filters and more.
 The function returns two ``pandas`` DataFrames: the first contains precipitation data
 by stations throughout time; the second provides metadata for those same stations.
@@ -16,7 +16,7 @@ Returned format
 ~~~~~~~~~~~~~~~
 
 Let us first have a look at the ``data`` and ``metadata`` DataFrames returned by the
-``load_gauge_data()`` function. With the following, filters are applied to load a
+``load_1h_gauge_data()`` function. With the following, filters are applied to load a
 subset of the rain gauge database (more details in the next section on
 :ref:`filtering <guide-gauge-filter>`), then we can see how the result is formatted:
 
@@ -24,7 +24,7 @@ subset of the rain gauge database (more details in the next section on
 
    >>> from datetime import datetime
    >>> import pyseasters as ps
-   >>> data, metadata = ps.load_gauge_data(
+   >>> data, metadata = ps.load_1h_gauge_data(
    ...     filter_condition="lon > 100 and lon < 130 and lat > 15 and lat < 25",
    ...     time_range=[datetime(2017, 1, 1), datetime(2017, 12, 31)],
    ...     usesources=["GHCNd"]
@@ -87,7 +87,7 @@ subset of the rain gauge database (more details in the next section on
 Filtering
 ~~~~~~~~~
 
-Calling ``load_gauge_data()`` without any argument would load **all time** rain gauge
+Calling ``load_1h_gauge_data()`` without any argument would load **all time** rain gauge
 data from **every station** in the database (i.e. from the
 :ref:`extended Southeast Asian region <SEA>`). Such a call can take minutes or more:
 **it is not recommended** for obvious memory concerns.
@@ -98,7 +98,7 @@ data from **every station** in the database (i.e. from the
 
       """ NOT RECOMMENDED """
       import pyseasters as ps
-      data, metadata = ps.load_gauge_data()  # <-- /!\ No argument!
+      data, metadata = ps.load_1h_gauge_data()  # <-- /!\ No argument!
 
 
 Instead, several arguments enable filtering the database.
@@ -107,7 +107,7 @@ using the ``usesources`` keyword argument:
 
 .. code:: python
 
-   data, metadata = ps.load_gauge_data(usesources=["GHCNd"])
+   data, metadata = ps.load_1h_gauge_data(usesources=["GHCNd"])
 
 
 .. admonition:: Currently supported sources
@@ -127,7 +127,7 @@ using specific keywords amongst "lat", "lon", "elevation", "station_id" and
 
 .. code:: python
 
-   data, metadata = ps.load_gauge_data(
+   data, metadata = ps.load_1h_gauge_data(
        filter_condition="lon > 100 and lon < 130 and lat > 10 and lat < 30"
    )
 
@@ -139,7 +139,7 @@ begining and ending dates of the desired interval:
 
    from datetime import datetime
 
-   data, metadata = ps.load_gauge_data(
+   data, metadata = ps.load_1h_gauge_data(
        time_range=[
            datetime(2018, 1, 1),
            datetime(2018, 3, 31)
@@ -157,7 +157,7 @@ can be applied together:
 
    from datetime import datetime
 
-   data, metadata = ps.load_gauge_data(
+   data, metadata = ps.load_1h_gauge_data(
        filter_condition="lon > 100 and lon < 130 and lat > 10 and lat < 30",
        time_range=[
            datetime(2018, 1, 1),
@@ -176,14 +176,14 @@ can be applied together:
 Units
 ~~~~~
 
-The ``load_gauge_data()`` function also have a ``units`` keyword argument, allowing
+The ``load_1h_gauge_data()`` function also have a ``units`` keyword argument, allowing
 users to choose the output unit of the result in ``data``. Although we are dealing
 with daily rainfall data, hence limiting the application of such an option, the first
 example of this page can be reran by changing units, as follows:
 
 .. code:: pycon
 
-   >>> data, metadata = ps.load_gauge_data(
+   >>> data, metadata = ps.load_1h_gauge_data(
    ...     filter_condition="lon > 100 and lon < 130 and lat > 15 and lat < 25",
    ...     time_range=[datetime(2017, 1, 1), datetime(2017, 12, 31)],
    ...     usesources=["GHCNd"],
@@ -223,7 +223,7 @@ Integration with ``xarray``
 Although ``xarray`` is not currently a dependency of PySEASTERS, using ``xarray`` tools
 can be done quite quickly based on the outputs of PySEASTERS functions.
 For instance, an ``xarray`` DataArray can be constructed using the data and metadata
-results of the ``load_gauge_data()`` function:
+results of the ``load_1h_gauge_data()`` function:
 
 .. code:: python
 
@@ -234,7 +234,7 @@ results of the ``load_gauge_data()`` function:
 
 
    # Load
-   d, md = ps.load_gauge_data(
+   d, md = ps.load_1h_gauge_data(
        filter_condition="lon > 100 and lon < 130 and lat > 10 and lat < 30",
        time_range=[
            datetime(2018, 1, 1),
@@ -264,7 +264,7 @@ Integration with ``matplotlib``
 -------------------------------
 
 The following script is a minimal working example loading station data and metadata
-using a given space-time filter with PySEASTERS ``load_gauge_data()`` function,
+using a given space-time filter with PySEASTERS ``load_1h_gauge_data()`` function,
 then plotting one day's data over a map, using ``matplotlib`` and ``cartopy``.
 
 .. code:: python
@@ -287,7 +287,7 @@ then plotting one day's data over a map, using ``matplotlib`` and ``cartopy``.
    units = "mm"
 
    # Load
-   data, metadata = ps.load_gauge_data(
+   data, metadata = ps.load_1h_gauge_data(
       filter_condition=query, time_range=(beg, end), units=units
    )
 
