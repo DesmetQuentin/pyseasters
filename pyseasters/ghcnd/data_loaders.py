@@ -24,23 +24,36 @@ def load_ghcnd_single_var_station(
     station_id: str,
     var: str,
     load_attributes: bool = True,
-) -> pd.DataFrame:
+) -> pd.DataFrame | pd.Series:
     """Load ``var`` data from the single GHCNd file associated with ``station_id``."""
     kws: Dict[str, Any] = {} if load_attributes else dict(columns=[var])
-    data = pd.read_parquet(paths.ghcnd_file(station_id), **kws).dropna()
-    return data
+    df = pd.read_parquet(paths.ghcnd_file(station_id), **kws).dropna(how="all")
+    df.attrs.update(_VAR_TO_META[var])
+    if not load_attributes:
+        series = df[var]
+        return series
+    else:
+        return df
 
 
 def load_ghcnd(
     var: str = "PRCP",
     filter_condition: Optional[str] = None,
     time_range: Optional[Tuple[datetime, datetime]] = None,
-) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    concat: bool = False,
+    load_attributes: bool = False,
+) -> Tuple[pd.DataFrame | Dict[str, pd.Series | pd.DataFrame], pd.DataFrame]:
     """Load daily GHCNd data and associated station metadata for a given variable.
 
     If a time range is specified, only stations with coverage overlapping the period
     are retained, and the data are time-sliced accordingly. A filter condition can
     also be used to subset stations based on metadata attributes.
+
+    .. attention::
+
+       Do not use ``concat=True`` unless you are sure to have enough memory available
+       for the data you are searching.
+
 
     Parameters
     ----------
@@ -52,12 +65,24 @@ def load_ghcnd(
         and 'station_name'.
     time_range
         An optional time range for selecting time coverage.
+    concat
+        A boolean enabling concatenation of the data into one single DataFrame. Default
+        is False. Note that ``load_attributes`` is incompatible with ``concat``. If both
+        are enabled, ``concat`` will reset to False.
+    load_attributes
+        A boolean enabling loading the variable's attributes. Default is False. Note
+        that ``load_attributes`` is incompatible with ``concat``. If both are enabled,
+        ``concat`` will reset to False.
 
     Returns
     -------
-    (data, metadata) : Tuple[DataFrame, DataFrame]
-        A tuple of DataFrames, with (1) Gauge data, with station IDs as columns, dates
-        as index and a 'units' attribute, and (2) Metadata for the associated stations.
+    (data, metadata) : Tuple[DataFrame | Dict[str, Series | DataFrame], DataFrame]
+        If ``concat`` is True: ``data`` is a single concatenated DataFrame, with station
+        IDs as columns and dates as index; otherwise: ``data`` is a dictionary of
+        ``pandas`` objects, the keys being the station IDs. Objects are DataFrames if
+        ``load_attributes`` is True (with one column for the variables, then one per
+        attribute); they are Series otherwise. In any case, ``metadata`` contains the
+        metadata for all associated stations.
 
     Raises
     ------
@@ -92,12 +117,16 @@ def load_ghcnd(
                     + "zone as start datetime."
                 )
                 time_range[1] = time_range[1].replace(tzinfo=time_localized[0])
+    if concat and load_attributes:
+        log.warning("Boolean arguments incompatible: `concat` and `load_attributes`.")
+        log.warning("Now ignoring `concat`.")
+        concat = False
 
     # Load metadata
     metadata = get_ghcnd_metadata(var=var)
 
     # Select the list of stations matching ``time_range`` and ``filter_condition``
-    if time_range is not None:
+    if time_range:
         start, end = time_range[0].year, time_range[1].year
 
         metadata = metadata[
@@ -106,31 +135,37 @@ def load_ghcnd(
         ]
     metadata.drop(["start", "end"], axis=1, inplace=True)
 
-    if filter_condition is not None:
+    if filter_condition:
         try:
             metadata = metadata.query(filter_condition)
         except Exception as e:
             raise RuntimeError(f"Error applying filter `{filter_condition}`: {e}")
 
     # Load data for the selected stations and refine the time range filtering
-    data = pd.concat(
-        [
-            load_ghcnd_single_var_station(
-                station, var=var, load_attributes=False
-            ).rename(columns={var: station})
-            for station in metadata.index
-        ],
-        axis=1,
-    )
     if time_range:
-        data = data.loc[
-            pd.Timestamp(time_range[0]) : pd.Timestamp(time_range[1])  # noqa: E203
-        ]
+        data_dict = {
+            station: load_ghcnd_single_var_station(
+                station,
+                var,
+                load_attributes=load_attributes,
+            ).loc[
+                pd.Timestamp(time_range[0]) : pd.Timestamp(time_range[1])  # noqa: E203
+            ]
+            for station in metadata.index
+        }
+    else:
+        data_dict = {
+            station: load_ghcnd_single_var_station(
+                station,
+                var,
+                load_attributes=load_attributes,
+            )
+            for station in metadata.index
+        }
 
-    # Add attributes
-    data.attrs.update(_VAR_TO_META[var])
-
-    # Match station order
-    data = data.loc[:, metadata.index.to_list()]
-
-    return data, metadata
+    # Concat
+    if concat:
+        data_df = pd.concat(data_dict, axis=1, copy=False)
+        return data_df, metadata
+    else:
+        return data_dict, metadata

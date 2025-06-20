@@ -67,7 +67,7 @@ def _renamer(source: str) -> Callable[[str], str]:
 
 def _dispatcher(
     source: str, var: Optional[str] = None, **kwargs
-) -> Tuple[pd.DataFrame, pd.DataFrame]:
+) -> Tuple[pd.DataFrame | Dict[str, pd.Series | pd.DataFrame], pd.DataFrame]:
     """Return the (data, metadata) pandas DataFrame tuple returned by the right loader.
 
     Based on ``source``, this functions calls the right loader, passing the adequate
@@ -87,9 +87,13 @@ def _dispatcher(
 
     Returns
     -------
-    (data, metadata) : Tuple[DataFrame, DataFrame]
-        A tuple of DataFrames, with (1) Gauge data, with station IDs as columns, dates
-        as index and a 'units' attribute, and (2) Metadata for the associated stations.
+    (data, metadata) : Tuple[DataFrame | Dict[str, Series | DataFrame], DataFrame]
+        If ``concat`` is True: ``data`` is a single concatenated DataFrame, with station
+        IDs as columns and dates as index; otherwise: ``data`` is a dictionary of
+        ``pandas`` objects, the keys being the station IDs. Objects are DataFrames if
+        ``load_attributes`` is True (with one column for the variables, then one per
+        attribute); they are Series otherwise. In any case, ``metadata`` contains the
+        metadata for all associated stations.
 
     Raises
     ------
@@ -101,17 +105,23 @@ def _dispatcher(
             var="PRCP" if not var else var,
             filter_condition=kwargs.get("filter_condition"),
             time_range=kwargs.get("time_range"),
+            concat=kwargs.get("concat", default=False),
+            load_attributes=kwargs.get("load_attributes", default=False),
         )
     elif source == "GHCNh":
         data, metadata = load_ghcnh(
             var="precipitation" if not var else var,
             filter_condition=kwargs.get("filter_condition"),
             time_range=kwargs.get("time_range"),
+            concat=kwargs.get("concat", default=False),
+            load_attributes=kwargs.get("load_attributes", default=False),
         )
     elif source == "GSDR":
         data, metadata = load_gsdr(
             filter_condition=kwargs.get("filter_condition"),
             time_range=kwargs.get("time_range"),
+            concat=kwargs.get("concat", default=False),
+            dataframe=kwargs.get("load_attributes", default=False),
         )
     else:
         raise ValueError(
@@ -129,9 +139,11 @@ def _dispatcher(
 def load_1h_gauge_data(
     filter_condition: Optional[str] = None,
     time_range: Optional[Tuple[datetime, datetime]] = None,
+    concat: bool = False,
+    load_attributes: bool = False,
     usesources: List[str] = _1H_GAUGE_DATA_SOURCES,
     units: str = "mm",
-) -> Tuple[pd.DataFrame, pd.DataFrame]:
+) -> Tuple[pd.DataFrame | Dict[str, pd.Series | pd.DataFrame], pd.DataFrame]:
     """Load rain gauge data and associated station metadata from multiple sources.
 
     If a time range is specified, only stations with coverage overlapping the period
@@ -141,6 +153,12 @@ def load_1h_gauge_data(
     matching station across all available sources. ``units`` allows to choose the output
     unit for rain gauge data.
 
+    .. attention::
+
+       Do not use ``concat=True`` unless you are sure to have enough memory available
+       for the data you are searching.
+
+
     Parameters
     ----------
     filter_condition
@@ -149,6 +167,14 @@ def load_1h_gauge_data(
         and 'station_name'.
     time_range
         An optional time range for selecting time coverage.
+    concat
+        A boolean enabling concatenation of the data into one single DataFrame. Default
+        is False. Note that ``load_attributes`` is incompatible with ``concat``. If both
+        are enabled, ``concat`` will reset to False.
+    load_attributes
+        A boolean enabling loading the variable's attributes. Default is False. Note
+        that ``load_attributes`` is incompatible with ``concat``. If both are enabled,
+        ``concat`` will reset to False.
     usesources
         A list of the sources to include in the search (default is all available
         sources).
@@ -158,9 +184,13 @@ def load_1h_gauge_data(
 
     Returns
     -------
-    (data, metadata) : Tuple[DataFrame, DataFrame]
-        A tuple of DataFrames, with (1) Gauge data, with station IDs as columns, dates
-        as index and a 'units' attribute, and (2) Metadata for the associated stations.
+    (data, metadata) : Tuple[DataFrame | Dict[str, Series | DataFrame], DataFrame]
+        If ``concat`` is True: ``data`` is a single concatenated DataFrame, with station
+        IDs as columns and dates as index; otherwise: ``data`` is a dictionary of
+        ``pandas`` objects, the keys being the station IDs. Objects are DataFrames if
+        ``load_attributes`` is True (with one column for the variables, then one per
+        attribute); they are Series otherwise. In any case, ``metadata`` contains the
+        metadata for all associated stations.
 
     Raises
     ------
@@ -194,33 +224,66 @@ def load_1h_gauge_data(
                     + "zone as start datetime."
                 )
                 time_range[1] = time_range[1].replace(tzinfo=time_localized[0])
+    if concat and load_attributes:
+        log.warning("Boolean arguments incompatible: `concat` and `load_attributes`.")
+        log.warning("Now ignoring `concat`.")
+        concat = False
 
     # Core
-    all_data, all_metadata = [], []
-    for source in usesources:
-        data, metadata = _dispatcher(
-            source=source,
-            filter_condition=filter_condition,
-            time_range=time_range,
-        )
-        data = check_dataframe_unit(data, target_unit=units)
+    if concat:
+        all_data, all_metadata = [], []
+        for source in usesources:
+            data, metadata = _dispatcher(
+                source=source,
+                filter_condition=filter_condition,
+                time_range=time_range,
+                concat=concat,
+                load_attributes=load_attributes,
+            )
+            assert isinstance(data, pd.DataFrame)
+            data = check_dataframe_unit(data, target_unit=units)
 
-        all_data.append(data)
-        all_metadata.append(metadata)
+            all_data.append(data)
+            all_metadata.append(metadata)
 
-    combined_metadata = pd.concat(all_metadata, axis=0).sort_index()
-    combined_data = pd.concat(all_data, axis=1)
-    combined_data = combined_data.loc[:, combined_metadata.index.to_list()]
+        combined_metadata = pd.concat(all_metadata, axis=0, copy=False).sort_index()
+        combined_data = pd.concat(all_data, axis=1, copy=False)
+        combined_data = combined_data.loc[:, combined_metadata.index.to_list()]
+        return combined_data, combined_metadata
 
-    return combined_data, combined_metadata
+    else:
+        data_dict = {}
+        all_metadata = []
+        for source in usesources:
+            data, metadata = _dispatcher(
+                source=source,
+                filter_condition=filter_condition,
+                time_range=time_range,
+                concat=concat,
+                load_attributes=load_attributes,
+            )
+            if load_attributes:
+                assert isinstance(data, Dict[str, pd.DataFrame])
+            else:
+                assert isinstance(data, Dict[str, pd.Series])
+
+            data_dict.update(
+                {k: check_dataframe_unit(v, target_unit=units) for k, v in data.items()}
+            )
+            all_metadata.append(metadata)
+
+        combined_metadata = pd.concat(all_metadata, axis=0, copy=False).sort_index()
+        return data_dict, combined_metadata
 
 
 def load_all_gauge_data(
     filter_condition: Optional[str] = None,
     time_range: Optional[Tuple[datetime, datetime]] = None,
+    concat: bool = False,
+    load_attributes: bool = False,
     usesources: List[str] = _GAUGE_DATA_SOURCES,
     units: str = "mm",
-) -> Tuple[Dict[str, pd.DataFrame], pd.DataFrame]:
+) -> Tuple[Dict[str, pd.DataFrame | Dict[str, pd.Series | pd.DataFrame]], pd.DataFrame]:
     """Load rain gauge data and associated station metadata from multiple sources.
 
     If a time range is specified, only stations with coverage overlapping the period
@@ -230,6 +293,12 @@ def load_all_gauge_data(
     matching station across all available sources. ``units`` allows to choose the output
     unit for rain gauge data.
 
+    .. attention::
+
+       Do not use ``concat=True`` unless you are sure to have enough memory available
+       for the data you are searching.
+
+
     Parameters
     ----------
     filter_condition
@@ -238,6 +307,14 @@ def load_all_gauge_data(
         and 'station_name'.
     time_range
         An optional time range for selecting time coverage.
+    concat
+        A boolean enabling concatenation of the data into one single DataFrame. Default
+        is False. Note that ``load_attributes`` is incompatible with ``concat``. If both
+        are enabled, ``concat`` will reset to False.
+    load_attributes
+        A boolean enabling loading the variable's attributes. Default is False. Note
+        that ``load_attributes`` is incompatible with ``concat``. If both are enabled,
+        ``concat`` will reset to False.
     usesources
         A list of the sources to include in the search (default is all available
         sources).
@@ -247,10 +324,14 @@ def load_all_gauge_data(
 
     Returns
     -------
-    (data, metadata) : Tuple[Dict[str, DataFrame], DataFrame]
-        A tuple, with (1) Gauge data Dataframes stored by accumulation period in a
-        dictionary, with station IDs as columns, dates as index and several attribute,
-        and (2) One single metadata Dataframe for the associated stations.
+    (data, metadata) : Tuple[Dict[str, DataFrame | Dict[str, Series | DataFrame]], DataFrame]
+        ``data`` contains gauge data stored by accumulation period in a dictionary.
+        If ``concat`` is True: dictionary values are Dataframes, with station
+        IDs as columns and dates as index; otherwise: they are themselves dictionaries
+        of ``pandas`` objects, the keys being the station IDs. Objects are DataFrames if
+        ``load_attributes`` is True (with one column for the variables, then one per
+        attribute); they are Series otherwise. In any case, ``metadata`` contains the
+        metadata for all associated stations.
 
     Raises
     ------
@@ -285,38 +366,81 @@ def load_all_gauge_data(
                 )
                 time_range[1] = time_range[1].replace(tzinfo=time_localized[0])
 
-    # Core
-    combined_data, all_metadata = {}, {}
-    for period, source_var in _PERIOD_SOURCE_VAR.items():
-        period_data, period_metadata = [], []
-        for source, var in source_var.items():
-            if source not in usesources:
-                continue
-
-            data, metadata = _dispatcher(
-                source=source,
-                var=var,
-                filter_condition=filter_condition,
-                time_range=time_range,
-            )
-            data = check_dataframe_unit(data, target_unit=units)
-
-            period_data.append(data)
-            period_metadata.append(metadata)
-
-        all_metadata[period] = pd.concat(period_metadata, axis=0).sort_index()
-        combined_data[period] = pd.concat(period_data, axis=1)
-        combined_data[period] = combined_data[period].loc[
-            :, all_metadata[period].index.to_list()
-        ]
-        combined_data[period].attrs = dict(
+    # Attrs
+    def attrs(period: str) -> Dict[str, str]:
+        return dict(
             name=f"{period.split('_')[-1]} total liquid precipitation",
             long_name=f"{period.split('_')[-1]} total liquid precipitation accumulation",
             units=units,
         )
 
-    combined_metadata = (
-        pd.concat(list(all_metadata.values()), axis=0).drop_duplicates().sort_index()
-    )
+    # Core
+    if concat:
+        combined_data, all_metadata = {}, {}
+        for period, source_var in _PERIOD_SOURCE_VAR.items():
+            period_data, period_metadata = [], []
+            for source, var in source_var.items():
+                if source not in usesources:
+                    continue
 
-    return combined_data, combined_metadata
+                data, metadata = _dispatcher(
+                    source=source,
+                    filter_condition=filter_condition,
+                    time_range=time_range,
+                    concat=concat,
+                    load_attributes=load_attributes,
+                )
+                assert isinstance(data, pd.DataFrame)
+                data = check_dataframe_unit(data, target_unit=units)
+
+                period_data.append(data)
+                period_metadata.append(metadata)
+
+            all_metadata[period] = pd.concat(period_metadata, axis=0).sort_index()
+            combined_data[period] = pd.concat(period_data, axis=1)
+            combined_data[period] = combined_data[period].loc[
+                :, all_metadata[period].index.to_list()
+            ]
+            combined_data[period].attrs = attrs(period)
+
+        combined_metadata = (
+            pd.concat(list(all_metadata.values()), axis=0)
+            .drop_duplicates()
+            .sort_index()
+        )
+
+        return combined_data, combined_metadata
+
+    else:
+        combined_data, all_metadata = {}, {}
+        for period, source_var in _PERIOD_SOURCE_VAR.items():
+            period_data_dict = {}
+            period_metadata = []
+            for source in usesources:
+                data, metadata = _dispatcher(
+                    source=source,
+                    filter_condition=filter_condition,
+                    time_range=time_range,
+                    concat=concat,
+                    load_attributes=load_attributes,
+                )
+                if load_attributes:
+                    assert isinstance(data, Dict[str, pd.DataFrame])
+                else:
+                    assert isinstance(data, Dict[str, pd.Series])
+                for k, v in data.items():
+                    _v = check_dataframe_unit(v, target_unit=units)
+                    _v.attrs = attrs(period)
+                    period_data_dict[k] = _v
+                period_metadata.append(metadata)
+
+            all_metadata[period] = pd.concat(period_metadata, axis=0).sort_index()
+            combined_data[period] = period_data_dict
+
+        combined_metadata = (
+            pd.concat(list(all_metadata.values()), axis=0)
+            .drop_duplicates()
+            .sort_index()
+        )
+
+        return combined_data, combined_metadata

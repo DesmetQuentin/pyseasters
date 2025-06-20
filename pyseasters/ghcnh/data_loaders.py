@@ -34,29 +34,45 @@ def load_ghcnh_single_var_station(
     var: str,
     year_list: List[int],
     load_attributes: bool = True,
-) -> pd.DataFrame:
+) -> pd.DataFrame | pd.Series:
     """Load ``var`` data GHCNh file associated with ``station_id`` and ``year_list``."""
     kws: Dict[str, Any] = {} if load_attributes else dict(columns=[var])
-    data = pd.concat(
+    df = pd.concat(
         [
-            pd.read_parquet(paths.ghcnh_file(station_id, year, var), **kws)
+            pd.read_parquet(paths.ghcnh_file(station_id, year, var), **kws).dropna(
+                how="all"
+            )
             for year in year_list
         ],
         axis=0,
+        copy=False,
     )
-    return data
+    df.attrs.update(_VAR_TO_META[var])
+    if not load_attributes:
+        series = df[var]
+        return series
+    else:
+        return df
 
 
 def load_ghcnh(
     var: str = "precipitation",
     filter_condition: Optional[str] = None,
     time_range: Optional[Tuple[datetime, datetime]] = None,
-) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    concat: bool = False,
+    load_attributes: bool = False,
+) -> Tuple[pd.DataFrame | Dict[str, pd.Series | pd.DataFrame], pd.DataFrame]:
     """Load hourly GHCNh data and associated station metadata for a given variable.
 
     If a time range is specified, only stations with coverage overlapping the period
     are retained, and the data are time-sliced accordingly. A filter condition can
     also be used to subset stations based on metadata attributes.
+
+    .. attention::
+
+       Do not use ``concat=True`` unless you are sure to have enough memory available
+       for the data you are searching.
+
 
     Parameters
     ----------
@@ -68,15 +84,30 @@ def load_ghcnh(
         and 'station_name'.
     time_range
         An optional time range for selecting time coverage.
+    concat
+        A boolean enabling concatenation of the data into one single DataFrame. Default
+        is False. Note that ``load_attributes`` is incompatible with ``concat``. If both
+        are enabled, ``concat`` will reset to False.
+    load_attributes
+        A boolean enabling loading the variable's attributes. Default is False. Note
+        that ``load_attributes`` is incompatible with ``concat``. If both are enabled,
+        ``concat`` will reset to False.
+
 
     Returns
     -------
-    (data, metadata) : Tuple[DataFrame, DataFrame]
-        A tuple of DataFrames, with (1) Gauge data, with station IDs as columns, dates
-        as index and a 'units' attribute, and (2) Metadata for the associated stations.
+    (data, metadata) : Tuple[DataFrame | Dict[str, Series | DataFrame], DataFrame]
+        If ``concat`` is True: ``data`` is a single concatenated DataFrame, with station
+        IDs as columns and dates as index; otherwise: ``data`` is a dictionary of
+        ``pandas`` objects, the keys being the station IDs. Objects are DataFrames if
+        ``load_attributes`` is True (with one column for the variables, then one per
+        attribute); they are Series otherwise. In any case, ``metadata`` contains the
+        metadata for all associated stations.
 
     Raises
     ------
+    ValueError
+        If ``var`` is not valid.
     RuntimeError
         If the filter condition is invalid or raises an exception.
     """
@@ -106,45 +137,54 @@ def load_ghcnh(
                     + "zone as start datetime."
                 )
                 time_range[1] = time_range[1].replace(tzinfo=time_localized[0])
+    if concat and load_attributes:
+        log.warning("Boolean arguments incompatible: `concat` and `load_attributes`.")
+        log.warning("Now ignoring `concat`.")
+        concat = False
 
     # Load the station list
     station_list = load_ghcnh_station_list()
     inventory = load_ghcnh_inventory(var=var).unstack()["count"]
 
     # Select the list of stations matching ``time_range`` and ``filter_condition``
-    if time_range is not None:
+    if time_range:
         year_list = list(np.arange(time_range[0].year, time_range[1].year + 1))
         inventory = inventory[list(map(str, year_list))].dropna()
         station_list = station_list.loc[inventory.index]
 
-    if filter_condition is not None:
+    if filter_condition:
         try:
             station_list = station_list.query(filter_condition)
         except Exception as e:
             raise RuntimeError(f"Error applying filter `{filter_condition}`: {e}")
 
     # Load data for the selected stations and refine the time range filtering
-    data = pd.concat(
-        [
-            load_ghcnh_single_var_station(
+    if time_range:
+        data_dict = {
+            station: load_ghcnh_single_var_station(
                 station,
                 var,
                 year_list=inventory.loc[station].dropna().index.to_list(),
-                load_attributes=False,
-            ).rename(columns={var: station})
+                load_attributes=load_attributes,
+            ).loc[
+                pd.Timestamp(time_range[0]) : pd.Timestamp(time_range[1])  # noqa: E203
+            ]
             for station in station_list.index
-        ],
-        axis=1,
-    )
-    if time_range is not None:
-        data = data.loc[
-            pd.Timestamp(time_range[0]) : pd.Timestamp(time_range[1])  # noqa: E203
-        ]
+        }
+    else:
+        data_dict = {
+            station: load_ghcnh_single_var_station(
+                station,
+                var,
+                year_list=inventory.loc[station].dropna().index.to_list(),
+                load_attributes=load_attributes,
+            )
+            for station in station_list.index
+        }
 
-    # Add attributes
-    data.attrs.update(_VAR_TO_META[var])
-
-    # Match station order
-    data = data.loc[:, station_list.index.to_list()]
-
-    return data, station_list
+    # Concat
+    if concat:
+        data_df = pd.concat(data_dict, axis=1, copy=False)
+        return data_df, station_list
+    else:
+        return data_dict, station_list
