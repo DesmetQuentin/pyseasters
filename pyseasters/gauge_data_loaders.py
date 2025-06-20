@@ -1,4 +1,5 @@
-from datetime import datetime
+import logging
+from datetime import datetime, timezone
 from typing import Callable, Dict, List, Optional, Tuple
 
 import pandas as pd
@@ -9,6 +10,8 @@ from .gsdr import load_gsdr
 from .utils import check_dataframe_unit
 
 __all__ = ["load_1h_gauge_data", "load_all_gauge_data"]
+
+log = logging.getLogger(__name__)
 
 _GAUGE_DATA_SOURCES = [
     "GHCNd",
@@ -171,7 +174,27 @@ def load_1h_gauge_data(
             f"{usesources!r} is not valid."
             + f" Please provide sources of {_1H_GAUGE_DATA_SOURCES!r}."
         )
+    if time_range:
+        time_localized = [dt.tzinfo for dt in time_range]
+        if not all(time_localized):
+            if not any(time_localized):
+                log.info("Time range datetimes assumed assumed to be in UTC...")
+                time_range[0] = time_range[0].replace(tzinfo=timezone.utc)
+                time_range[1] = time_range[1].replace(tzinfo=timezone.utc)
+            elif not time_localized[0]:
+                log.info(
+                    "Time range start datetime is assumed to be in the same time "
+                    + "zone as end datetime."
+                )
+                time_range[0] = time_range[0].replace(tzinfo=time_localized[1])
+            else:
+                log.info(
+                    "Time range start datetime is assumed to be in the same time "
+                    + "zone as start datetime."
+                )
+                time_range[1] = time_range[1].replace(tzinfo=time_localized[0])
 
+    # Core
     all_data, all_metadata = [], []
     for source in usesources:
         data, metadata = _dispatcher(
@@ -240,7 +263,27 @@ def load_all_gauge_data(
             f"{usesources!r} is not valid."
             + f" Please provide sources of {_GAUGE_DATA_SOURCES!r}."
         )
+    if time_range:
+        time_localized = [dt.tzinfo for dt in time_range]
+        if not all(time_localized):
+            if not any(time_localized):
+                log.info("Time range datetimes assumed assumed to be in UTC...")
+                time_range[0] = time_range[0].replace(tzinfo=timezone.utc)
+                time_range[1] = time_range[1].replace(tzinfo=timezone.utc)
+            elif not time_localized[0]:
+                log.info(
+                    "Time range start datetime is assumed to be in the same time "
+                    + "zone as end datetime."
+                )
+                time_range[0] = time_range[0].replace(tzinfo=time_localized[1])
+            else:
+                log.info(
+                    "Time range start datetime is assumed to be in the same time "
+                    + "zone as start datetime."
+                )
+                time_range[1] = time_range[1].replace(tzinfo=time_localized[0])
 
+    # Core
     combined_data, all_metadata = {}, {}
     for period, source_var in _PERIOD_SOURCE_VAR.items():
         period_data, period_metadata = [], []

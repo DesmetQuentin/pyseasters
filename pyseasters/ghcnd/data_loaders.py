@@ -1,5 +1,6 @@
 import importlib.resources
-from datetime import datetime
+import logging
+from datetime import datetime, timezone
 from typing import Any, Dict, Optional, Tuple
 
 import pandas as pd
@@ -10,6 +11,8 @@ from pyseasters.constants import paths
 from .metadata_loaders import get_ghcnd_metadata
 
 __all__ = ["load_ghcnd", "load_ghcnd_single_var_station"]
+
+log = logging.getLogger(__name__)
 
 with importlib.resources.files("pyseasters.ghcnd.data").joinpath(
     "var_metadata.yaml"
@@ -70,6 +73,25 @@ def load_ghcnd(
             f"Provided `var` ({var!r}) is not valid."
             + f" Accepted values are in {list(_VAR_TO_META.keys())!r}."
         )
+    if time_range:
+        time_localized = [dt.tzinfo for dt in time_range]
+        if not all(time_localized):
+            if not any(time_localized):
+                log.info("Time range datetimes assumed assumed to be in UTC...")
+                time_range[0] = time_range[0].replace(tzinfo=timezone.utc)
+                time_range[1] = time_range[1].replace(tzinfo=timezone.utc)
+            elif not time_localized[0]:
+                log.info(
+                    "Time range start datetime is assumed to be in the same time "
+                    + "zone as end datetime."
+                )
+                time_range[0] = time_range[0].replace(tzinfo=time_localized[1])
+            else:
+                log.info(
+                    "Time range start datetime is assumed to be in the same time "
+                    + "zone as start datetime."
+                )
+                time_range[1] = time_range[1].replace(tzinfo=time_localized[0])
 
     # Load metadata
     metadata = get_ghcnd_metadata(var=var)
@@ -100,7 +122,7 @@ def load_ghcnd(
         ],
         axis=1,
     )
-    if time_range is not None:
+    if time_range:
         data = data.loc[
             pd.Timestamp(time_range[0]) : pd.Timestamp(time_range[1])  # noqa: E203
         ]

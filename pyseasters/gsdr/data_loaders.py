@@ -1,4 +1,5 @@
-from datetime import datetime
+import logging
+from datetime import datetime, timezone
 from typing import Optional, Tuple
 
 import pandas as pd
@@ -8,6 +9,8 @@ from pyseasters.constants import paths
 from .metadata_loaders import get_gsdr_metadata
 
 __all__ = ["load_gsdr_single_station", "load_gsdr"]
+
+log = logging.getLogger(__name__)
 
 
 def load_gsdr_single_station(
@@ -50,6 +53,27 @@ def load_gsdr(
     RuntimeError
         If the filter condition is invalid or raises an exception.
     """
+
+    # Check arguments
+    if time_range:
+        time_localized = [dt.tzinfo for dt in time_range]
+        if not all(time_localized):
+            if not any(time_localized):
+                log.info("Time range datetimes assumed assumed to be in UTC...")
+                time_range[0] = time_range[0].replace(tzinfo=timezone.utc)
+                time_range[1] = time_range[1].replace(tzinfo=timezone.utc)
+            elif not time_localized[0]:
+                log.info(
+                    "Time range start datetime is assumed to be in the same time "
+                    + "zone as end datetime."
+                )
+                time_range[0] = time_range[0].replace(tzinfo=time_localized[1])
+            else:
+                log.info(
+                    "Time range start datetime is assumed to be in the same time "
+                    + "zone as start datetime."
+                )
+                time_range[1] = time_range[1].replace(tzinfo=time_localized[0])
 
     # Load metadata
     metadata = get_gsdr_metadata()
