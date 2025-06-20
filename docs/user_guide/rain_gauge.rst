@@ -28,56 +28,72 @@ subset of the rain gauge database (more details in the next section on
    >>> import pyseasters as ps
    >>> data, metadata = ps.load_1h_gauge_data(
    ...     filter_condition="lon > 100 and lon < 130 and lat > 15 and lat < 25",
-   ...     time_range=[datetime(2017, 1, 1), datetime(2017, 12, 31)],
-   ...     usesources=["GHCNd"]
+   ...     time_range=[datetime(2010, 1, 1), datetime(2011, 12, 31)],
+   ...     usesources=["GHCNh"]
    ... )
    >>> data
-               GHCNd:CHM00056951  GHCNd:CHM00056964  ...  GHCNd:VMM00048848  GHCNd:VMM00048855
-   time                                              ...
-   2017-01-01                NaN                NaN  ...                0.0              297.0
-   2017-01-02                NaN               58.0  ...                0.0              104.0
-   2017-01-03              325.0              564.0  ...               43.0               33.0
-   2017-01-04               38.0               64.0  ...               10.0               76.0
-   2017-01-05               23.0               48.0  ...                8.0               76.0
-   ...                       ...                ...  ...                ...                ...
-   2017-12-27                NaN                8.0  ...               10.0              150.0
-   2017-12-28                NaN                NaN  ...                0.0                0.0
-   2017-12-29                NaN                NaN  ...                0.0                8.0
-   2017-12-30                NaN                NaN  ...                0.0               23.0
-   2017-12-31                NaN              213.0  ...              147.0                0.0
+                              GHCNh:THI0000VTCP  ...  GHCNh:TWI0000RCKH
+   time                                          ...
+   2010-01-02 12:00:00+00:00                NaN  ...                0.3
+   2010-01-03 00:00:00+00:00                NaN  ...                0.5
+   2010-01-03 02:00:00+00:00                NaN  ...                0.3
+   2010-01-06 09:00:00+00:00                NaN  ...                NaN
+   2010-01-06 21:00:00+00:00                NaN  ...                NaN
+   ...                                      ...  ...                ...
+   2011-12-13 03:00:00+00:00                NaN  ...                0.5
+   2011-12-13 05:00:00+00:00                NaN  ...                0.8
+   2011-12-13 06:00:00+00:00                NaN  ...                1.3
+   2011-12-19 18:00:00+00:00                NaN  ...                0.5
+   2011-12-19 19:00:00+00:00                NaN  ...                1.0
 
-   [365 rows x 63 columns]
+   [1692 rows x 29 columns]
    >>> data.attrs
-   {'name': 'Precipitation', 'units': 'mm'}
+   {'name': 'Total liquid precipitation', 'long_name': 'Total liquid precipitation (rain or melted snow). Totals are nominally for the hour, but may include intermediate reports within the hour.', 'note': "A 'T' in the measurement code column indicates a trace amount of precipitation.", 'units': 'millimeter'}
    >>> metadata
-                      lat      lon  elevation                      station_name
+                          lat       lon  elevation           station_name
    station_id
-   GHCNd:CHM00056951  23.950  100.217     1503.0               LINCANG [WMO=56951]
-   GHCNd:CHM00056964  22.767  100.983     1303.0                 SIMAO [WMO=56964]
-   GHCNd:CHM00056985  23.383  103.383     1302.0       MENGZI [GSN=GSN, WMO=56985]
-   GHCNd:CHM00059023  24.700  108.050      214.0                 HECHI [WMO=59023]
-   GHCNd:CHM00059082  24.667  113.600       68.0              SHAOGUAN [WMO=59082]
-   ...                   ...      ...        ...                               ...
-   GHCNd:VMM00048830  21.833  106.767      263.0              LANG SON [WMO=48830]
-   GHCNd:VMM00048840  19.750  105.783        5.0             THANH HOA [WMO=48840]
-   GHCNd:VMM00048845  18.737  105.671        5.2                  VINH [WMO=48845]
-   GHCNd:VMM00048848  17.483  106.600        8.0              DONG HOI [WMO=48848]
-   GHCNd:VMM00048855  16.044  108.199       10.1  DANANG INTL [GSN=GSN, WMO=48855]
-
-   [63 rows x 4 columns]
+   GHCNh:THI0000VTCP  18.1322  100.1647      164.0                  PHRAE
+   GHCNh:THI0000VTPB  16.6760  101.1951      137.2             PHETCHABUN
+   GHCNh:THI0000VTPN  15.6730  100.1368       34.4           NAKHON SAWAN
+   GHCNh:THI0000VTUL  17.4391  101.7221      262.1                   LOEI
+   GHCNh:THI0000VTUU  15.2513  104.8702      123.7       UBON RATCHATHANI
+   GHCNh:THM00048307  19.4167  100.8833      335.0             TUNG CHANG
+   GHCNh:THM00048315  19.1167  100.8000      237.0           THA WANG PHA
+   GHCNh:THM00048333  18.8667  100.7500      264.0            NAN AGROMET
+   GHCNh:THM00048350  17.4000  101.7333      264.0           LOEI AGROMET
+   GHCNh:THM00048351  17.6167  100.1000       64.0              UTTARADIT
+   GHCNh:THM00048355  17.1167  104.0500      192.0   SAKON NAKHON AGROMET
+   GHCNh:THM00048357  17.4167  104.7833      148.0          NAKHON PHANOM
+   GHCNh:THM00048358  17.4333  104.7833      153.0  NAKHON PHANOM AGROMET
+   GHCNh:THM00048360  17.2167  102.4167      228.0          NONGBUALAMPHU
+   GHCNh:THM00048374  16.7667  101.2500      145.0                 LOMSAK
+   GHCNh:THM00048382  16.2500  103.0667      154.0            KOSUMPHISAI
+   GHCNh:THM00048383  16.5333  104.7167      140.0               MUKDAHAN
+   GHCNh:THM00048384  16.3333  102.8167      166.0       THA PHRA AGROMET
+   GHCNh:THM00048386  16.3333  100.3667       39.4         PICHIT AGROMET
+   GHCNh:THM00048390  16.3333  103.5833      140.9              KAMALASAI
+   GHCNh:THM00048401  15.3500  100.5000       87.0          TAKFA AGROMET
+   GHCNh:THM00048403  15.8000  102.0333      184.0             CHAIYAPHUM
+   GHCNh:THM00048404  16.0667  103.6167      156.0         ROI ET AGROMET
+   GHCNh:THM00048409  15.0853  104.3306      129.2       SI SAKET AGROMET
+   GHCNh:THM00048413  15.6569  101.1053       69.7           WICHIAN BURI
+   GHCNh:THM00048416  15.3167  103.6833      130.0                THA TUM
+   GHCNh:THM00048418  15.2667  101.2000       51.0               BUA CHUM
+   GHCNh:THM00048437  15.2333  103.2500      184.0                BURERAM
+   GHCNh:TWI0000RCKH  22.5771  120.3500        7.9         KAOHSIUNG INTL
 
 
 * ``data`` shows for each station across columns a time series of its precipitation data
   across a time axis in index that is shared for all stations (using ``NaN`` to fill
-  the blanks). The DataFrame has two attributes: "name", containing the standard
-  variable name for the data, here "Precipitation", and "units" which contains unit
-  information, in this case, "mm".
+  the blanks). The DataFrame has several attributes, including "name", containing the
+  standard variable name for the data, here "Total liquid precipitation", and "units"
+  which contains unit information, in this case, "millimeter".
 
 * ``metadata`` contains station metadata for all the stations in ``data.columns``.
   This includes "lat" and "lon" for latitude and longitude, respectively, "elevation"
   and "station_name" which, depending on the source and the station, may contain more
   specific information than just a city name, between square brackets (for this example,
-  you may refer to this documentation's page on the :ref:`GHCNd dataset <ghcnd>`).
+  you may refer to this documentation's page on the :ref:`GHCNh dataset <ghcnh>`).
 
 .. note::
 
@@ -187,28 +203,28 @@ example of this page can be reran by changing units, as follows:
 
    >>> data, metadata = ps.load_1h_gauge_data(
    ...     filter_condition="lon > 100 and lon < 130 and lat > 15 and lat < 25",
-   ...     time_range=[datetime(2017, 1, 1), datetime(2017, 12, 31)],
-   ...     usesources=["GHCNd"],
+   ...     time_range=[datetime(2010, 1, 1), datetime(2011, 12, 31)],
+   ...     usesources=["GHCNh"],
    ...     units="cm",
    ... )
    >>> data
-               GHCNd:CHM00056951  GHCNd:CHM00056964  ...  GHCNd:VMM00048848  GHCNd:VMM00048855
-   time                                              ...
-   2017-01-01                NaN                NaN  ...                0.0               29.7
-   2017-01-02                NaN                5.8  ...                0.0               10.4
-   2017-01-03               32.5               56.4  ...                4.3                3.3
-   2017-01-04                3.8                6.4  ...                1.0                7.6
-   2017-01-05                2.3                4.8  ...                0.8                7.6
-   ...                       ...                ...  ...                ...                ...
-   2017-12-27                NaN                0.8  ...                1.0               15.0
-   2017-12-28                NaN                NaN  ...                0.0                0.0
-   2017-12-29                NaN                NaN  ...                0.0                0.8
-   2017-12-30                NaN                NaN  ...                0.0                2.3
-   2017-12-31                NaN               21.3  ...               14.7                0.0
+                              GHCNh:THI0000VTCP  ...  GHCNh:TWI0000RCKH
+   time                                          ...
+   2010-01-02 12:00:00+00:00                NaN  ...               0.03
+   2010-01-03 00:00:00+00:00                NaN  ...               0.05
+   2010-01-03 02:00:00+00:00                NaN  ...               0.03
+   2010-01-06 09:00:00+00:00                NaN  ...                NaN
+   2010-01-06 21:00:00+00:00                NaN  ...                NaN
+   ...                                      ...  ...                ...
+   2011-12-13 03:00:00+00:00                NaN  ...               0.05
+   2011-12-13 05:00:00+00:00                NaN  ...               0.08
+   2011-12-13 06:00:00+00:00                NaN  ...               0.13
+   2011-12-19 18:00:00+00:00                NaN  ...               0.05
+   2011-12-19 19:00:00+00:00                NaN  ...               0.10
 
-   [365 rows x 63 columns]
+   [1692 rows x 29 columns]
    >>> data.attrs
-   {'name': 'Precipitation', 'units': 'cm'}
+   {'name': 'Total liquid precipitation', 'long_name': 'Total liquid precipitation (rain or melted snow). Totals are nominally for the hour, but may include intermediate reports within the hour.', 'note': "A 'T' in the measurement code column indicates a trace amount of precipitation.", 'units': 'cm'}
 
 
 .. note::
@@ -239,10 +255,10 @@ results of the ``load_1h_gauge_data()`` function:
    d, md = ps.load_1h_gauge_data(
        filter_condition="lon > 100 and lon < 130 and lat > 10 and lat < 30",
        time_range=[
-           datetime(2018, 1, 1),
-           datetime(2018, 3, 31)
+           datetime(2010, 1, 1),
+           datetime(2011, 3, 31)
        ],
-       usesources=["GHCNd"],
+       usesources=["GHCNh"],
    )
 
    # Build the DataArray
@@ -282,9 +298,9 @@ then plotting one day's data over a map, using ``matplotlib`` and ``cartopy``.
    # Input
    lonmin, lonmax = 115, 135
    latmin, latmax = -15, 5
-   plot_date = "2016-01-02"
-   beg = date.fromisoformat("2015-01-01")
-   end = date.fromisoformat("2017-12-31")
+   plot_date = "2011-01-02"
+   beg = date.fromisoformat("2010-01-01")
+   end = date.fromisoformat("2011-12-31")
    query = f"lon >= {lonmin} and lon <= {lonmax} and lat >= {latmin} and lat <= {latmax}"
    units = "mm"
 

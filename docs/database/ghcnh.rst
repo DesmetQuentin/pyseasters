@@ -45,7 +45,37 @@ snippet applying this function with some filtering:
    ...    time_range=[datetime(2017, 1, 1), datetime(2017, 12, 31)],
    ... )
    >>> data
-   TODO
+                              CHI0000ZGBH  CHI0000ZGGG  ...  VMM00048848  VMW00041024
+   time                                                 ...
+   2017-01-01 00:00:00+00:00          NaN         13.0  ...         18.0         20.0
+   2017-01-01 00:07:00+00:00          NaN          NaN  ...          NaN          NaN
+   2017-01-01 00:11:00+00:00          NaN          NaN  ...          NaN          NaN
+   2017-01-01 00:30:00+00:00          NaN         14.0  ...          NaN         21.0
+   2017-01-01 00:40:00+00:00          NaN          NaN  ...          NaN          NaN
+   ...                                ...          ...  ...          ...          ...
+   2017-12-30 23:00:00+00:00          NaN         14.0  ...          NaN         22.0
+   2017-12-30 23:30:00+00:00          NaN         14.0  ...          NaN         22.0
+   2017-12-30 23:45:00+00:00          NaN          NaN  ...          NaN          NaN
+   2017-12-30 23:48:00+00:00          NaN          NaN  ...          NaN          NaN
+   2017-12-31 00:00:00+00:00          NaN         14.0  ...         19.1         22.0
+
+   [27441 rows x 130 columns]
+   >>> metadata
+                    lat       lon  elevation    station_name
+   station_id
+   CHI0000ZGBH  21.5394  109.2939       16.0  BEIHAI AIRPORT
+   CHI0000ZGGG  23.3924  113.2988       15.2     BAIYUN INTL
+   CHI0000ZGOW  23.4000  116.6833        3.0         SHANTOU
+   CHI0000ZGSZ  22.6393  113.8107        4.0      BAOAN INTL
+   CHI0000ZJHK  19.9349  110.4590       22.9          MEILAN
+   ...              ...       ...        ...             ...
+   VMM00048839  20.1333  107.7167       56.0    BACH LONG VI
+   VMM00048840  19.7500  105.7833        5.0       THANH HOA
+   VMM00048846  18.3500  105.9000        3.0         HA TINH
+   VMM00048848  17.4833  106.6000        8.0        DONG HOI
+   VMW00041024  16.0439  108.1994       10.1      MARBLE MTN
+
+   [130 rows x 4 columns]
 
 
 .. note::
@@ -53,7 +83,7 @@ snippet applying this function with some filtering:
    For accumulation (e.g., precipitation) and statistical data (e.g., wind gusts), the
    time axis indicates the end of the measurement period. This is to be accounted for
    in the ``time_range`` argument.
-   
+
 
 .. seealso::
 

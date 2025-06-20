@@ -55,16 +55,46 @@ snippet applying this function with some filtering:
    ...    time_range=[datetime(2017, 1, 1), datetime(2017, 12, 31)],
    ... )
    >>> data
-   TODO
+                              CHM00056951  CHM00056964  ...  VMM00048848  VMM00048855
+   time                                                 ...
+   2017-01-01 00:00:00+00:00         56.0         80.0  ...          NaN        197.0
+   2017-01-02 00:00:00+00:00         80.0        107.0  ...        173.0        198.0
+   2017-01-03 00:00:00+00:00        105.0        142.0  ...        189.0          NaN
+   2017-01-04 00:00:00+00:00          NaN          NaN  ...        196.0        225.0
+   2017-01-05 00:00:00+00:00          NaN        115.0  ...        205.0          NaN
+   ...                                ...          ...  ...          ...          ...
+   2017-12-27 00:00:00+00:00         54.0         78.0  ...          NaN          NaN
+   2017-12-28 00:00:00+00:00          NaN          NaN  ...        163.0        193.0
+   2017-12-29 00:00:00+00:00          NaN          NaN  ...        165.0        194.0
+   2017-12-30 00:00:00+00:00         75.0        117.0  ...        178.0          NaN
+   2017-12-31 00:00:00+00:00         66.0        132.0  ...        186.0        208.0
+
+   [365 rows x 63 columns]
+   >>> metadata
+                   lat      lon  elevation                      station_name
+   station_id
+   CHM00056951  23.950  100.217     1503.0               LINCANG [WMO=56951]
+   CHM00056964  22.767  100.983     1303.0                 SIMAO [WMO=56964]
+   CHM00056985  23.383  103.383     1302.0       MENGZI [GSN=GSN, WMO=56985]
+   CHM00059023  24.700  108.050      214.0                 HECHI [WMO=59023]
+   CHM00059082  24.667  113.600       68.0              SHAOGUAN [WMO=59082]
+   ...             ...      ...        ...                               ...
+   VMM00048830  21.833  106.767      263.0              LANG SON [WMO=48830]
+   VMM00048840  19.750  105.783        5.0             THANH HOA [WMO=48840]
+   VMM00048845  18.737  105.671        5.2                  VINH [WMO=48845]
+   VMM00048848  17.483  106.600        8.0              DONG HOI [WMO=48848]
+   VMM00048855  16.044  108.199       10.1  DANANG INTL [GSN=GSN, WMO=48855]
+
+   [63 rows x 4 columns]
 
 
 .. note::
 
    The time indicates the end of the measurement period for accumulation or statistical
-   data: the record of ``20170102T00:00``
+   data: the record of ``2017-01-02 00:00:00+00:00``
    in the example above corresponds to the minimum temperature of the previous 24 hours,
-   i.e., during January 1st 2017. This is to be accounted for in the ``time_range``
-   argument.
+   i.e., during January 1st, 2017, UTC. This is to be accounted for in the
+   ``time_range`` argument.
 
 
 .. seealso::
