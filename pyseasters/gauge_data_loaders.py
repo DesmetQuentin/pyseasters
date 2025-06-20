@@ -169,7 +169,8 @@ def load_1h_gauge_data(
     RuntimeError
         If the filter condition is invalid or raises an exception.
     """
-    if any([source in _1H_GAUGE_DATA_SOURCES for source in usesources]):
+    # Check arguments
+    if any([source not in _1H_GAUGE_DATA_SOURCES for source in usesources]):
         raise ValueError(
             f"{usesources!r} is not valid."
             + f" Please provide sources of {_1H_GAUGE_DATA_SOURCES!r}."
@@ -258,7 +259,8 @@ def load_all_gauge_data(
     RuntimeError
         If the filter condition is invalid or raises an exception.
     """
-    if any([source in _GAUGE_DATA_SOURCES for source in usesources]):
+    # Check arguments
+    if any([source not in _GAUGE_DATA_SOURCES for source in usesources]):
         raise ValueError(
             f"{usesources!r} is not valid."
             + f" Please provide sources of {_GAUGE_DATA_SOURCES!r}."
