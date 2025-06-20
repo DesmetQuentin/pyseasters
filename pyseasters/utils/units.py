@@ -68,6 +68,7 @@ def convert_dataframe_unit(df: pd.DataFrame, target_unit: str) -> pd.DataFrame:
     df_converted = pd.DataFrame(
         quantity.to(target_unit).magnitude, columns=df.columns, index=df.index  # type: ignore[attr-defined]
     )
+    df_converted.attrs = df.attrs
     df_converted.attrs["units"] = target_unit
 
     return df_converted
