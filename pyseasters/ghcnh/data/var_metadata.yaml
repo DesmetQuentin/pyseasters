@@ -110,38 +110,38 @@ precipitation_3_hour:
   note: "A 'T' in the measurement code column indicates a trace amount of precipitation."
   units: millimeter
 precipitation_6_hour:
-  name: 3-hour total liquid precipitation
-  long_name: 3-hour total liquid precipitation (rain or melted snow) accumulation from FM12/SYNOP reports
+  name: 6-hour total liquid precipitation
+  long_name: 6-hour total liquid precipitation (rain or melted snow) accumulation from FM12/SYNOP reports
   note: "A 'T' in the measurement code column indicates a trace amount of precipitation."
   units: millimeter
 precipitation_9_hour:
-  name: 3-hour total liquid precipitation
-  long_name: 3-hour total liquid precipitation (rain or melted snow) accumulation from FM12/SYNOP reports
+  name: 9-hour total liquid precipitation
+  long_name: 9-hour total liquid precipitation (rain or melted snow) accumulation from FM12/SYNOP reports
   note: "A 'T' in the measurement code column indicates a trace amount of precipitation."
   units: millimeter
 precipitation_12_hour:
-  name: 3-hour total liquid precipitation
-  long_name: 3-hour total liquid precipitation (rain or melted snow) accumulation from FM12/SYNOP reports
+  name: 12-hour total liquid precipitation
+  long_name: 12-hour total liquid precipitation (rain or melted snow) accumulation from FM12/SYNOP reports
   note: "A 'T' in the measurement code column indicates a trace amount of precipitation."
   units: millimeter
 precipitation_15_hour:
-  name: 3-hour total liquid precipitation
-  long_name: 3-hour total liquid precipitation (rain or melted snow) accumulation from FM12/SYNOP reports
+  name: 15-hour total liquid precipitation
+  long_name: 15-hour total liquid precipitation (rain or melted snow) accumulation from FM12/SYNOP reports
   note: "A 'T' in the measurement code column indicates a trace amount of precipitation."
   units: millimeter
 precipitation_18_hour:
-  name: 3-hour total liquid precipitation
-  long_name: 3-hour total liquid precipitation (rain or melted snow) accumulation from FM12/SYNOP reports
+  name: 18-hour total liquid precipitation
+  long_name: 18-hour total liquid precipitation (rain or melted snow) accumulation from FM12/SYNOP reports
   note: "A 'T' in the measurement code column indicates a trace amount of precipitation."
   units: millimeter
 precipitation_21_hour:
-  name: 3-hour total liquid precipitation
-  long_name: 3-hour total liquid precipitation (rain or melted snow) accumulation from FM12/SYNOP reports
+  name: 21-hour total liquid precipitation
+  long_name: 21-hour total liquid precipitation (rain or melted snow) accumulation from FM12/SYNOP reports
   note: "A 'T' in the measurement code column indicates a trace amount of precipitation."
   units: millimeter
 precipitation_24_hour:
-  name: 3-hour total liquid precipitation
-  long_name: 3-hour total liquid precipitation (rain or melted snow) accumulation from FM12/SYNOP reports
+  name: 24-hour total liquid precipitation
+  long_name: 24-hour total liquid precipitation (rain or melted snow) accumulation from FM12/SYNOP reports
   note: "A 'T' in the measurement code column indicates a trace amount of precipitation."
   units: millimeter
 remarks:

@@ -16,6 +16,7 @@ Subpackages
    pyseasters.data_curation
    pyseasters.ghcnd
    pyseasters.ghcnh
+   pyseasters.gsdr
    pyseasters.utils
 
 Submodules
@@ -24,4 +25,4 @@ Submodules
 .. toctree::
    :maxdepth: 1
 
-   pyseasters.gauge_data_loader
+   pyseasters.gauge_data_loaders

@@ -28,6 +28,119 @@ Description
    unaffected.
 
 
+Data access with PySEASTERS
+---------------------------
+
+With PySEASTERS, the most direct way to access GHCNh data is by using the
+:doc:`load_ghcnh() <../api/pyseasters.ghcnh.data_loaders>` function. Hereafter is a code
+snippet applying this function with some filtering:
+
+.. code:: pycon
+
+   >>> from datetime import datetime
+   >>> import pyseasters as ps
+   >>> data, metadata = ps.load_ghcnh(
+   ...    var="temperature",  # Looks for temperature
+   ...    filter_condition="lon > 100 and lon < 130 and lat > 15 and lat < 25",
+   ...    time_range=[datetime(2017, 1, 1), datetime(2017, 12, 31)],
+   ... )
+   >>> data
+   TODO
+
+
+.. note::
+
+   For accumulation (e.g., precipitation) and statistical data (e.g., wind gusts), the
+   time axis indicates the end of the measurement period. This is to be accounted for
+   in the ``time_range`` argument.
+   
+
+.. seealso::
+
+   :ref:`User guide \> Rain gauge data <guide-rain-gauge>`
+      User guide page introducing rain gauge data loading functions looking into all
+      available datasets -- including GHCNh --, and giving more details about filtering
+      and searching in PySEASTERS.
+
+
+Variables
+---------
+
+Below is a table gathering variable information from the documentation:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Code
+     - Name
+     - Default units
+     - Details
+   * - ``temperature``
+     - Temperature
+     - Tenths of degree Celsius
+     - 2 meter (circa) Above Ground Level Air (dry bulb) Temperature
+   * - ``dew_point_temperature``
+     - Dew point temperature
+     - Tenths of degree Celsius
+     - None
+   * - ``station_level_pressure``
+     - Station level pressure
+     - hPa
+     - Pressure observed at a specific elevation (true barometric pressure of a location). It is the pressure exerted by the atmosphere at a point as a result of gravity acting upon the 'column' of air that lies directly above the point.
+   * - ``sea_level_pressure``
+     - Sea level pressure
+     - hPa
+     - Estimates the pressure that would exist at sea level at a point directly below the station using a temperature profile based on temperatures that actually exist at the station
+   * - ``wind_direction``
+     - Wind direction
+     - degree
+     - Wind Direction from true north using compass directions (e.g. 360 = true north, 180 = south, 270 = west, etc.). Note: A direction of '000' is given for calm winds.
+   * - ``wind_speed``
+     - Wind speed
+     - m/s
+     - None
+   * - ``wind_gust``
+     - Wind gust
+     - m/s
+     - Peak short duration (usually < 20 seconds) wind speed (meters per second) that exceeds the wind_speed average
+   * - ``precipitation``
+     - Total liquid precipitation
+     - mm
+     - Total liquid precipitation (rain or melted snow). Totals are nominally for the hour, but may include intermediate reports within the hour. Note: A 'T' in the measurement code column indicates a trace amount of precipitation.
+   * - ``relative_humidity``
+     - Relative humidity
+     - percent
+     - Depending on the source, relative humidity is either measured directly or calculated from air (dry bulb) temperature and dew point temperature
+   * - ``wet_bulb_temperature``
+     - Wet bulb temperature
+     - Tenths of degree Celsius
+     - Depending on the source, wet bulb temperature is either measured directly or calculated from air (dry bulb) temperature, dew point temperature, and station pressure
+   * - ``snow_depth``
+     - Snow depth
+     - mm
+     - Depth of snowpack on the ground
+   * - ``visibility``
+     - Visibility
+     - km
+     - Horizontal distance at which an object can be seen and identified
+   * - ``altimeter``
+     - Altimeter
+     - mbar/hPa
+     - The pressure 'reduced' to mean sea level using the temperature profile of the 'standard' atmosphere, which is representative of average conditions over the United States at 40 degrees north latitude
+   * - ``pressure_3hr_change``
+     - 3-hour pressure change
+     - mbar/hPa
+     - Change in atmospheric pressure measured at the beginning and end of a three hour period; accompanied by tendency code in measurement code field
+   * - ``precipitation_x_hour`` with ``x`` being 3, 6, 9, 12, 15, 18, 21 or 24.
+     - ``x``-hour total liquid precipitation
+     - mm
+     - ``x``-hour total liquid precipitation (rain or melted snow) accumulation from FM12/SYNOP reports. Note: A 'T' in the measurement code column indicates a trace amount of precipitation.
+   * - ``remarks``
+     - Hourly remarks
+     - None
+     - Raw surface observation data in the original format encoded into ICAO-standardized METAR (FM15) or FM12 (SYNOP), FM16 (SPECI), etc. format for global dissemination. Note: Further information on decoding these observations can be found in the Federal Meteorological Handbook (FMH) No. 1, Surface Weather Observations & Reports.
+
+
 Station names and IDs
 ---------------------
 
@@ -50,7 +163,7 @@ e.g., ``GQW00041406``, where (the following is derived from GHCNh documentation)
 
   .. seealso::
 
-     :doc:`pyseasters.COUNTRIES <../api/pyseasters.constants.countries>`:
+     :doc:`pyseasters.COUNTRIES <../api/pyseasters.constants.countries>`
         PySEASTERS provides the ``COUNTRIES`` constant ``pandas`` DataFrame that relates
         country names with ISO and FIPS codes.
 
@@ -94,7 +207,7 @@ e.g., ``GQW00041406``, where (the following is derived from GHCNh documentation)
 .. tip::
 
    Such station ID formatting can be used to filter stations when loading data,
-   e.g., with PySEASTERS :doc:`load_1h_gauge_data() <../api/pyseasters.gauge_data_loader>`
+   e.g., with PySEASTERS :doc:`load_1h_gauge_data() <../api/pyseasters.gauge_data_loaders>`
    function. For instance, Indonesian stations could be selected using the following
    ``filter_condition`` argument: ``filter_condition='station_id[:2] == "ID"'``.
 
@@ -143,7 +256,7 @@ Below are explanations on the flags, derived from from GHCNh documentation:
 
    As for station IDs, station names can be used in the ``filter_condition`` argument
    of several PySEASTERS loading functions such as
-   :doc:`load_1h_gauge_data() <../api/pyseasters.gauge_data_loader>`. For example, stations
+   :doc:`load_1h_gauge_data() <../api/pyseasters.gauge_data_loaders>`. For example, stations
    with a WMO ID could be selected using ``filter_condition='"WMO=" in station_name'``.
 
 

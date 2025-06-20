@@ -1,8 +1,10 @@
+.. _guide-rain-gauge:
+
 Rain gauge data
 ===============
 
 The ``load_1h_gauge_data()`` function
-----------------------------------
+-------------------------------------
 
 PySEASTERS provides the ``load_1h_gauge_data()`` function to load rain gauge daily data,
 optionally applying spatio-temporal filters and more.

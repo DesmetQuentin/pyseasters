@@ -26,12 +26,45 @@ Description
    **Source:** Absract of Lewis et al. (2019).
 
 
+.. note::
+
+   In SEASTERS, we included the stations from five countries: Japan, Malaysia, India and
+   Australia.
+
+
 .. attention::
 
    The GSDR dataset is **not publicly distributed!** Before using this data for
    published work, please first contact the CNRM branch of SEASTERS -- who we got
    this data from -- to get the approval of the team behind the dataset. Also check
    this page's :ref:`How to cite <gsdr-cite>` section.
+
+
+Data access with PySEASTERS
+---------------------------
+
+With PySEASTERS, the most direct way to access GSDR data is by using the
+:doc:`load_gsdr() <../api/pyseasters.gsdr.data_loaders>` function. Hereafter is a code
+snippet applying this function with some filtering:
+
+.. code:: pycon
+
+   >>> from datetime import datetime
+   >>> import pyseasters as ps
+   >>> data, metadata = ps.load_gsdr(
+   ...    filter_condition="station_id.str.startswith('MY')",  # focuses on Malaysia
+   ...    time_range=[datetime(2017, 1, 1), datetime(2017, 12, 31)],
+   ... )
+   >>> data
+   TODO
+
+
+.. seealso::
+
+   :ref:`User guide \> Rain gauge data <guide-rain-gauge>`
+      User guide page introducing rain gauge data loading functions looking into all
+      available datasets -- including GSDR --, and giving more details about filtering
+      and searching in PySEASTERS.
 
 
 Station names and IDs
@@ -49,7 +82,7 @@ For instance, ``IN_33`` is the ID of a station located in India, and
 
 .. seealso::
 
-   :doc:`pyseasters.COUNTRIES <../api/pyseasters.constants.countries>`:
+   :doc:`pyseasters.COUNTRIES <../api/pyseasters.constants.countries>`
       PySEASTERS provides the ``COUNTRIES`` constant ``pandas`` DataFrame that relates
       country names with ISO and FIPS codes.
 

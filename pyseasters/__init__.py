@@ -16,7 +16,7 @@ specifically ``pyseasters.data_curation``.
 
 from ._version import __version__ as VERSION
 from .constants import COUNTRIES, paths
-from .gauge_data_loader import load_1h_gauge_data, load_all_gauge_data
+from .gauge_data_loaders import load_1h_gauge_data, load_all_gauge_data
 from .ghcnd import (
     get_ghcnd_metadata,
     get_ghcnd_station_list,
