@@ -42,7 +42,7 @@ Data access with PySEASTERS
 ---------------------------
 
 With PySEASTERS, the most direct way to access GHCNd data is by using the
-:doc:`load_ghcnd() <../api/pyseasters.ghcnd.data_loaders>` function. Hereafter is a code
+:func:`load_ghcnd() <pyseasters.ghcnd.data_loaders.load_ghcnd>` function. Hereafter is a code
 snippet applying this function with some filtering:
 
 .. code:: pycon
@@ -228,7 +228,8 @@ e.g., ``ASM00094299``, where (the following is derived from GHCNd documentation)
 .. tip::
 
    Such station ID formatting can be used to filter stations when loading data,
-   e.g., with PySEASTERS :doc:`load_1h_gauge_data() <../api/pyseasters.gauge_data_loaders>`
+   e.g., with PySEASTERS
+   :func:`load_1h_gauge_data() <pyseasters.gauge_data_loaders.load_1h_gauge_data>`
    function. For instance, Indonesian stations could be selected using the following
    ``filter_condition`` argument: ``filter_condition='station_id[:2] == "ID"'``.
 
@@ -277,8 +278,9 @@ Below are explanations on the flags, derived from from GHCNd documentation:
 
    As for station IDs, station names can be used in the ``filter_condition`` argument
    of several PySEASTERS loading functions such as
-   :doc:`load_1h_gauge_data() <../api/pyseasters.gauge_data_loaders>`. For example, stations
-   with a WMO ID could be selected using ``filter_condition='"WMO=" in station_name'``.
+   :func:`load_1h_gauge_data() <pyseasters.gauge_data_loaders.load_1h_gauge_data>`. For
+   example, stations with a WMO ID could be selected using
+   ``filter_condition='"WMO=" in station_name'``.
 
 
 

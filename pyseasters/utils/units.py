@@ -1,4 +1,5 @@
 import logging
+from typing import Union, overload
 
 import pandas as pd
 from pint import UnitRegistry
@@ -30,89 +31,121 @@ def _standard_unit(unit: str) -> str:
     return str(ureg.Quantity(1, unit).units)
 
 
-def convert_dataframe_unit(df: pd.DataFrame, target_unit: str) -> pd.DataFrame:
-    """Convert units of a pandas DataFrame using the pint library.
+@overload
+def convert_dataframe_unit(  # noqa: E704
+    data: pd.DataFrame, target_unit: str
+) -> pd.DataFrame: ...
+@overload  # noqa: E302
+def convert_dataframe_unit(  # noqa: E704
+    data: pd.Series, target_unit: str
+) -> pd.Series: ...
 
-    This function reads the unit from the DataFrame's 'units' attribute,
+
+def convert_dataframe_unit(
+    data: Union[pd.DataFrame, pd.Series], target_unit: str
+) -> Union[pd.DataFrame, pd.Series]:
+    """Convert units of a pandas object using the pint library.
+
+    This function reads the unit from ``data``'s 'units' attribute,
     performs the unit conversion, and updates the attribute to the new unit.
 
     Parameters
     ----------
-    df
-        DataFrame with a 'units' attribute specifying its current units.
+    data
+        DataFrame or Series with a 'units' attribute specifying its current units.
     target_unit
         Target unit to convert the data to (e.g., 'inch/day').
 
     Returns
     -------
-    df_converted : DataFrame
-        A new DataFrame with converted values and updated 'units' attribute.
+    data_converted : Same type as ``data``
+        A new DataFrame or Series with converted values and updated 'units' attribute.
 
     Raises
     ------
     ValueError
-        If the DataFrame has no 'units' attribute.
+        If ``data`` has no 'units' attribute.
     Pint package errors.
     """
 
-    source_unit = df.attrs.get("units", None)
+    source_unit = data.attrs.get("units", None)
     if source_unit is None:
-        raise ValueError("No 'units' attribute found in the DataFrame.")
+        raise ValueError("No 'units' attribute found in the ``data``.")
 
     log.info(
         "Proceed to unit conversion: %s -> %s",
         _standard_unit(source_unit),
         _standard_unit(target_unit),
     )
-    quantity = df.values * ureg(source_unit)
-    df_converted = pd.DataFrame(
-        quantity.to(target_unit).magnitude, columns=df.columns, index=df.index  # type: ignore[attr-defined]
-    )
-    df_converted.attrs = df.attrs
-    df_converted.attrs["units"] = target_unit
 
-    return df_converted
+    # Convert
+    quantity = ureg.Quantity(data.values, source_unit)
+    converted = quantity.to(target_unit).magnitude
+
+    # Format
+    if isinstance(data, pd.DataFrame):
+        res = pd.DataFrame(converted, columns=data.columns, index=data.index)
+    else:
+        res = pd.Series(converted, index=data.index, name=data.name)
+
+    # Attributes
+    res.attrs = dict(data.attrs)
+    res.attrs["units"] = target_unit
+
+    return res
 
 
-def check_dataframe_unit(df: pd.DataFrame, target_unit: str) -> pd.DataFrame:
+@overload
+def check_dataframe_unit(  # noqa: E704
+    data: pd.DataFrame, target_unit: str
+) -> pd.DataFrame: ...
+@overload  # noqa: E302
+def check_dataframe_unit(  # noqa: E704
+    data: pd.Series, target_unit: str
+) -> pd.Series: ...
+
+
+def check_dataframe_unit(
+    data: Union[pd.DataFrame, pd.Series], target_unit: str
+) -> Union[pd.DataFrame, pd.Series]:
     """
-    Check if the DataFrame's unit matches the target unit, and convert if necessary.
+    Check if ``data``'s unit matches the target unit, and convert if necessary.
 
-    This function compares the DataFrame's 'units' attribute with a specified target
-    unit. If they are the same, it returns the original DataFrame. Otherwise, it
-    converts the data using ``convert_dataframe_unit()`` and updates the 'units'
+    This function compares as ``pandas`` object's 'units' attribute with a specified
+    target unit. If they are the same, it returns the original ``data``. Otherwise, it
+    converts it using ``convert_dataframe_unit()`` and updates the 'units'
     attribute.
 
     Parameters
     ----------
-    df
-        DataFrame with a 'units' attribute specifying its current units.
+    data
+        DataFrame or Series with a 'units' attribute specifying its current units.
     target_unit
         The target unit to match or convert the data to (e.g., 'inch/day').
 
     Returns
     -------
-    result : DataFrame
-        A DataFrame with the target unit
+    result : Same type as ``data``
+        A DataFrame or Series with the target unit
         (either unchanged because already matching, or converted).
 
     Raises
     ------
     ValueError
-        If the DataFrame does not have a 'units' attribute.
+        If ``data`` does not have a 'units' attribute.
     """
-    source_unit = df.attrs.get("units", None)
+    source_unit = data.attrs.get("units", None)
     if source_unit is None:
-        raise ValueError("No 'units' attribute found in the DataFrame.")
+        raise ValueError("No 'units' attribute found in ``data``.")
 
     source_u = _standard_unit(source_unit)
     target_u = _standard_unit(target_unit)
     if source_u == target_u:
         log.info(
-            f"DataFrame's unit equivalent to target unit ('{target_u}')."
+            f"``data``'s unit equivalent to target unit ('{target_u}')."
             + " No conversion needed."
         )
-        return df
+        return data
     else:
         log.info("Conversion is needed.")
-        return convert_dataframe_unit(df, target_unit)
+        return convert_dataframe_unit(data, target_unit)

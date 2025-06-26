@@ -44,8 +44,8 @@ Data access with PySEASTERS
 ---------------------------
 
 With PySEASTERS, the most direct way to access GSDR data is by using the
-:doc:`load_gsdr() <../api/pyseasters.gsdr.data_loaders>` function. Hereafter is a code
-snippet applying this function with some filtering:
+:func:`load_gsdr() <../api/pyseasters.gsdr.data_loaders.load_gsdr>` function. Hereafter
+is a code snippet applying this function with some filtering:
 
 .. code:: pycon
 

@@ -12,7 +12,7 @@ from dask.distributed import Client, LocalCluster
 
 from pyseasters.constants import paths
 from pyseasters.ghcnh import load_ghcnh_inventory, load_ghcnh_station_list
-from pyseasters.ghcnh.data_loaders import _ATTRIBUTES, _VAR_TO_META
+from pyseasters.ghcnh._constants import ATTRIBUTES, VAR_TO_META
 from pyseasters.utils._logging import LoggingStack, LoggingStackPickle
 from pyseasters.utils._typing import LoggerLike
 
@@ -42,8 +42,8 @@ def _export_variables(
 ) -> Dict[str, int]:
     """Export DataFrame into 38 files (one per variable)."""
     var_to_count = {}
-    for var in _VAR_TO_META.keys():
-        cols = [var] + [f"{var}{attr}" for attr in _ATTRIBUTES]
+    for var in VAR_TO_META.keys():
+        cols = [var] + [f"{var}{attr}" for attr in ATTRIBUTES]
         var_df = df[cols].dropna(how="all")
         var_to_count[var] = len(var_df.index)
         if not var_df.empty:
@@ -184,12 +184,12 @@ def _preprocess_single_psv_station(
                 )
                 else float
             )
-            for var in _VAR_TO_META.keys()
+            for var in VAR_TO_META.keys()
         }
         col_dtype.update(
             {
                 f"{var}{attr}": str
-                for var, attr in itertools.product(_VAR_TO_META.keys(), _ATTRIBUTES)
+                for var, attr in itertools.product(VAR_TO_META.keys(), ATTRIBUTES)
             }
         )
         df_my = pd.read_csv(file, sep="|", na_values="-None", dtype=col_dtype)
@@ -352,7 +352,7 @@ def preprocess_ghcnh(
 
     # Prepare directories
     for var, year in itertools.product(
-        _VAR_TO_META.keys(), station_year["year"].drop_duplicates().to_list()
+        VAR_TO_META.keys(), station_year["year"].drop_duplicates().to_list()
     ):
         folder = paths.ghcnh() / "data" / var / str(year)
         if not folder.exists():
