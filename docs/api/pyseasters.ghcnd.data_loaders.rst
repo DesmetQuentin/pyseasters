@@ -5,3 +5,17 @@ pyseasters.ghcnd.data\_loaders module
    :members:
    :show-inheritance:
    :undoc-members:
+
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+      :signatures: short
+
+      load_ghcnd
+      load_ghcnd_attrs
+      load_ghcnd_concat
+      load_ghcnd_noattrs
+      load_ghcnd_single_var_station
+      load_ghcnd_single_var_station_attrs
+      load_ghcnd_single_var_station_noattrs

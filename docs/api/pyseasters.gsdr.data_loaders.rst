@@ -5,3 +5,13 @@ pyseasters.gsdr.data\_loaders module
    :members:
    :show-inheritance:
    :undoc-members:
+
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+      :signatures: short
+
+      load_gsdr
+      load_gsdr_concat
+      load_gsdr_single_station

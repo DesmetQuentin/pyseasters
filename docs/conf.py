@@ -62,24 +62,7 @@ autodoc_default_options = {
     "show-inheritance": True,
 }
 add_module_names = False
-autosummary_generate = [
-    "api/pyseasters.constants.countries.rst",
-    "api/pyseasters.constants.pathconfig.rst",
-    "api/pyseasters.data_curation.download.main.rst",
-    "api/pyseasters.data_curation.preprocess.ghcnd_data.rst",
-    "api/pyseasters.data_curation.preprocess.ghcnd_metadata.rst",
-    "api/pyseasters.data_curation.preprocess.ghcnh_metadata.rst",
-    "api/pyseasters.data_curation.preprocess.ghcnh.rst",
-    "api/pyseasters.data_curation.preprocess.gsdr.rst",
-    "api/pyseasters.gauge_data_loaders.rst",
-    "api/pyseasters.ghcnd.data_loaders.rst",
-    "api/pyseasters.ghcnd.metadata_loaders.rst",
-    "api/pyseasters.ghcnh.data_loaders.rst",
-    "api/pyseasters.ghcnh.metadata_loaders.rst",
-    "api/pyseasters.gsdr.data_loaders.rst",
-    "api/pyseasters.gsdr.metadata_loaders.rst",
-    "api/pyseasters.utils.units.rst",
-]
+autosummary_generate = False
 
 
 # -- Options for bibtex

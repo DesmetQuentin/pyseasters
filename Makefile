@@ -12,10 +12,7 @@ doc:
 
 doc-api:
 	sphinx-apidoc -f -d1 -T -e -M -t docs/_templates -o docs/api/ pyseasters
-
-#	sed -i '1d' docs/api/pyseasters.rst
-#	sed -i '1d' docs/api/pyseasters.rst
-#	sed -i '1s/^/API reference\n=============\n/' docs/api/pyseasters.rst
+	python docs/autosummary_modules.py
 
 purge-server:
 	fuser -k 8000/tcp >/dev/null 2>&1 || true

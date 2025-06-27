@@ -5,3 +5,11 @@ pyseasters.data\_curation.preprocess.ghcnh\_metadata module
    :members:
    :show-inheritance:
    :undoc-members:
+
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+      :signatures: short
+
+      preprocess_ghcnh_metadata

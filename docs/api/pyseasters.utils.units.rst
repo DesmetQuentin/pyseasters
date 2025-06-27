@@ -5,3 +5,12 @@ pyseasters.utils.units module
    :members:
    :show-inheritance:
    :undoc-members:
+
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+      :signatures: short
+
+      convert_dataframe_unit
+      check_dataframe_unit
