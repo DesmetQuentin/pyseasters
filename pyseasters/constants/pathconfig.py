@@ -13,6 +13,7 @@ the root directory of the database.
    then running the ``configure_api.py`` script located in the database root directory
    should generate the 'path.txt' automatically.
 
+
 If 'path.txt' is not found when importing the
 package, a manual configuration is needed before attempting to load any data.
 To do this, users could type the following in their scripts' header:
@@ -21,7 +22,6 @@ To do this, users could type the following in their scripts' header:
 
    import pyseasters
    pyseasters.paths.manual_config(root="<path/to/database/root>")
-
 """
 
 import importlib.resources
@@ -108,19 +108,19 @@ class PathConfig:
       If the current session's machine or network does not match any predefined data
       root path, then the ``PathConfig`` object is considered not operational and a
       warning is emitted to notify the user that no data will be accessible unless
-      configured manually (see the ``manual_config()`` method to override or define the
-      data root path explicitly).
+      configured manually (see the :func:`PathConfig.manual_config` method to override
+      or define the data root path explicitly).
 
-    * ``init_mode == preconfig"``:
+    * ``init_mode == "preconfig"``:
       The object attempts to assign its ``root`` attribute with the data root path
       stored in the 'path.txt' file located in 'pyseasters/constants/data/'. If the
       directory does not exist, the object remains non operational, and the user
-      will also need to use the ``manual_config()`` method to define the data root
-      explicitly).
+      will also need to use the :func:`PathConfig.manual_config` method to define the
+      data root explicitly).
 
     * ``init_mode == manual:<root_path>``:
-      In this mode, the ``manual_config()`` method is directly called, using the
-      ``root=<root_path>`` argument.
+      In this mode, the :func:`PathConfig.manual_config` method is directly called,
+      using the ``root=<root_path>`` argument.
 
     Once operational, a ``PathConfig`` object provides plenty of paths to various data
     under the data root directory, accessible via methods.

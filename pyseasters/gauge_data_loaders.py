@@ -37,13 +37,13 @@ __all__ = [
 
 log = logging.getLogger(__name__)
 
-_GAUGE_DATA_SOURCES = [
+_ALL_GAUGE_DATA_SOURCES = [
     "GHCNd",
     "GHCNh",
     "GSDR",
 ]
 
-_search_1h = ["GHCNh", "GSDR"]
+_1H_GAUGE_DATA_SOURCES = ["GHCNh", "GSDR"]
 
 _load_1h_concat: Dict[
     str,
@@ -78,7 +78,7 @@ _load_1h_noattrs: Dict[
     "GSDR": _load_gsdr_series,
 }
 
-_search_all: Dict[
+_GAUGE_DATA_SOURCES_PER_PERIOD: Dict[
     str,
     List[str],
 ] = {
@@ -90,7 +90,7 @@ _search_all: Dict[
     "precipitation_9h": ["GHCNh"],
     "precipitation_6h": ["GHCNh"],
     "precipitation_3h": ["GHCNh"],
-    "precipitation_1h": _search_1h,
+    "precipitation_1h": _1H_GAUGE_DATA_SOURCES,
 }
 
 _load_all_concat: Dict[
@@ -222,7 +222,7 @@ def _renamer(source: str) -> Callable[[str], str]:
 def search_1h_gauge_data(
     filter_condition: Optional[str] = None,
     time_range: Optional[Tuple[datetime, datetime]] = None,
-    usesources: List[str] = _search_1h,
+    usesources: List[str] = _1H_GAUGE_DATA_SOURCES,
     memory_est: str = "none",
 ) -> Tuple[pd.DataFrame, Optional[pd.DataFrame]]:
     """
@@ -270,10 +270,10 @@ def search_1h_gauge_data(
         If the filter condition is invalid or raises an exception.
     """
     # Check arguments
-    if any([source not in _search_1h for source in usesources]):
+    if any([source not in _1H_GAUGE_DATA_SOURCES for source in usesources]):
         raise ValueError(
             f"{usesources!r} is not valid."
-            + f" Please provide sources of {_search_1h!r}."
+            + f" Please provide sources of {_1H_GAUGE_DATA_SOURCES!r}."
         )
     if time_range:
         time_range = localize_time_range(time_range)
@@ -461,11 +461,6 @@ def load_1h_gauge_data_attrs(
         ``data`` is a dictionary of DataFrame, with station IDs as keys and dates as
         DataFrame index. ``metadata`` contains the metadata for all associated stations.
 
-        ; otherwise: ``data`` is a dictionary of
-        ``pandas`` objects, the keys being the station IDs. Objects are DataFrames if
-        ``load_attributes`` is True (with one column for the variables, then one per
-        attribute); they are Series otherwise. In any case,
-
     Raises
     ------
     ValueError
@@ -598,7 +593,7 @@ def _attrs(period: str, units: str) -> Dict[Hashable | None, Any]:
 def search_all_gauge_data(
     filter_condition: Optional[str] = None,
     time_range: Optional[Tuple[datetime, datetime]] = None,
-    usesources: List[str] = _search_1h,
+    usesources: List[str] = _ALL_GAUGE_DATA_SOURCES,
     memory_est: str = "none",
 ) -> Tuple[pd.DataFrame, Dict[str, Optional[pd.DataFrame]]]:
     """
@@ -646,10 +641,10 @@ def search_all_gauge_data(
         If the filter condition is invalid or raises an exception.
     """
     # Check arguments
-    if any([source not in _search_1h for source in usesources]):
+    if any([source not in _ALL_GAUGE_DATA_SOURCES for source in usesources]):
         raise ValueError(
             f"{usesources!r} is not valid."
-            + f" Please provide sources of {_search_1h!r}."
+            + f" Please provide sources of {_ALL_GAUGE_DATA_SOURCES!r}."
         )
     if time_range:
         time_range = localize_time_range(time_range)
@@ -664,7 +659,7 @@ def search_all_gauge_data(
     ghcnh_inventory: Dict[str, Optional[pd.DataFrame]] = {}
     if memory_est != "none":
         est_bytes = 0
-    for period, sources in _search_all.items():
+    for period, sources in _GAUGE_DATA_SOURCES_PER_PERIOD.items():
 
         period_metadata: List[pd.DataFrame] = []
         period_ghcnh_inventory: Optional[pd.DataFrame] = None
@@ -738,7 +733,7 @@ def search_all_gauge_data(
 def load_all_gauge_data_concat(
     filter_condition: Optional[str] = None,
     time_range: Optional[Tuple[datetime, datetime]] = None,
-    usesources: List[str] = _GAUGE_DATA_SOURCES,
+    usesources: List[str] = _ALL_GAUGE_DATA_SOURCES,
     units: str = "mm",
 ) -> Tuple[Dict[str, pd.DataFrame], pd.DataFrame]:
     """
@@ -790,10 +785,10 @@ def load_all_gauge_data_concat(
         If the filter condition is invalid or raises an exception.
     """
     # Check arguments
-    if any([source not in _GAUGE_DATA_SOURCES for source in usesources]):
+    if any([source not in _ALL_GAUGE_DATA_SOURCES for source in usesources]):
         raise ValueError(
             f"{usesources!r} is not valid."
-            + f" Please provide sources of {_GAUGE_DATA_SOURCES!r}."
+            + f" Please provide sources of {_ALL_GAUGE_DATA_SOURCES!r}."
         )
     if time_range:
         time_range = localize_time_range(time_range)
@@ -847,7 +842,7 @@ def load_all_gauge_data_concat(
 def load_all_gauge_data_attrs(
     filter_condition: Optional[str] = None,
     time_range: Optional[Tuple[datetime, datetime]] = None,
-    usesources: List[str] = _GAUGE_DATA_SOURCES,
+    usesources: List[str] = _ALL_GAUGE_DATA_SOURCES,
     units: str = "mm",
 ) -> Tuple[Dict[str, Dict[str, pd.DataFrame]], pd.DataFrame]:
     """
@@ -893,10 +888,10 @@ def load_all_gauge_data_attrs(
         If the filter condition is invalid or raises an exception.
     """
     # Check arguments
-    if any([source not in _GAUGE_DATA_SOURCES for source in usesources]):
+    if any([source not in _ALL_GAUGE_DATA_SOURCES for source in usesources]):
         raise ValueError(
             f"{usesources!r} is not valid."
-            + f" Please provide sources of {_GAUGE_DATA_SOURCES!r}."
+            + f" Please provide sources of {_ALL_GAUGE_DATA_SOURCES!r}."
         )
     if time_range:
         time_range = localize_time_range(time_range)
@@ -946,7 +941,7 @@ def load_all_gauge_data_attrs(
 def load_all_gauge_data_noattrs(
     filter_condition: Optional[str] = None,
     time_range: Optional[Tuple[datetime, datetime]] = None,
-    usesources: List[str] = _GAUGE_DATA_SOURCES,
+    usesources: List[str] = _ALL_GAUGE_DATA_SOURCES,
     units: str = "mm",
 ) -> Tuple[Dict[str, Dict[str, pd.Series]], pd.DataFrame]:
     """
@@ -991,10 +986,10 @@ def load_all_gauge_data_noattrs(
         If the filter condition is invalid or raises an exception.
     """
     # Check arguments
-    if any([source not in _GAUGE_DATA_SOURCES for source in usesources]):
+    if any([source not in _ALL_GAUGE_DATA_SOURCES for source in usesources]):
         raise ValueError(
             f"{usesources!r} is not valid."
-            + f" Please provide sources of {_GAUGE_DATA_SOURCES!r}."
+            + f" Please provide sources of {_ALL_GAUGE_DATA_SOURCES!r}."
         )
     if time_range:
         time_range = localize_time_range(time_range)

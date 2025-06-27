@@ -1,16 +1,21 @@
-pyseasters.ghcnh package
-========================
+ghcnh
+=====
+|rarr| :mod:`pyseasters.ghcnh`
+
 
 .. automodule:: pyseasters.ghcnh
    :members:
    :show-inheritance:
    :undoc-members:
 
-Submodules
-----------
 
-.. toctree::
-   :maxdepth: 1
 
-   pyseasters.ghcnh.data_loaders
-   pyseasters.ghcnh.metadata_loaders
+
+   .. rubric:: Submodules
+
+   .. autosummary::
+      :template: module.rst
+      :toctree:
+
+      data_loaders
+      metadata_loaders

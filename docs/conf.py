@@ -56,6 +56,30 @@ napoleon_numpy_docstring = True
 # -- Options for autodoc
 autodoc_typehints = "description"
 autodoc_typehints_description_target = "all"
+autodoc_default_options = {
+    "members": True,
+    "undoc-members": True,
+    "show-inheritance": True,
+}
+add_module_names = False
+autosummary_generate = [
+    "api/pyseasters.constants.countries.rst",
+    "api/pyseasters.constants.pathconfig.rst",
+    "api/pyseasters.data_curation.download.main.rst",
+    "api/pyseasters.data_curation.preprocess.ghcnd_data.rst",
+    "api/pyseasters.data_curation.preprocess.ghcnd_metadata.rst",
+    "api/pyseasters.data_curation.preprocess.ghcnh_metadata.rst",
+    "api/pyseasters.data_curation.preprocess.ghcnh.rst",
+    "api/pyseasters.data_curation.preprocess.gsdr.rst",
+    "api/pyseasters.gauge_data_loaders.rst",
+    "api/pyseasters.ghcnd.data_loaders.rst",
+    "api/pyseasters.ghcnd.metadata_loaders.rst",
+    "api/pyseasters.ghcnh.data_loaders.rst",
+    "api/pyseasters.ghcnh.metadata_loaders.rst",
+    "api/pyseasters.gsdr.data_loaders.rst",
+    "api/pyseasters.gsdr.metadata_loaders.rst",
+    "api/pyseasters.utils.units.rst",
+]
 
 
 # -- Options for bibtex
@@ -98,42 +122,6 @@ html_sidebars = {
 # violet: #8045e5
 # blue: #0a7d91
 
+rst_prolog = """
+.. |rarr| unicode:: U+2192
 """
-# -- Options for myst-parser -------------------------------------------------
-myst_enable_extensions = ["colon_fence"]
-"""
-
-'''
-# -- Options for autodoc2 ----------------------------------------------------
-autodoc2_packages = ["../pyseasters"]
-# autodoc2_packages = [{"path": "../pyseasters", "auto_mode": False}]  # disable auto api
-# autodoc2_render_plugin = "myst"  # produce apidocs file in myst
-autodoc2_hidden_objects = ["dunder", "private", "inherited"]
-# autodoc2_module_all_regexes = [r"my_package\..*"]  # only include what's in __all__  # noqa: W605
-autodoc2_hidden_regexes = [
-    "pyseasters.*log",
-    "pyseasters.cli.*main",
-    "pyseasters.constants.countries.COUNTRIES",
-    "pyseasters.constants.pathconfig.paths",
-    "pyseasters.utils.units.ureg",
-]
-autodoc2_index_template = """API Reference
-=========================
-
-.. autodoc2-docstring:: pyseasters
-   :allowtitles:
-
-.. toctree::
-   :titlesonly:
-
-   pyseasters/pyseasters.load_1h_gauge_data
-   pyseasters/pyseasters.ghcnd
-   pyseasters/pyseasters.constants
-   pyseasters/pyseasters.utils
-   pyseasters/pyseasters.data_curation
-
-.. note::
-    This page contains auto-generated API reference documentation created with
-    `sphinx-autodoc2 <https://github.com/chrisjsewell/sphinx-autodoc2>`_.
-"""
-'''

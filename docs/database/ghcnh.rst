@@ -32,7 +32,7 @@ Data access with PySEASTERS
 ---------------------------
 
 With PySEASTERS, the most direct way to access GHCNh data is by using the
-:func:`load_ghcnh() <pyseasters.ghcnh.data_loaders.load_ghcnh>` function. Hereafter is a
+:func:`~pyseasters.ghcnh.data_loaders.load_ghcnh` function. Hereafter is a
 code snippet applying this function with some filtering:
 
 .. code:: pycon
@@ -238,7 +238,7 @@ e.g., ``GQW00041406``, where (the following is derived from GHCNh documentation)
 
    Such station ID formatting can be used to filter stations when loading data,
    e.g., with PySEASTERS
-   :func:`load_1h_gauge_data() <pyseasters.gauge_data_loaders.load_1h_gauge_data>`
+   :func:`~pyseasters.gauge_data_loaders.load_1h_gauge_data`
    function. For instance, Indonesian stations could be selected using the following
    ``filter_condition`` argument: ``filter_condition='station_id[:2] == "ID"'``.
 
@@ -287,7 +287,7 @@ Below are explanations on the flags, derived from from GHCNh documentation:
 
    As for station IDs, station names can be used in the ``filter_condition`` argument
    of several PySEASTERS loading functions such as
-   :func:`load_1h_gauge_data() <pyseasters.gauge_data_loaders.load_1h_gauge_data>`. For
+   :func:`~pyseasters.gauge_data_loaders.load_1h_gauge_data`. For
    example, stations with a WMO ID could be selected using
    ``filter_condition='"WMO=" in station_name'``.
 

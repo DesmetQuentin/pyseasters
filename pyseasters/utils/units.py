@@ -113,7 +113,7 @@ def check_dataframe_unit(
 
     This function compares as ``pandas`` object's 'units' attribute with a specified
     target unit. If they are the same, it returns the original ``data``. Otherwise, it
-    converts it using ``convert_dataframe_unit()`` and updates the 'units'
+    converts it using :func:`convert_dataframe_unit` and updates the 'units'
     attribute.
 
     Parameters

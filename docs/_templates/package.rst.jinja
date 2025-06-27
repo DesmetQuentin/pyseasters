@@ -1,0 +1,33 @@
+{%- if pkgname == "pyseasters" -%}
+API reference
+=============
+{% else %}
+{{- pkgname.split('.') | last | e | heading }}
+|rarr| :mod:`{{ pkgname }}`
+{% endif %}
+
+.. automodule:: {{ pkgname }}
+{%- for option in automodule_options %}
+   :{{ option }}:
+{%- endfor %}
+
+{% if subpackages %}
+   .. rubric:: Subpackages
+
+   .. autosummary::
+      :toctree:
+{% for docname in subpackages %}
+      {{ docname.split('.') | last }}
+{%- endfor %}
+{%- endif %}
+
+{% if submodules %}
+   .. rubric:: Submodules
+
+   .. autosummary::
+      :template: module.rst
+      :toctree:
+{% for docname in submodules %}
+      {{ docname.split('.') | last }}
+{%- endfor %}
+{%- endif %}

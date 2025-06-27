@@ -1,16 +1,21 @@
-pyseasters.gsdr package
-=======================
+gsdr
+====
+|rarr| :mod:`pyseasters.gsdr`
+
 
 .. automodule:: pyseasters.gsdr
    :members:
    :show-inheritance:
    :undoc-members:
 
-Submodules
-----------
 
-.. toctree::
-   :maxdepth: 1
 
-   pyseasters.gsdr.data_loaders
-   pyseasters.gsdr.metadata_loaders
+
+   .. rubric:: Submodules
+
+   .. autosummary::
+      :template: module.rst
+      :toctree:
+
+      data_loaders
+      metadata_loaders

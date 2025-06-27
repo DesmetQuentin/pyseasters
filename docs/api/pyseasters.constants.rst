@@ -1,16 +1,21 @@
-pyseasters.constants package
-============================
+constants
+=========
+|rarr| :mod:`pyseasters.constants`
+
 
 .. automodule:: pyseasters.constants
    :members:
    :show-inheritance:
    :undoc-members:
 
-Submodules
-----------
 
-.. toctree::
-   :maxdepth: 1
 
-   pyseasters.constants.countries
-   pyseasters.constants.pathconfig
+
+   .. rubric:: Submodules
+
+   .. autosummary::
+      :template: module.rst
+      :toctree:
+
+      countries
+      pathconfig

@@ -167,7 +167,7 @@ def load_gsdr_concat(
 
        Do not use this function (with the ``_concat`` suffix) unless you are sure to
        have enough memory available for the data you are searching. See
-       :func:`search_gsdr() <pyseasters.gsdr.metadata_loaders.search_gsdr>` to get a
+       :func:`~pyseasters.gsdr.metadata_loaders.search_gsdr` to get a
        memory estimate of the data matching your search criteria.
 
 

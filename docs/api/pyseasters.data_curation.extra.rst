@@ -1,5 +1,7 @@
-pyseasters.data\_curation.extra package
-=======================================
+extra
+=====
+|rarr| :mod:`pyseasters.data_curation.extra`
+
 
 .. automodule:: pyseasters.data_curation.extra
    :members:

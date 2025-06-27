@@ -3,15 +3,15 @@ PySEASTERS includes:
 
 #. A Python API aiming to manipulate the data stored internally.
 
-#. ``pyseasters.data_curation``: The scripts that serve for
+#. :mod:`~pyseasters.data_curation`: The scripts that serve for
    :ref:`constructing the database <replicate>`.
 
 
-Importing ``pyseasters`` does not import the ``data_curation`` subpackage by default,
-because it is not aimed at being used frequently, unlike the main API. The subpackage
-is maintained for history, or in case data needs to be downloaded and preprocessed
-again. If needed, one can access the ``data_curation`` subpackage by importing
-specifically ``pyseasters.data_curation``.
+Importing :mod:`pyseasters` does not import the :mod:`~pyseasters.data_curation`
+subpackage by default, because it is not aimed at being used frequently, unlike the main
+API. The subpackage is maintained for history, or in case data needs to be downloaded
+and preprocessed again. If needed, one can access the :mod:`~pyseasters.data_curation`
+subpackage by importing specifically :mod:`pyseasters.data_curation`.
 """
 
 from ._version import __version__ as VERSION

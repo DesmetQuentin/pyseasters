@@ -1,15 +1,20 @@
-pyseasters.utils package
-========================
+utils
+=====
+|rarr| :mod:`pyseasters.utils`
+
 
 .. automodule:: pyseasters.utils
    :members:
    :show-inheritance:
    :undoc-members:
 
-Submodules
-----------
 
-.. toctree::
-   :maxdepth: 1
 
-   pyseasters.utils.units
+
+   .. rubric:: Submodules
+
+   .. autosummary::
+      :template: module.rst
+      :toctree:
+
+      units

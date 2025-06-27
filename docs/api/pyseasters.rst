@@ -1,28 +1,30 @@
 API reference
 =============
 
+
 .. automodule:: pyseasters
    :members:
    :show-inheritance:
    :undoc-members:
 
-Subpackages
------------
 
-.. toctree::
-   :maxdepth: 1
+   .. rubric:: Subpackages
 
-   pyseasters.constants
-   pyseasters.data_curation
-   pyseasters.ghcnd
-   pyseasters.ghcnh
-   pyseasters.gsdr
-   pyseasters.utils
+   .. autosummary::
+      :toctree:
 
-Submodules
-----------
+      constants
+      data_curation
+      ghcnd
+      ghcnh
+      gsdr
+      utils
 
-.. toctree::
-   :maxdepth: 1
 
-   pyseasters.gauge_data_loaders
+   .. rubric:: Submodules
+
+   .. autosummary::
+      :template: module.rst
+      :toctree:
+
+      gauge_data_loaders

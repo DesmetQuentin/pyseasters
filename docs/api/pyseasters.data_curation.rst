@@ -1,17 +1,19 @@
-pyseasters.data\_curation package
-=================================
+data\_curation
+==============
+|rarr| :mod:`pyseasters.data_curation`
+
 
 .. automodule:: pyseasters.data_curation
    :members:
    :show-inheritance:
    :undoc-members:
 
-Subpackages
------------
 
-.. toctree::
-   :maxdepth: 1
+   .. rubric:: Subpackages
 
-   pyseasters.data_curation.download
-   pyseasters.data_curation.extra
-   pyseasters.data_curation.preprocess
+   .. autosummary::
+      :toctree:
+
+      download
+      extra
+      preprocess

@@ -65,8 +65,8 @@ def search_gsdr(
         An optional time range for selecting time coverage.
     memory_est
         A string indicating how to estimate memory usage.
-        Available strings are 'none' (no memory estimate), 'attrs' and 'noattrs', which
-        yield identical results since GSDR data does not have attributes.
+        Available strings are 'none' (no memory estimate), and 'attrs' and 'noattrs'
+        (which yield identical results since GSDR data does not have attributes).
 
     Returns
     -------

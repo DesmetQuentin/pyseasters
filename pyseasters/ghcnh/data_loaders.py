@@ -228,7 +228,7 @@ def load_ghcnh_concat(
 
        Do not use this function (with the ``_concat`` suffix) unless you are sure to
        have enough memory available for the data you are searching. See
-       :func:`search_ghcnh() <pyseasters.ghcnh.metadata_loaders.search_ghcnh>` to get a
+       :func:`~pyseasters.ghcnh.metadata_loaders.search_ghcnh` to get a
        memory estimate of the data matching your search criteria.
 
 

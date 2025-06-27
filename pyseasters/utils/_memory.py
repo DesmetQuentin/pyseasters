@@ -17,7 +17,8 @@ def _single_file_memory_estimate(
     file
         Path to a Parquet file.
     usecols
-        Subset of column names to include, as passed to ``pd.read_parquet()``.
+        Subset of column names to include, as passed to
+        `pd.read_parquet() <https://pandas.pydata.org/docs/reference/api/pandas.read_parquet.html>`_.
 
     Returns
     -------
@@ -68,9 +69,9 @@ def memory_estimate(files: List[Path], usecols: Optional[List[str]] = None) -> f
 def format_memory(mem: float) -> str:
     """Format ``mem`` bytes as a string using the appropriate units."""
     if mem > 1024**3:
-        res = f"{mem / 1024 ** 3:.2f} GB"
+        res = f"{mem / 1024 ** 3:.2f} GB"  # noqa: E231
     elif mem > 1024**2:
-        res = f"{mem / 1024 ** 2:.2f} MB"
+        res = f"{mem / 1024 ** 2:.2f} MB"  # noqa: E231
     else:
-        res = f"{mem / 1024:.2f} KB"
+        res = f"{mem / 1024:.2f} KB"  # noqa: E231
     return res
