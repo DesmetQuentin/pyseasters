@@ -1,7 +1,7 @@
 """Provide the single :func:`preprocess_gsdr` function."""
 
 import logging
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from io import StringIO
 from pathlib import Path
 from typing import Any, Dict, Optional, Tuple
@@ -87,7 +87,7 @@ def _preprocess_single_station(
     data_lines = lines[21:]  # skip 'Other:\n' at line 21 (starting from 1)
 
     # Parse metadata using YAML
-    metadata = yaml.safe_load("\n".join(yaml_lines))
+    metadata = yaml.safe_load("".join(yaml_lines))
 
     # Data existence check
     try:
@@ -158,17 +158,14 @@ def _preprocess_single_station(
 
     # Build datetime index
     try:
-        start = (
-            datetime.strptime(str(metadata["Start datetime"]), "%Y%m%d%H")
-            .replace(tzinfo=tz)
-            .astimezone(timezone.utc)
+        start = datetime.strptime(str(metadata["Start datetime"]), "%Y%m%d%H").replace(
+            tzinfo=tz
         )
-        end = (
-            datetime.strptime(str(metadata["End datetime"]), "%Y%m%d%H")
-            .replace(tzinfo=tz)
-            .astimezone(timezone.utc)
+        end = datetime.strptime(str(metadata["End datetime"]), "%Y%m%d%H").replace(
+            tzinfo=tz
         )
         index = [start + i * delta for i in range(len(data_lines))]
+        assert index[-1] == end
     except Exception as e:
         logger.error("Error while building datetime index: %s", e)
         return logger.picklable(), None, None
@@ -220,7 +217,6 @@ def _preprocess_single_station(
 
     # Fill the inventory series
     try:
-
         inventory_dict: Dict[str, Any] = {
             "station_id": metadata_series["station_id"],
             "start": start,
@@ -234,7 +230,7 @@ def _preprocess_single_station(
 
     # Assign datetime index
     try:
-        df.index = pd.DatetimeIndex(index, name="time")
+        df.index = pd.DatetimeIndex(index, name="time").tz_convert("UTC")
     except Exception as e:
         logger.error("Error while assigning datetime index: %s", e)
         return logger.picklable(), metadata_series, inventory_series
@@ -323,7 +319,9 @@ def preprocess_gsdr(
         if file.stem.replace(" ", "_") in completed_stations:
             file.unlink()
     for folder in _COUNTRY_TO_TZ.keys():
-        if not any((paths.gsdr() / "data" / folder).iterdir()):
+        if (paths.gsdr() / "data" / folder).exists() and not any(
+            (paths.gsdr() / "data" / folder).iterdir()
+        ):
             (paths.gsdr() / "data" / folder).rmdir()
 
     log.info("GSDR data preprocessing completed.")
