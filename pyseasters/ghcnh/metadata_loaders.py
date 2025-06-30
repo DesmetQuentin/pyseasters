@@ -7,6 +7,7 @@ year.
 
 import logging
 from datetime import datetime
+from itertools import product
 from typing import Callable, List, Optional, Tuple, cast
 
 import numpy as np
@@ -111,7 +112,7 @@ def search_ghcnh(
     if time_range:
         year_list = list(np.arange(time_range[0].year, time_range[1].year + 1))
         assert len(year_list) != 0
-        if not inventory.columns.intersection(list(map(str, year_list))):
+        if inventory.columns.intersection(list(map(str, year_list))).empty:
             return search_fallback_double(
                 log, "GHCNh", "time_range", time_range, station_list, inventory
             )
@@ -141,7 +142,9 @@ def search_ghcnh(
     if memory_est != "none":
         files = [
             paths.ghcnh_file(station_id, year, var)
-            for station_id, year in inventory.index
+            for station_id, year in product(
+                inventory.index.to_list(), inventory.columns
+            )
         ]
         usecols: Optional[List[str]] = [var] if memory_est == "noattrs" else None
         est = memory_estimate(files, usecols=usecols)

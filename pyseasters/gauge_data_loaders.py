@@ -323,7 +323,8 @@ def search_1h_gauge_data(
         if source == "GHCNh":
             assert isinstance(ghcnh_inventory, pd.DataFrame)
             ghcnh_inventory = ghcnh_inventory.rename(_renamer(source))
-            del ghcnh_inventory.attrs["memory_est"]
+            if "memory_est" in ghcnh_inventory.attrs:
+                del ghcnh_inventory.attrs["memory_est"]
 
         # Memory
         if memory_est != "none":
