@@ -124,7 +124,7 @@ def search_ghcnh(
             return search_fallback_double(
                 log, "GHCNh", "time_range", time_range, station_list, inventory
             )
-        station_list = station_list.loc[inventory.index]
+    station_list = station_list.loc[inventory.index]
 
     if filter_condition:
         try:
@@ -141,7 +141,7 @@ def search_ghcnh(
 
     if memory_est != "none":
         files = [
-            paths.ghcnh_file(station_id, year, var)
+            paths.ghcnh_file(station_id, int(year), var)
             for station_id, year in product(
                 inventory.index.to_list(), inventory.columns
             )

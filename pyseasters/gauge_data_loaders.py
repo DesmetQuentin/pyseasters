@@ -327,7 +327,7 @@ def search_1h_gauge_data(
                 del ghcnh_inventory.attrs["memory_est"]
 
         # Memory
-        if memory_est != "none":
+        if memory_est != "none" and "memory_est" in metadata.attrs:
             est_bytes += metadata.attrs["memory_est"]
 
         # Append
