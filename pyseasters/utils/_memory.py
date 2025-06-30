@@ -37,7 +37,7 @@ def _single_file_memory_estimate(
             col_meta = row_group.column(col_idx)
             col_name = col_meta.path_in_schema
 
-            if usecols and col_name not in usecols:
+            if col_name != "time" and usecols and col_name not in usecols:
                 continue  # Skip this column
 
             physical_type = col_meta.physical_type
@@ -46,7 +46,7 @@ def _single_file_memory_estimate(
             # Estimate based on physical type
             if physical_type in {"BYTE_ARRAY", "STRING", "UTF8"}:
                 avg_len = col_meta.total_compressed_size / max(1, num_values)
-                est_bytes += int(num_values * (avg_len + 50))  # 50B Python overhead
+                est_bytes += int(num_values * (avg_len + 55))  # 55B Python overhead
             elif physical_type in {"INT64", "DOUBLE", "FLOAT"}:
                 est_bytes += num_values * 8
             elif physical_type == "INT32":
