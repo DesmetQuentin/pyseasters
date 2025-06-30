@@ -1,5 +1,6 @@
-pyseasters.data\_curation.preprocess.ghcnh\_metadata module
-===========================================================
+ghcnh\_metadata
+===============
+|rarr| :mod:`pyseasters.data_curation.preprocess.ghcnh_metadata`
 
 .. automodule:: pyseasters.data_curation.preprocess.ghcnh_metadata
    :members:

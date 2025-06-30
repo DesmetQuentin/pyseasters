@@ -1,5 +1,5 @@
 """
-This module provides the ``COUNTRIES`` constant.
+Provide the ``COUNTRIES`` constant.
 
 ``COUNTRIES`` is a pandas DataFrame containing ISO and FIPS codes associated with the
 countries considered for the :ref:`extended Southeast Asian region <SEA>`.

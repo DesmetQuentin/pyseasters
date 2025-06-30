@@ -1,3 +1,5 @@
+"""Provide the single :func:`preprocess_ghcnh` function."""
+
 import importlib.resources
 import itertools
 import logging

@@ -5,13 +5,13 @@ API reference
 {{- pkgname.split('.') | last | e | heading }}
 |rarr| :mod:`{{ pkgname }}`
 {% endif %}
-
 .. automodule:: {{ pkgname }}
 {%- for option in automodule_options %}
    :{{ option }}:
-{%- endfor %}
+{%- endfor -%}
 
-{% if subpackages %}
+{%- if subpackages %}
+
    .. rubric:: Subpackages
 
    .. autosummary::
@@ -19,9 +19,10 @@ API reference
 {% for docname in subpackages %}
       {{ docname.split('.') | last }}
 {%- endfor %}
-{%- endif %}
+{% endif -%}
 
-{% if submodules %}
+{%- if submodules %}
+
    .. rubric:: Submodules
 
    .. autosummary::
@@ -30,4 +31,4 @@ API reference
 {% for docname in submodules %}
       {{ docname.split('.') | last }}
 {%- endfor %}
-{%- endif %}
+{% endif %}

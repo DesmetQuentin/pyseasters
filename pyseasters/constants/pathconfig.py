@@ -1,6 +1,5 @@
 """
-This module provides the ``paths`` constant
--- and defines its dataclass, ``PathConfig``.
+Provide the ``paths`` constant -- and define its dataclass, ``PathConfig``.
 
 ``paths`` aims at providing the paths to the external database employed in this package.
 By default, it is initialized reading the 'path.txt' file located at

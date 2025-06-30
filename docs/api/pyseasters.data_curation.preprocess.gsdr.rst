@@ -1,5 +1,6 @@
-pyseasters.data\_curation.preprocess.gsdr module
-================================================
+gsdr
+====
+|rarr| :mod:`pyseasters.data_curation.preprocess.gsdr`
 
 .. automodule:: pyseasters.data_curation.preprocess.gsdr
    :members:

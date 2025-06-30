@@ -1,3 +1,5 @@
+"""Provide the single :func:`preprocess_ghcnd_data` function."""
+
 import logging
 import subprocess
 from datetime import timedelta

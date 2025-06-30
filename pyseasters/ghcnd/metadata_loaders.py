@@ -1,3 +1,9 @@
+"""Loaders for GHCNd metadata.
+
+In the GHCNd framework, ``stations`` refer to the stations' static metadata, and the
+``inventory`` tells the years of available records per station and variable.
+"""
+
 import logging
 from datetime import datetime
 from typing import List, Optional, Tuple
@@ -74,7 +80,7 @@ def search_ghcnd(
     time_range: Optional[Tuple[datetime, datetime]] = None,
     memory_est: str = "none",
 ) -> pd.DataFrame:
-    """Search GHCNh stations matching the search criteria.
+    """Search GHCNd stations matching the search criteria.
 
     If a time range is specified, only stations with coverage overlapping the period
     are retained, and the data are time-sliced accordingly. A filter condition can
@@ -98,7 +104,7 @@ def search_ghcnd(
     Returns
     -------
     metadata : DataFrame
-        Contains the metadata for all GHCNh stations matching the search.
+        Contains the metadata for all GHCNd stations matching the search.
         Memory estimate
         (if requested with the ``memory_est`` argument)
         is provided in the DataFrame's 'memory_est' attribute.

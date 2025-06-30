@@ -231,14 +231,6 @@ example of this page can be reran by changing units, as follows:
    {'name': 'Total liquid precipitation', 'long_name': 'Total liquid precipitation (rain or melted snow). Totals are nominally for the hour, but may include intermediate reports within the hour.', 'note': "A 'T' in the measurement code column indicates a trace amount of precipitation.", 'units': 'cm'}
 
 
-.. note::
-
-   This feature relies on
-   `Pint Python library <https://pint.readthedocs.io/en/stable/>`_, notably for parsing
-   unit strings, making it quite **flexible**: e.g., "mm" is equivalent to
-   "millimeter".
-
-
 Integration with ``xarray``
 ---------------------------
 

@@ -1,3 +1,15 @@
+"""Loaders for GSDR metadata.
+
+.. note::
+
+   In the original GSDR framework, metadata were stored with the records in the same
+   ASCII files. During preprocessing within SEASTERS, all metadata were moved to a
+   separate file, allowing to search before loading. This was done following the same
+   naming as with GHCNd, i.e., with ``stations`` referring to the stations' static
+   metadata, and the ``inventory`` containing information on the time range covered by
+   the stations.
+"""
+
 import logging
 from datetime import datetime
 from typing import List, Optional, Tuple
@@ -25,7 +37,7 @@ def load_gsdr_stations() -> pd.DataFrame:
 
 
 def get_gsdr_station_list() -> List[str]:
-    """Return GHCNh station IDs as a list."""
+    """Return GSDR station IDs as a list."""
     return load_gsdr_stations().index.to_list()
 
 

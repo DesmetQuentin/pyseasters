@@ -1,3 +1,5 @@
+"""Provide the single :func:`preprocess_ghcnd_metadata` function."""
+
 import logging
 import subprocess
 from typing import List, Optional

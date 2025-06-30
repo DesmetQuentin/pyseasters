@@ -1,5 +1,6 @@
-pyseasters.gsdr.metadata\_loaders module
-========================================
+metadata\_loaders
+=================
+|rarr| :mod:`pyseasters.gsdr.metadata_loaders`
 
 .. automodule:: pyseasters.gsdr.metadata_loaders
    :members:

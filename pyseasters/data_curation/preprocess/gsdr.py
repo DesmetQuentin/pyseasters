@@ -1,3 +1,5 @@
+"""Provide the single :func:`preprocess_gsdr` function."""
+
 import logging
 from datetime import datetime, timedelta, timezone
 from io import StringIO

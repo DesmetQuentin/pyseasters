@@ -7,11 +7,14 @@ PySEASTERS includes:
    :ref:`constructing the database <replicate>`.
 
 
-Importing :mod:`pyseasters` does not import the :mod:`~pyseasters.data_curation`
-subpackage by default, because it is not aimed at being used frequently, unlike the main
-API. The subpackage is maintained for history, or in case data needs to be downloaded
-and preprocessed again. If needed, one can access the :mod:`~pyseasters.data_curation`
-subpackage by importing specifically :mod:`pyseasters.data_curation`.
+.. note::
+
+    Importing :mod:`pyseasters` does not import the :mod:`~pyseasters.data_curation`
+    subpackage by default, because it is not aimed at being used frequently, unlike the
+    main API. The subpackage is maintained for history, or in case data needs to be
+    downloaded and preprocessed again. If needed, one can access the
+    :mod:`~pyseasters.data_curation` subpackage by importing specifically
+    :mod:`pyseasters.data_curation`.
 """
 
 from ._version import __version__ as VERSION

@@ -1,3 +1,16 @@
+"""Loaders for GHCNh data, with filters and several output format options.
+
+GHCNh data contains for each record not only the record value but also "attributes",
+i.e., additional information about the context of the measurements, how to interpret
+the data, etc.
+The meaning of attributes is explained in GHCNh's documentation.
+
+This module essentially provides two types of functions: ``load_ghcnh*()`` and
+``load_ghcnh_single_var_station*()``. Each has an ``attrs``, ``noattrs`` and a default
+version with no suffix. Please understand that loading attributes takes more time and
+memory and default no suffix functions are aliases for the ``noattrs`` versions.
+"""
+
 import logging
 from datetime import datetime
 from typing import Callable, Dict, List, Optional, Tuple

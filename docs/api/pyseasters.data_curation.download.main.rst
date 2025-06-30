@@ -1,5 +1,6 @@
-pyseasters.data\_curation.download.main module
-==============================================
+main
+====
+|rarr| :mod:`pyseasters.data_curation.download.main`
 
 .. automodule:: pyseasters.data_curation.download.main
    :members:

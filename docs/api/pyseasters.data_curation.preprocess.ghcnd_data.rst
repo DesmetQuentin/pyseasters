@@ -1,5 +1,6 @@
-pyseasters.data\_curation.preprocess.ghcnd\_data module
-=======================================================
+ghcnd\_data
+===========
+|rarr| :mod:`pyseasters.data_curation.preprocess.ghcnd_data`
 
 .. automodule:: pyseasters.data_curation.preprocess.ghcnd_data
    :members:

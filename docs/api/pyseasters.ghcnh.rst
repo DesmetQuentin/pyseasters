@@ -2,14 +2,10 @@ ghcnh
 =====
 |rarr| :mod:`pyseasters.ghcnh`
 
-
 .. automodule:: pyseasters.ghcnh
    :members:
    :show-inheritance:
    :undoc-members:
-
-
-
 
    .. rubric:: Submodules
 

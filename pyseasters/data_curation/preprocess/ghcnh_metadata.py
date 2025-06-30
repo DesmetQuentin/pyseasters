@@ -1,3 +1,5 @@
+"""Provide the single :func:`preprocess_ghcnh_data` function."""
+
 import logging
 import subprocess
 

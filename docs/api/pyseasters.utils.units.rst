@@ -1,5 +1,6 @@
-pyseasters.utils.units module
-=============================
+units
+=====
+|rarr| :mod:`pyseasters.utils.units`
 
 .. automodule:: pyseasters.utils.units
    :members:

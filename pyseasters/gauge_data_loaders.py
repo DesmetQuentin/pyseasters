@@ -1,3 +1,17 @@
+"""Provide searchers and loaders of rain gauge data, accross multiple data sources.
+
+Functions of this modules can be separated into ``search*()`` and ``load*()``
+categories. The former apply the search criteria to the metadata without loading the
+actual records, optionally estimating the memory usage once the corresponding data
+records are loader. The latter does the search but also load and return the data.
+
+Another separation can be made between ``*_1h_*()`` and ``*_all_*()`` functions. The
+former focuses on hourly records, throughout the GHCNh and GSDR datasets. The latter
+extends the scope to all available rain gauge data, currently from daily to hourly. The
+returned values are formatted in the form of dictionaries where keys refer to the
+accumulation period.
+"""
+
 import logging
 from datetime import datetime
 from typing import Any, Callable, Dict, Hashable, List, Optional, Tuple

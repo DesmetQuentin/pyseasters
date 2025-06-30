@@ -43,6 +43,5 @@ for rst_path in API_DIR.glob("*.rst"):
       :signatures: short
 
       {JOIN_STRING.join(functions)}
-
-"""
+"""  # noqa: E231, E241, E203
         )

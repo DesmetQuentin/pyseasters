@@ -2,14 +2,10 @@ gsdr
 ====
 |rarr| :mod:`pyseasters.gsdr`
 
-
 .. automodule:: pyseasters.gsdr
    :members:
    :show-inheritance:
    :undoc-members:
-
-
-
 
    .. rubric:: Submodules
 

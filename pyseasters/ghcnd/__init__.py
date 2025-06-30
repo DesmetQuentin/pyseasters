@@ -1,4 +1,4 @@
-"""This package provides functions to load and manipulate GHCNd data."""
+"""Provide functions to load and manipulate GHCNd data."""
 
 from .data_loaders import (
     load_ghcnd,

@@ -1,3 +1,10 @@
+"""Loaders for GHCNh metadata.
+
+In the GHCNh framework, ``station_list`` refer to the stations' static metadata, and the
+``inventory`` contains the number of available hourly records per station, variable and
+year.
+"""
+
 import logging
 from datetime import datetime
 from typing import Callable, List, Optional, Tuple, cast

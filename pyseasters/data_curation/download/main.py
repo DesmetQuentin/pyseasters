@@ -1,3 +1,8 @@
+"""
+Provide the dispatching
+:func:`generate_download_script` function.
+"""
+
 from ._ghcnd_data import generate_ghcnd_data_download_script
 from ._ghcnd_metadata import generate_ghcnd_metadata_download_script
 from ._ghcnh_data import generate_ghcnh_data_download_script
@@ -14,13 +19,21 @@ _dispatcher = {
 
 
 def generate_download_script(key: str) -> None:
-    """Generate a download script in bash for the provided ``key``.
+    """
+    Generate a download script in bash for the provided ``key``, at the location of
+    the related folder in the database.
+
+    .. note::
+
+       There is no key relating to the :ref:`GSDR <gsdr>` dataset because it cannot be
+       retrieved online.
+
 
     Parameters
     ----------
     key
         The key associated with the desired download script.
-        Available keys are: 'GHCNd', 'GHCNd metadata' and 'GHCNh metadata'.
+        Available keys are: 'GHCNd', 'GHCNd metadata', 'GHCNh' and 'GHCNh metadata'.
 
     Raises
     ------

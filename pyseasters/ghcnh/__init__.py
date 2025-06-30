@@ -1,3 +1,5 @@
+"""Provide functions to load and manipulate GHCNh data."""
+
 from .data_loaders import (
     load_ghcnh,
     load_ghcnh_attrs,

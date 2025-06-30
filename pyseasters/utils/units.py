@@ -1,3 +1,13 @@
+"""Provide tools to handle the units of ``pandas`` objects.
+
+.. note::
+
+   This modules relies on
+   `Pint Python library <https://pint.readthedocs.io/en/stable/>`_, notably for parsing
+   unit strings, making it quite **flexible**: e.g., "mm" is equivalent to
+   "millimeter".
+"""
+
 import logging
 from typing import Union, overload
 
@@ -44,7 +54,7 @@ def convert_dataframe_unit(  # noqa: E704
 def convert_dataframe_unit(
     data: Union[pd.DataFrame, pd.Series], target_unit: str
 ) -> Union[pd.DataFrame, pd.Series]:
-    """Convert units of a pandas object using the pint library.
+    """Convert units of a ``pandas`` object.
 
     This function reads the unit from ``data``'s 'units' attribute,
     performs the unit conversion, and updates the attribute to the new unit.
@@ -111,10 +121,9 @@ def check_dataframe_unit(
     """
     Check if ``data``'s unit matches the target unit, and convert if necessary.
 
-    This function compares as ``pandas`` object's 'units' attribute with a specified
+    This function compares a ``pandas`` object's 'units' attribute with a specified
     target unit. If they are the same, it returns the original ``data``. Otherwise, it
-    converts it using :func:`convert_dataframe_unit` and updates the 'units'
-    attribute.
+    converts it using :func:`convert_dataframe_unit`.
 
     Parameters
     ----------

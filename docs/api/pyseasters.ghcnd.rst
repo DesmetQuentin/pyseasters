@@ -2,14 +2,10 @@ ghcnd
 =====
 |rarr| :mod:`pyseasters.ghcnd`
 
-
 .. automodule:: pyseasters.ghcnd
    :members:
    :show-inheritance:
    :undoc-members:
-
-
-
 
    .. rubric:: Submodules
 

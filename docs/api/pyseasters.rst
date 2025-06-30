@@ -1,12 +1,10 @@
 API reference
 =============
 
-
 .. automodule:: pyseasters
    :members:
    :show-inheritance:
    :undoc-members:
-
 
    .. rubric:: Subpackages
 

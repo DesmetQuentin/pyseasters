@@ -1,5 +1,6 @@
-pyseasters.ghcnd.metadata\_loaders module
-=========================================
+metadata\_loaders
+=================
+|rarr| :mod:`pyseasters.ghcnd.metadata_loaders`
 
 .. automodule:: pyseasters.ghcnd.metadata_loaders
    :members:

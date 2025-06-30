@@ -1,5 +1,6 @@
-pyseasters.ghcnh.data\_loaders module
-=====================================
+data\_loaders
+=============
+|rarr| :mod:`pyseasters.ghcnh.data_loaders`
 
 .. automodule:: pyseasters.ghcnh.data_loaders
    :members:

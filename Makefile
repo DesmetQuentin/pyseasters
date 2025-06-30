@@ -22,4 +22,6 @@ doc-serve: purge-server
 
 doc-test: doc doc-serve
 
-doc-full-test: doc-api doc doc-serve
+doc-full: doc-api doc
+
+doc-full-test: doc-full doc-serve

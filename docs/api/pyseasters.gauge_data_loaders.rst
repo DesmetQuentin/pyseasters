@@ -1,5 +1,6 @@
-pyseasters.gauge\_data\_loaders module
-======================================
+gauge\_data\_loaders
+====================
+|rarr| :mod:`pyseasters.gauge_data_loaders`
 
 .. automodule:: pyseasters.gauge_data_loaders
    :members:

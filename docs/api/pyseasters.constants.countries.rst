@@ -1,5 +1,6 @@
-pyseasters.constants.countries module
-=====================================
+countries
+=========
+|rarr| :mod:`pyseasters.constants.countries`
 
 .. automodule:: pyseasters.constants.countries
    :members:

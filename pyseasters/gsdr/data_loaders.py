@@ -1,3 +1,5 @@
+"""Loaders for GSDR data, with filtering options."""
+
 import logging
 from datetime import datetime
 from typing import Dict, Optional, Tuple
