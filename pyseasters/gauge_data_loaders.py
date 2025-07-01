@@ -717,10 +717,11 @@ def search_all_gauge_data(
             if source == "GHCNh":
                 assert isinstance(period_ghcnh_inventory, pd.DataFrame)
                 period_ghcnh_inventory = period_ghcnh_inventory.rename(_renamer(source))
-                del period_ghcnh_inventory.attrs["memory_est"]
+                if "memory_est" in period_ghcnh_inventory.attrs:
+                    del period_ghcnh_inventory.attrs["memory_est"]
 
             # Memory
-            if memory_est != "none":
+            if memory_est != "none" and "memory_est" in metadata.attrs:
                 est_bytes += metadata.attrs["memory_est"]
 
             # Append
