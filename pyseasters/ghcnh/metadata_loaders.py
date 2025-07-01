@@ -142,9 +142,7 @@ def search_ghcnh(
     if memory_est != "none":
         files = [
             paths.ghcnh_file(station_id, int(year), var)
-            for station_id, year in product(
-                inventory.index.to_list(), inventory.columns
-            )
+            for station_id, year in inventory.stack().dropna().index
         ]
         usecols: Optional[List[str]] = [var] if memory_est == "noattrs" else None
         est = memory_estimate(files, usecols=usecols)
