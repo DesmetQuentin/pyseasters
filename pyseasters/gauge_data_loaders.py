@@ -96,15 +96,15 @@ _GAUGE_DATA_SOURCES_PER_PERIOD: Dict[
     str,
     List[str],
 ] = {
-    "precipitation_1d": ["GHCNd", "GHCNh"],
-    "precipitation_21h": ["GHCNh"],
-    "precipitation_18h": ["GHCNh"],
-    "precipitation_15h": ["GHCNh"],
-    "precipitation_12h": ["GHCNh"],
-    "precipitation_9h": ["GHCNh"],
-    "precipitation_6h": ["GHCNh"],
-    "precipitation_3h": ["GHCNh"],
-    "precipitation_1h": _1H_GAUGE_DATA_SOURCES,
+    "precipitation_1_day": ["GHCNd", "GHCNh"],
+    "precipitation_21_hour": ["GHCNh"],
+    "precipitation_18_hour": ["GHCNh"],
+    "precipitation_15_hour": ["GHCNh"],
+    "precipitation_12_hour": ["GHCNh"],
+    "precipitation_9_hour": ["GHCNh"],
+    "precipitation_6_hour": ["GHCNh"],
+    "precipitation_3_hour": ["GHCNh"],
+    "precipitation_1_hour": _1H_GAUGE_DATA_SOURCES,
 }
 
 _load_all_concat: Dict[
@@ -117,32 +117,32 @@ _load_all_concat: Dict[
         ],
     ],
 ] = {
-    "precipitation_1d": {
+    "precipitation_1_day": {
         "GHCNd": _load_ghcnd_concat_pr,
-        "GHCNh": _load_ghcnh_concat_pr("24h"),
+        "GHCNh": _load_ghcnh_concat_pr("24_hour"),
     },
-    "precipitation_21h": {
-        "GHCNh": _load_ghcnh_concat_pr("21h"),
+    "precipitation_21_hour": {
+        "GHCNh": _load_ghcnh_concat_pr("21_hour"),
     },
-    "precipitation_18h": {
-        "GHCNh": _load_ghcnh_concat_pr("18h"),
+    "precipitation_18_hour": {
+        "GHCNh": _load_ghcnh_concat_pr("18_hour"),
     },
-    "precipitation_15h": {
-        "GHCNh": _load_ghcnh_concat_pr("15h"),
+    "precipitation_15_hour": {
+        "GHCNh": _load_ghcnh_concat_pr("15_hour"),
     },
-    "precipitation_12h": {
-        "GHCNh": _load_ghcnh_concat_pr("12h"),
+    "precipitation_12_hour": {
+        "GHCNh": _load_ghcnh_concat_pr("12_hour"),
     },
-    "precipitation_9h": {
-        "GHCNh": _load_ghcnh_concat_pr("9h"),
+    "precipitation_9_hour": {
+        "GHCNh": _load_ghcnh_concat_pr("9_hour"),
     },
-    "precipitation_6h": {
-        "GHCNh": _load_ghcnh_concat_pr("6h"),
+    "precipitation_6_hour": {
+        "GHCNh": _load_ghcnh_concat_pr("6_hour"),
     },
-    "precipitation_3h": {
-        "GHCNh": _load_ghcnh_concat_pr("3h"),
+    "precipitation_3_hour": {
+        "GHCNh": _load_ghcnh_concat_pr("3_hour"),
     },
-    "precipitation_1h": _load_1h_concat,
+    "precipitation_1_hour": _load_1h_concat,
 }
 
 _load_all_attrs: Dict[
@@ -155,32 +155,32 @@ _load_all_attrs: Dict[
         ],
     ],
 ] = {
-    "precipitation_1d": {
+    "precipitation_1_day": {
         "GHCNd": _load_ghcnd_attrs_pr,
-        "GHCNh": _load_ghcnh_attrs_pr("24h"),
+        "GHCNh": _load_ghcnh_attrs_pr("24_hour"),
     },
-    "precipitation_21h": {
-        "GHCNh": _load_ghcnh_attrs_pr("21h"),
+    "precipitation_21_hour": {
+        "GHCNh": _load_ghcnh_attrs_pr("21_hour"),
     },
-    "precipitation_18h": {
-        "GHCNh": _load_ghcnh_attrs_pr("18h"),
+    "precipitation_18_hour": {
+        "GHCNh": _load_ghcnh_attrs_pr("18_hour"),
     },
-    "precipitation_15h": {
-        "GHCNh": _load_ghcnh_attrs_pr("15h"),
+    "precipitation_15_hour": {
+        "GHCNh": _load_ghcnh_attrs_pr("15_hour"),
     },
-    "precipitation_12h": {
-        "GHCNh": _load_ghcnh_attrs_pr("12h"),
+    "precipitation_12_hour": {
+        "GHCNh": _load_ghcnh_attrs_pr("12_hour"),
     },
-    "precipitation_9h": {
-        "GHCNh": _load_ghcnh_attrs_pr("9h"),
+    "precipitation_9_hour": {
+        "GHCNh": _load_ghcnh_attrs_pr("9_hour"),
     },
-    "precipitation_6h": {
-        "GHCNh": _load_ghcnh_attrs_pr("6h"),
+    "precipitation_6_hour": {
+        "GHCNh": _load_ghcnh_attrs_pr("6_hour"),
     },
-    "precipitation_3h": {
-        "GHCNh": _load_ghcnh_attrs_pr("3h"),
+    "precipitation_3_hour": {
+        "GHCNh": _load_ghcnh_attrs_pr("3_hour"),
     },
-    "precipitation_1h": _load_1h_attrs,
+    "precipitation_1_hour": _load_1h_attrs,
 }
 
 _load_all_noattrs: Dict[
@@ -193,32 +193,32 @@ _load_all_noattrs: Dict[
         ],
     ],
 ] = {
-    "precipitation_1d": {
+    "precipitation_1_day": {
         "GHCNd": _load_ghcnd_noattrs_pr,
-        "GHCNh": _load_ghcnh_noattrs_pr("24h"),
+        "GHCNh": _load_ghcnh_noattrs_pr("24_hour"),
     },
-    "precipitation_21h": {
-        "GHCNh": _load_ghcnh_noattrs_pr("21h"),
+    "precipitation_21_hour": {
+        "GHCNh": _load_ghcnh_noattrs_pr("21_hour"),
     },
-    "precipitation_18h": {
-        "GHCNh": _load_ghcnh_noattrs_pr("18h"),
+    "precipitation_18_hour": {
+        "GHCNh": _load_ghcnh_noattrs_pr("18_hour"),
     },
-    "precipitation_15h": {
-        "GHCNh": _load_ghcnh_noattrs_pr("15h"),
+    "precipitation_15_hour": {
+        "GHCNh": _load_ghcnh_noattrs_pr("15_hour"),
     },
-    "precipitation_12h": {
-        "GHCNh": _load_ghcnh_noattrs_pr("12h"),
+    "precipitation_12_hour": {
+        "GHCNh": _load_ghcnh_noattrs_pr("12_hour"),
     },
-    "precipitation_9h": {
-        "GHCNh": _load_ghcnh_noattrs_pr("9h"),
+    "precipitation_9_hour": {
+        "GHCNh": _load_ghcnh_noattrs_pr("9_hour"),
     },
-    "precipitation_6h": {
-        "GHCNh": _load_ghcnh_noattrs_pr("6h"),
+    "precipitation_6_hour": {
+        "GHCNh": _load_ghcnh_noattrs_pr("6_hour"),
     },
-    "precipitation_3h": {
-        "GHCNh": _load_ghcnh_noattrs_pr("3h"),
+    "precipitation_3_hour": {
+        "GHCNh": _load_ghcnh_noattrs_pr("3_hour"),
     },
-    "precipitation_1h": _load_1h_noattrs,
+    "precipitation_1_hour": _load_1h_noattrs,
 }
 
 
@@ -597,7 +597,7 @@ def load_1h_gauge_data_noattrs(
 
 
 def _attrs(period: str, units: str) -> Dict[Hashable | None, Any]:
-    time = period.split("_")[-1]
+    time = " ".join(period.split("_")[1:])
     return dict(
         name=f"{time} total liquid precipitation",
         long_name=f"{time} total liquid precipitation accumulation",
@@ -686,9 +686,11 @@ def search_all_gauge_data(
             if source == "GHCNh":
                 metadata, period_ghcnh_inventory = _search_ghcnh_pr(
                     ""
-                    if period == "precipitation_1h"
+                    if period == "precipitation_1_hour"
                     else (
-                        "24h" if period == "precipitation_1d" else period.split("_")[-1]
+                        "24_hour"
+                        if period == "precipitation_1_day"
+                        else period.split("_", 1)[-1]
                     )
                 )(
                     filter_condition=filter_condition,
