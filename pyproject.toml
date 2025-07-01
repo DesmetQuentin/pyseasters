@@ -1,13 +1,16 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel", "setuptools-scm"]
+requires = ["setuptools>=61.0", "wheel", "setuptools-scm>=7"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyseasters"
-dynamic = ["version"]
 description = "Python package to handle data in the SEASTERS project."
 authors = [{ name = "Quentin Desmet", email = "desmetque@gmail.com" }]
+dynamic = ["version"]
+requires-python = ">=3.11,<3.12"
+
 dependencies = [
+  "numpy<=2.2.4",
   "pytz",
   "pandas",
   "pint",
