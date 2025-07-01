@@ -13,7 +13,9 @@ ATTRIBUTES = [
     "_Source_Station_ID",
 ]
 
-with importlib.resources.files("pyseasters.ghcnh.data").joinpath(
-    "var_metadata.yaml"
-).open("r") as file:
+with (
+    importlib.resources.files("pyseasters.ghcnh.data")
+    .joinpath("var_metadata.yaml")
+    .open("r") as file
+):
     VAR_TO_META = yaml.safe_load(file)

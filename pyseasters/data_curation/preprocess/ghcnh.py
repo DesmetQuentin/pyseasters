@@ -288,9 +288,11 @@ def preprocess_ghcnh(
     # Load metadata
     station_year = load_ghcnh_inventory().index.to_frame(index=False)
     station_list = load_ghcnh_station_list().index.to_frame(index=False)
-    with importlib.resources.files("pyseasters.data_curation.data").joinpath(
-        "ghcnh_station-year_missing_by-year.parquet"
-    ).open("rb") as file:
+    with (
+        importlib.resources.files("pyseasters.data_curation.data")
+        .joinpath("ghcnh_station-year_missing_by-year.parquet")
+        .open("rb") as file
+    ):
         station_year_missing_by_year = pd.read_parquet(file)
 
     # Map station IDs to year lists for parquet files

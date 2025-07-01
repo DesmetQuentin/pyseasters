@@ -48,9 +48,11 @@ def _parse_pathsyaml():
 
     machine_to_root, network_to_root = {}, {}
     try:
-        with importlib.resources.files("pyseasters.constants.data").joinpath(
-            "paths.yaml"
-        ).open("r") as file:
+        with (
+            importlib.resources.files("pyseasters.constants.data")
+            .joinpath("paths.yaml")
+            .open("r") as file
+        ):
             data = yaml.safe_load(file)
             for k, v in data.items():
                 if isinstance(v, list):
@@ -207,9 +209,11 @@ class PathConfig:
             log.info("Initialize in preconfig mode (req. running configure_api first).")
 
             try:
-                with importlib.resources.files("pyseasters.constants.data").joinpath(
-                    "path.txt"
-                ).open("r") as file:
+                with (
+                    importlib.resources.files("pyseasters.constants.data")
+                    .joinpath("path.txt")
+                    .open("r") as file
+                ):
                     root_path = Path(file.read())
                     if not root_path.exists():
                         self.root = self._dummy_root

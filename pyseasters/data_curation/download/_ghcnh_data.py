@@ -42,9 +42,11 @@ def generate_ghcnh_data_download_script() -> None:
     # Get station_id-year tuples from the inventory
     station_year = inv.index.to_frame(index=False)
     # Get station_id-year tuples we know are not available by year
-    with importlib.resources.files("pyseasters.data_curation.data").joinpath(
-        "ghcnh_station-year_missing_by-year.parquet"
-    ).open("rb") as file:
+    with (
+        importlib.resources.files("pyseasters.data_curation.data")
+        .joinpath("ghcnh_station-year_missing_by-year.parquet")
+        .open("rb") as file
+    ):
         station_year_missing_by_year = pd.read_parquet(file)
     # Determine station_id-year tuples to download by year (in parquet)
     merged = station_year.merge(
