@@ -24,7 +24,7 @@ Follow the adequate tab below according to your virtual environment manager:
 
       .. code:: bash
 
-         conda create --name pyseasters
+         conda create --name pyseasters python=3.11
 
       Activate:
 
@@ -45,13 +45,13 @@ Follow the adequate tab below according to your virtual environment manager:
 
    .. tab-item:: venv
 
-      Create:
+      Create (you may need to adapt the directory below):
 
       .. code:: bash
 
-         python -m venv pyseasters
+         python3 -m venv ~/venv/pyseasters
 
-      Activate (you may need to adapt the directory below):
+      Activate:
 
       .. code:: bash
 
