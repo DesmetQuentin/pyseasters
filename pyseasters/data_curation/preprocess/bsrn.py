@@ -104,7 +104,6 @@ def _parse_metadata_comment(text: str) -> Dict[str, Any]:
     return metadata
 
 
-@delayed
 def _radiation_to_parquet(path: Path) -> Tuple[str, str]:
     """Convert the radiation-type file in ``path`` into parquet."""
     # Separate metadata from data
@@ -191,9 +190,10 @@ def _preprocess_single_file(
         year, month = -1, -1
 
     # Convert to parquet
-    start, end = globals()[f"_{'radiation' if typ != 'horizon' else typ}_to_parquet"](
-        path
-    )
+    if typ != "horizon":
+        start, end = _radiation_to_parquet(path)
+    else:
+        start, end = _horizon_to_parquet(path)
 
     logger.info("Task completed for %s", path.with_suffix("").name)
 
