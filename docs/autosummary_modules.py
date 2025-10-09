@@ -36,7 +36,7 @@ for rst_path in API_DIR.glob("*.rst"):
     with open(rst_path, "a") as file:
         file.write(
             f"""
-            
+
    .. rubric:: Functions
 
    .. autosummary::

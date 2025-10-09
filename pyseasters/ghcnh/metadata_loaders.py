@@ -7,7 +7,6 @@ year.
 
 import logging
 from datetime import datetime
-from itertools import product
 from typing import Callable, List, Optional, Tuple, cast
 
 import numpy as np
