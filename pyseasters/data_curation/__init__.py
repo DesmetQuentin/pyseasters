@@ -21,6 +21,7 @@ Provide core functions dedicated to data curation, all used in PySEASTERS' CLI.
 
 from .download import generate_download_script
 from .preprocess import (
+    preprocess_bsrn,
     preprocess_ghcnd_data,
     preprocess_ghcnd_metadata,
     preprocess_ghcnh,

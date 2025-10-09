@@ -47,6 +47,7 @@ cli = [
 
 [project.scripts]
 generate_download_script = "pyseasters.cli.generate_download_script:main"
+preprocess_bsrn = "pyseasters.cli.preprocess_bsrn:main"
 preprocess_ghcnd_metadata = "pyseasters.cli.preprocess_ghcnd_metadata:main"
 preprocess_ghcnd_data = "pyseasters.cli.preprocess_ghcnd_data:main"
 preprocess_ghcnh_metadata = "pyseasters.cli.preprocess_ghcnh_metadata:main"

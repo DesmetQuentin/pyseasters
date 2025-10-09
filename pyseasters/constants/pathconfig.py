@@ -347,5 +347,26 @@ class PathConfig:
         """Return path to the GSDR file associated with the station ``station_id``."""
         return self.gsdr() / "data" / f"{station_id}.parquet"
 
+    def bsrn(self) -> Path:
+        """Return BSRN data root directory."""
+        return self.root / "BSRN"
+
+    def bsrn_stations(self) -> Path:
+        """Return path to the BSRN station metadata file."""
+        return self.bsrn() / "metadata" / "bsrn-stations.parquet"
+
+    def bsrn_inventory(self) -> Path:
+        """Return path to the BSRN inventory file."""
+        return self.bsrn() / "metadata" / "bsrn-inventory.parquet"
+
+    def bsrn_file(self, station: str, typ: str, year: int, month: int) -> Path:
+        """Return path to the BSRN file associated with the four arguments."""
+        return (
+            self.bsrn()
+            / "data"
+            / station
+            / f"{station}_{typ}_{year}-{month:02d}.parquet"
+        )
+
 
 paths = PathConfig(init_mode="preconfig")
