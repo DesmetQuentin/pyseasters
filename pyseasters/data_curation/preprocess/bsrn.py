@@ -246,14 +246,14 @@ def preprocess_bsrn(
 
     # Prepare inventory
     inventory = pd.DataFrame(
-        file_info, columns=["station", "type", "year", "month", "start", "end"]
+        file_info, columns=["station_id", "type", "year", "month", "start", "end"]
     )
 
     # Fill horizon list in station metadata file
     horizon = (
         inventory[inventory["type"] == "horizon"]
         .drop(columns=["year", "month", "start", "end"])
-        .set_index("station")
+        .set_index("station_id")
     )
     col = "has horizon"
     horizon[col] = True
@@ -270,7 +270,7 @@ def preprocess_bsrn(
     inventory = inventory[inventory["type"] != "horizon"]
     inventory["start"] = pd.to_datetime(inventory["start"])
     inventory["end"] = pd.to_datetime(inventory["end"])
-    inventory = inventory.set_index(["station", "type", "year", "month"])
+    inventory = inventory.set_index(["station_id", "type", "year", "month"])
     if paths.bsrn_inventory().exists():
         log.info("Update existing inventory file.")
         inventory = inventory.combine_first(pd.read_parquet(paths.bsrn_inventory()))
