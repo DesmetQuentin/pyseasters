@@ -351,21 +351,24 @@ class PathConfig:
         """Return BSRN data root directory."""
         return self.root / "BSRN"
 
-    def bsrn_stations(self) -> Path:
+    def bsrn_stations(self, ext: str = "parquet") -> Path:
         """Return path to the BSRN station metadata file."""
-        return self.bsrn() / "metadata" / "bsrn-stations.parquet"
+        return self.bsrn() / "metadata" / f"bsrn-stations.{ext}"
 
-    def bsrn_inventory(self) -> Path:
+    def bsrn_parameters(self, ext: str = "parquet") -> Path:
+        """Return path to the BSRN parameter metadata file."""
+        return self.bsrn() / "metadata" / f"bsrn-parameters.{ext}"
+
+    def bsrn_inventory(self, ext: str = "parquet") -> Path:
         """Return path to the BSRN inventory file."""
-        return self.bsrn() / "metadata" / "bsrn-inventory.parquet"
+        return self.bsrn() / "metadata" / f"bsrn-inventory.{ext}"
 
-    def bsrn_file(self, station: str, typ: str, year: int, month: int) -> Path:
+    def bsrn_file(
+        self, station: str, typ: str, year: int, month: int, ext: str = "parquet"
+    ) -> Path:
         """Return path to the BSRN file associated with the four arguments."""
         return (
-            self.bsrn()
-            / "data"
-            / station
-            / f"{station}_{typ}_{year}-{month:02d}.parquet"
+            self.bsrn() / "data" / station / f"{station}_{typ}_{year}-{month:02d}.{ext}"
         )
 
 
