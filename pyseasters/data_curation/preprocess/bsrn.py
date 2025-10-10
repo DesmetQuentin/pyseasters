@@ -276,7 +276,7 @@ def preprocess_bsrn(
         stations.update(horizon)
     else:
         stations = stations.join(horizon, how="left")
-    stations[col] = stations[col].fillna(False).infer_objects(copy=False).astype(bool)
+    stations[col] = stations[col].fillna(False).astype(bool)
     stations.to_parquet(paths.bsrn_stations())
 
     # Write/update inventory
