@@ -106,8 +106,13 @@ def _parse_metadata_comment(text: str) -> Dict[str, Any]:
 
 def _radiation_to_parquet(path: Path) -> Tuple[str, str]:
     """Convert the radiation-type file in ``path`` into parquet."""
+    # Decode
+    try:
+        text = path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        text = path.read_text(encoding="latin-1")
+
     # Separate metadata from data
-    text = path.read_text(encoding="utf-8")
     match = re.search(r"/\*(.*?)\*/", text, re.DOTALL)
     assert match is not None
     comment_text = match.group(1).strip()
@@ -139,8 +144,12 @@ def _radiation_to_parquet(path: Path) -> Tuple[str, str]:
 
 def _horizon_to_parquet(path: Path) -> Tuple[str, str]:
     """Convert the horizon file in ``path`` into parquet."""
+    try:
+        text = path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        text = path.read_text(encoding="latin-1")
+
     # Separate metadata from data
-    text = path.read_text(encoding="utf-8")
     match = re.search(r"/\*(.*?)\*/", text, re.DOTALL)
     assert match is not None
     comment_text = match.group(1).strip()
