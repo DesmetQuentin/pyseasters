@@ -353,15 +353,15 @@ class PathConfig:
 
     def bsrn_stations(self, ext: str = "parquet") -> Path:
         """Return path to the BSRN station metadata file."""
-        return self.bsrn() / "metadata" / f"bsrn-stations.{ext}"
+        return self.bsrn() / "metadata" / f"bsrn_stations.{ext}"
 
     def bsrn_parameters(self, ext: str = "parquet") -> Path:
         """Return path to the BSRN parameter metadata file."""
-        return self.bsrn() / "metadata" / f"bsrn-parameters.{ext}"
+        return self.bsrn() / "metadata" / f"bsrn_parameters.{ext}"
 
     def bsrn_inventory(self, ext: str = "parquet") -> Path:
         """Return path to the BSRN inventory file."""
-        return self.bsrn() / "metadata" / f"bsrn-inventory.{ext}"
+        return self.bsrn() / "metadata" / f"bsrn_inventory.{ext}"
 
     def bsrn_file(
         self, station: str, typ: str, year: int, month: int, ext: str = "parquet"

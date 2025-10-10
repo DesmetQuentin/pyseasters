@@ -22,7 +22,7 @@ def preprocess_bsrn_metadata() -> None:
         )
         .rename(
             columns={
-                "Station long name": "name",
+                "Station full name": "name",
                 "Abbreviation": "station_id",
                 "Latitude": "lat",
                 "Longitude": "lon",
