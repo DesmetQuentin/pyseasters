@@ -190,10 +190,14 @@ def _preprocess_single_file(
         year, month = -1, -1
 
     # Convert to parquet
-    if typ != "horizon":
-        start, end = _radiation_to_parquet(path)
-    else:
-        start, end = _horizon_to_parquet(path)
+    try:
+        if typ != "horizon":
+            start, end = _radiation_to_parquet(path)
+        else:
+            start, end = _horizon_to_parquet(path)
+    except Exception as e:
+        logger.error("Could not read or convert: %s", e)
+        return logger.picklable(), (station, typ, year, month, "none", "none")
 
     logger.info("Task completed for %s", path.with_suffix("").name)
 
@@ -268,6 +272,8 @@ def preprocess_bsrn(
 
     # Write/update inventory
     inventory = inventory[inventory["type"] != "horizon"]
+    inventory = inventory[inventory["start"] != "none"]
+    inventory = inventory[inventory["end"] != "none"]
     inventory["start"] = pd.to_datetime(inventory["start"])
     inventory["end"] = pd.to_datetime(inventory["end"])
     inventory = inventory.set_index(["station_id", "type", "year", "month"])
