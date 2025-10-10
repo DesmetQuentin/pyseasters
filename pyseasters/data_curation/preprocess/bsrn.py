@@ -244,13 +244,36 @@ def preprocess_bsrn(
     for args in stacked_messages:
         LoggingStack(*args).flush(logger=log)
 
-    # Write inventory
+    # Prepare inventory
     inventory = pd.DataFrame(
         file_info, columns=["station", "type", "year", "month", "start", "end"]
     )
+
+    # Fill horizon list in station metadata file
+    horizon = (
+        inventory[inventory["type"] == "horizon"]
+        .drop(columns=["year", "month", "start", "end"])
+        .set_index("station")
+    )
+    col = "has horizon"
+    horizon[col] = True
+    horizon.drop(columns=["type"], inplace=True)
+    stations = pd.read_parquet(paths.bsrn_stations())
+    if col in stations.columns:
+        stations.update(horizon)
+    else:
+        stations = stations.join(horizon, how="left")
+    stations[col] = stations[col].fillna(False).astype(bool)
+    stations.to_parquet(paths.bsrn_stations())
+
+    # Write/update inventory
+    inventory = inventory[inventory["type"] != "horizon"]
     inventory["start"] = pd.to_datetime(inventory["start"])
     inventory["end"] = pd.to_datetime(inventory["end"])
     inventory = inventory.set_index(["station", "type", "year", "month"])
+    if paths.bsrn_inventory().exists():
+        log.info("Update existing inventory file.")
+        inventory = inventory.combine_first(pd.read_parquet(paths.bsrn_inventory()))
     inventory.sort_index().to_parquet(paths.bsrn_inventory())
 
     # Delete original files
