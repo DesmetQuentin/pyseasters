@@ -268,7 +268,7 @@ def preprocess_bsrn(
         .drop(columns=["year", "month", "start", "end"])
         .set_index("station_id")
     )
-    col = "has horizon"
+    col = "Has horizon?"
     horizon[col] = True
     horizon.drop(columns=["type"], inplace=True)
     stations = pd.read_parquet(paths.bsrn_stations())
