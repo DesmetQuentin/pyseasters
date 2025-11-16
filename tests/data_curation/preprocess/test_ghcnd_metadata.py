@@ -4,8 +4,8 @@ from unittest.mock import patch
 import pandas as pd
 import pytest
 
-from pyseasters.constants import paths
-from pyseasters.data_curation.preprocess.ghcnd_metadata import (
+from seastersdb.constants import paths
+from seastersdb.data_curation.preprocess.ghcnd_metadata import (
     _clean_columns,
     _filter_countries,
     _inventory_to_parquet,
@@ -18,7 +18,7 @@ from pyseasters.data_curation.preprocess.ghcnd_metadata import (
 def patch_require_tools():
     """Cancel the `require_tools` decorator."""
     with patch(
-        "pyseasters.utils._dependencies.require_tools",
+        "seastersdb.utils._dependencies.require_tools",
         lambda *args, **kwargs: (lambda f: f),
     ):
         yield
@@ -194,7 +194,7 @@ class TestStationsToParquet:
         file_in = tmp_path / "input.txt"
         file_out = tmp_path / "output.parquet"
         monkeypatch.setattr(
-            "pyseasters.data_curation.preprocess.ghcnd_metadata.load_ghcnd_stations",
+            "seastersdb.data_curation.preprocess.ghcnd_metadata.load_ghcnd_stations",
             lambda: tmp_station_df,
         )
         monkeypatch.setattr(
@@ -211,7 +211,7 @@ class TestInventoryToParquet:
         file_in = tmp_path / "input.txt"
         file_out = tmp_path / "output.parquet"
         monkeypatch.setattr(
-            "pyseasters.data_curation.preprocess.ghcnd_metadata.load_ghcnd_inventory",
+            "seastersdb.data_curation.preprocess.ghcnd_metadata.load_ghcnd_inventory",
             lambda: tmp_inventory_df,
         )
         monkeypatch.setattr(
@@ -257,19 +257,19 @@ class TestPreprocessGHCNdMetadata:
         """Test nominal behavior."""
         self.patch_paths(tmp_path, monkeypatch)
         monkeypatch.setattr(
-            "pyseasters.data_curation.preprocess.ghcnd_metadata._filter_countries",
+            "seastersdb.data_curation.preprocess.ghcnd_metadata._filter_countries",
             self.patch_no_run(),
         )
         monkeypatch.setattr(
-            "pyseasters.data_curation.preprocess.ghcnd_metadata._clean_columns",
+            "seastersdb.data_curation.preprocess.ghcnd_metadata._clean_columns",
             self.patch_return(True),
         )
         monkeypatch.setattr(
-            "pyseasters.data_curation.preprocess.ghcnd_metadata._stations_to_parquet",
+            "seastersdb.data_curation.preprocess.ghcnd_metadata._stations_to_parquet",
             self.patch_no_run(),
         )
         monkeypatch.setattr(
-            "pyseasters.data_curation.preprocess.ghcnd_metadata._inventory_to_parquet",
+            "seastersdb.data_curation.preprocess.ghcnd_metadata._inventory_to_parquet",
             self.patch_no_run(),
         )
         monkeypatch.setattr(subprocess, "run", patch_subprocess_run("no_run"))

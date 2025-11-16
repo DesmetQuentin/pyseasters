@@ -1,8 +1,8 @@
 constants
 =========
-|rarr| :mod:`pyseasters.constants`
+|rarr| :mod:`seastersdb.constants`
 
-.. automodule:: pyseasters.constants
+.. automodule:: seastersdb.constants
    :members:
    :show-inheritance:
    :undoc-members:

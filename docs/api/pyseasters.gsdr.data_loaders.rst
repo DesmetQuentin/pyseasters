@@ -1,8 +1,8 @@
 data\_loaders
 =============
-|rarr| :mod:`pyseasters.gsdr.data_loaders`
+|rarr| :mod:`seastersdb.gsdr.data_loaders`
 
-.. automodule:: pyseasters.gsdr.data_loaders
+.. automodule:: seastersdb.gsdr.data_loaders
    :members:
    :show-inheritance:
    :undoc-members:

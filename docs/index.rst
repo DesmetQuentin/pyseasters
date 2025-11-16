@@ -1,7 +1,7 @@
-PySEASTERS documentation
+SEASTERSdb documentation
 ========================
 
-PySEASTERS is Python package providing a number of tools to support the SEASTERS
+SEASTERSdb is Python package providing a number of tools to support the SEASTERS
 scientific project.
 
 .. toctree::
@@ -11,7 +11,7 @@ scientific project.
    install
    database/index
    user_guide/index
-   api/pyseasters
+   api/seastersdb
    faq/index
    development/index
 
@@ -26,7 +26,7 @@ scientific project.
       :img-top: _static/svg/install.svg
       :class-card: intro-card
 
-      How to install PySEASTERS with ``pip`` or ``conda``. 
+      How to install SEASTERSdb with ``pip`` or ``conda``. 
 
    .. grid-item-card:: Database
       :link: database/index
@@ -35,7 +35,7 @@ scientific project.
       :img-top: _static/svg/database.svg
       :class-card: intro-card
 
-      Presentation of the database & guide to replicate it using the PySEASTERS CLI.
+      Presentation of the database & guide to replicate it using the SEASTERSdb CLI.
 
    .. grid-item-card:: User guide
       :link: user_guide/index
@@ -47,7 +47,7 @@ scientific project.
       Guiding through using the main API.
 
    .. grid-item-card:: API reference
-      :link: api/pyseasters
+      :link: api/seastersdb
       :link-type: doc
       :text-align: center
       :img-top: _static/svg/api.svg
@@ -62,7 +62,7 @@ scientific project.
       :img-top: _static/svg/faq.svg
       :class-card: intro-card
 
-      Frequently asked questions about the database & the PySEASTERS API.
+      Frequently asked questions about the database & the SEASTERSdb API.
 
    .. grid-item-card:: Development
       :link: development/index
@@ -71,4 +71,4 @@ scientific project.
       :img-top: _static/svg/development.svg
       :class-card: intro-card
 
-      Contributing guidelines to help improving PySEASTERS.
+      Contributing guidelines to help improving SEASTERSdb.

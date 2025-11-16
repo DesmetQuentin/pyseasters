@@ -1,7 +1,7 @@
 API reference
 =============
 
-.. automodule:: pyseasters
+.. automodule:: seastersdb
    :members:
    :show-inheritance:
    :undoc-members:

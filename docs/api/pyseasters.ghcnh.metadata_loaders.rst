@@ -1,8 +1,8 @@
 metadata\_loaders
 =================
-|rarr| :mod:`pyseasters.ghcnh.metadata_loaders`
+|rarr| :mod:`seastersdb.ghcnh.metadata_loaders`
 
-.. automodule:: pyseasters.ghcnh.metadata_loaders
+.. automodule:: seastersdb.ghcnh.metadata_loaders
    :members:
    :show-inheritance:
    :undoc-members:

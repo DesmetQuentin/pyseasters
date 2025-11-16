@@ -1,6 +1,6 @@
 import pytest
 
-from pyseasters.data_curation.download._ghcnd_data import (
+from seastersdb.data_curation.download._ghcnd_data import (
     _DATA,
     generate_ghcnd_data_download_script,
 )
@@ -16,7 +16,7 @@ class TestGenerateGHCNdDataDownloadScript:
     def patch_station_list(self, stations, patch):
         """Patch `get_ghcnd_station_list()` to return a given station list."""
         patch.setattr(
-            "pyseasters.data_curation.download._ghcnd_data.get_ghcnd_station_list",
+            "seastersdb.data_curation.download._ghcnd_data.get_ghcnd_station_list",
             lambda: stations,
         )
 

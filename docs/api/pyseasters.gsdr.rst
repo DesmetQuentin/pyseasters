@@ -1,8 +1,8 @@
 gsdr
 ====
-|rarr| :mod:`pyseasters.gsdr`
+|rarr| :mod:`seastersdb.gsdr`
 
-.. automodule:: pyseasters.gsdr
+.. automodule:: seastersdb.gsdr
    :members:
    :show-inheritance:
    :undoc-members:

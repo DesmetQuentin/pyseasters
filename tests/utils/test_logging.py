@@ -3,7 +3,7 @@ import logging
 
 import pytest
 
-import pyseasters.utils._logging as module
+import seastersdb.utils._logging as module
 
 
 class TestSetupCLILogging:

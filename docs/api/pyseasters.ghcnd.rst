@@ -1,8 +1,8 @@
 ghcnd
 =====
-|rarr| :mod:`pyseasters.ghcnd`
+|rarr| :mod:`seastersdb.ghcnd`
 
-.. automodule:: pyseasters.ghcnd
+.. automodule:: seastersdb.ghcnd
    :members:
    :show-inheritance:
    :undoc-members:

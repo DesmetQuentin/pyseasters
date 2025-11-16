@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 from pint import UnitRegistry
 
-from pyseasters.utils.units import (
+from seastersdb.utils.units import (
     _standard_unit,
     check_dataframe_unit,
     convert_dataframe_unit,

@@ -25,7 +25,7 @@ log.info("Set switcher version to %s", switcher_version)
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = "pyseasters"
+project = "seastersdb"
 copyright = "2025, Quentin Desmet"
 author = "Quentin Desmet"
 release = "1.0.0"
@@ -77,14 +77,14 @@ bibtex_reference_style = "author_year"
 html_theme = "pydata_sphinx_theme"
 html_theme_options = {
     "navbar_end": ["version-switcher", "navbar-icon-links", "theme-switcher"],
-    "github_url": "https://github.com/DesmetQuentin/pyseasters",
+    "github_url": "https://github.com/DesmetQuentin/seastersdb",
     "icon_links": [],
     "switcher": {
-        "json_url": "https://pyseasters.readthedocs.io/en/dev/_static/versions.json",
+        "json_url": "https://seastersdb.readthedocs.io/en/dev/_static/versions.json",
         "version_match": switcher_version,
     },
     "logo": {
-        "text": "PySEASTERS",
+        "text": "seastersdb",
     },
 }
 # html_extra_path = ["versions.json"]

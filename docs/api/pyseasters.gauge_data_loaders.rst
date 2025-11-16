@@ -1,8 +1,8 @@
 gauge\_data\_loaders
 ====================
-|rarr| :mod:`pyseasters.gauge_data_loaders`
+|rarr| :mod:`seastersdb.gauge_data_loaders`
 
-.. automodule:: pyseasters.gauge_data_loaders
+.. automodule:: seastersdb.gauge_data_loaders
    :members:
    :show-inheritance:
    :undoc-members:

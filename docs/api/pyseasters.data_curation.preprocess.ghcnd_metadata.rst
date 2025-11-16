@@ -1,8 +1,8 @@
 ghcnd\_metadata
 ===============
-|rarr| :mod:`pyseasters.data_curation.preprocess.ghcnd_metadata`
+|rarr| :mod:`seastersdb.data_curation.preprocess.ghcnd_metadata`
 
-.. automodule:: pyseasters.data_curation.preprocess.ghcnd_metadata
+.. automodule:: seastersdb.data_curation.preprocess.ghcnd_metadata
    :members:
    :show-inheritance:
    :undoc-members:

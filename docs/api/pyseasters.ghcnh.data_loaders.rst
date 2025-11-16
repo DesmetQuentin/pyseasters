@@ -1,8 +1,8 @@
 data\_loaders
 =============
-|rarr| :mod:`pyseasters.ghcnh.data_loaders`
+|rarr| :mod:`seastersdb.ghcnh.data_loaders`
 
-.. automodule:: pyseasters.ghcnh.data_loaders
+.. automodule:: seastersdb.ghcnh.data_loaders
    :members:
    :show-inheritance:
    :undoc-members:

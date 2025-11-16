@@ -1,8 +1,8 @@
 download
 ========
-|rarr| :mod:`pyseasters.data_curation.download`
+|rarr| :mod:`seastersdb.data_curation.download`
 
-.. automodule:: pyseasters.data_curation.download
+.. automodule:: seastersdb.data_curation.download
    :members:
    :show-inheritance:
    :undoc-members:

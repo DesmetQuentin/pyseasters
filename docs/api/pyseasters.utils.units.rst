@@ -1,8 +1,8 @@
 units
 =====
-|rarr| :mod:`pyseasters.utils.units`
+|rarr| :mod:`seastersdb.utils.units`
 
-.. automodule:: pyseasters.utils.units
+.. automodule:: seastersdb.utils.units
    :members:
    :show-inheritance:
    :undoc-members:

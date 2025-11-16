@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-from pyseasters.ghcnd.metadata_loaders import (
+from seastersdb.ghcnd.metadata_loaders import (
     get_ghcnd_metadata,
     get_ghcnd_station_list,
     load_ghcnd_inventory,
@@ -44,7 +44,7 @@ class TestLoadGHCNdStations:
         tmp_station_df.to_parquet(fn)
 
         # Patch paths.ghcnd_stations() to return this path
-        from pyseasters.constants import paths
+        from seastersdb.constants import paths
 
         monkeypatch.setattr(paths, "ghcnd_stations", lambda ext="parquet": fn)
 
@@ -63,7 +63,7 @@ class TestLoadGHCNdStations:
         fn.write_text(txt)
 
         # Patch paths.ghcnd_stations() to return this path
-        from pyseasters.constants import paths
+        from seastersdb.constants import paths
 
         monkeypatch.setattr(paths, "ghcnd_stations", lambda ext="txt": fn)
 
@@ -80,7 +80,7 @@ class TestGetGHCNdList:
         tmp_station_df.to_parquet(fn)
 
         # Patch paths.ghcnd_stations() to return this path
-        from pyseasters.constants import paths
+        from seastersdb.constants import paths
 
         monkeypatch.setattr(paths, "ghcnd_stations", lambda ext="parquet": fn)
 
@@ -97,7 +97,7 @@ class TestLoadGHCNdInventory:
         df.to_parquet(fn)
 
         # Patch paths.ghcnd_inventory() to return this path
-        from pyseasters.constants import paths
+        from seastersdb.constants import paths
 
         patch.setattr(paths, "ghcnd_inventory", lambda ext="parquet": fn)
 
@@ -153,7 +153,7 @@ class TestGetGHCNdMetadata:
         tmp_inventory_df.to_parquet(fn_inventory)
 
         # Patch paths.ghcnd_stations() and paths.ghcnd_inventory() to return those paths
-        from pyseasters.constants import paths
+        from seastersdb.constants import paths
 
         monkeypatch.setattr(paths, "ghcnd_stations", lambda ext="parquet": fn_stations)
         monkeypatch.setattr(

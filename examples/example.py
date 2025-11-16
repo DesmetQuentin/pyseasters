@@ -5,7 +5,7 @@ import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
 import numpy as np
 
-import pyseasters as pys
+import seastersdb as sdb
 
 # Input
 lonmin, lonmax = 115, 135
@@ -19,7 +19,7 @@ units = "mm/day"
 # Loading
 print("Loading data...")
 time1 = time()
-data, metadata = pys.load_1h_gauge_data(
+data, metadata = sdb.load_1h_gauge_data(
     filter_condition=query, time_range=(beg, end), units=units
 )
 time2 = time()

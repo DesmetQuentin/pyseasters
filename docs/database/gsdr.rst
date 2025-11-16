@@ -40,17 +40,17 @@ Description
    this page's :ref:`How to cite <gsdr-cite>` section.
 
 
-Data access with PySEASTERS
+Data access with SEASTERSdb
 ---------------------------
 
-With PySEASTERS, the most direct way to access GSDR data is by using the
-:func:`~pyseasters.gsdr.data_loaders.load_gsdr` function. Hereafter
+With SEASTERSdb, the most direct way to access GSDR data is by using the
+:func:`~seastersdb.gsdr.data_loaders.load_gsdr` function. Hereafter
 is a code snippet applying this function with some filtering:
 
 .. code:: pycon
 
    >>> from datetime import datetime
-   >>> import pyseasters as ps
+   >>> import seastersdb as ps
    >>> data, metadata = ps.load_gsdr(
    ...    filter_condition="station_id.str.startswith('MY')",  # focuses on Malaysia
    ...    time_range=[datetime(2017, 1, 1), datetime(2017, 12, 31)],
@@ -94,7 +94,7 @@ is a code snippet applying this function with some filtering:
    :ref:`User guide \> Rain gauge data <guide-rain-gauge>`
       User guide page introducing rain gauge data loading functions looking into all
       available datasets -- including GSDR --, and giving more details about filtering
-      and searching in PySEASTERS.
+      and searching in SEASTERSdb.
 
 
 Station names and IDs
@@ -112,8 +112,8 @@ For instance, ``IN_33`` is the ID of a station located in India, and
 
 .. seealso::
 
-   :doc:`pyseasters.COUNTRIES <../api/pyseasters.constants.countries>`
-      PySEASTERS provides the ``COUNTRIES`` constant ``pandas`` DataFrame that relates
+   :doc:`seastersdb.COUNTRIES <../api/seastersdb.constants.countries>`
+      SEASTERSdb provides the ``COUNTRIES`` constant ``pandas`` DataFrame that relates
       country names with ISO and FIPS codes.
 
 

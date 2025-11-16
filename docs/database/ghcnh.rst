@@ -28,17 +28,17 @@ Description
    unaffected.
 
 
-Data access with PySEASTERS
+Data access with SEASTERSdb
 ---------------------------
 
-With PySEASTERS, the most direct way to access GHCNh data is by using the
-:func:`~pyseasters.ghcnh.data_loaders.load_ghcnh` function. Hereafter is a
+With SEASTERSdb, the most direct way to access GHCNh data is by using the
+:func:`~seastersdb.ghcnh.data_loaders.load_ghcnh` function. Hereafter is a
 code snippet applying this function with some filtering:
 
 .. code:: pycon
 
    >>> from datetime import datetime
-   >>> import pyseasters as ps
+   >>> import seastersdb as ps
    >>> data, metadata = ps.load_ghcnh(
    ...    var="temperature",  # Looks for temperature
    ...    filter_condition="lon > 100 and lon < 130 and lat > 15 and lat < 25",
@@ -90,7 +90,7 @@ code snippet applying this function with some filtering:
    :ref:`User guide \> Rain gauge data <guide-rain-gauge>`
       User guide page introducing rain gauge data loading functions looking into all
       available datasets -- including GHCNh --, and giving more details about filtering
-      and searching in PySEASTERS.
+      and searching in SEASTERSdb.
 
 
 Variables
@@ -193,8 +193,8 @@ e.g., ``GQW00041406``, where (the following is derived from GHCNh documentation)
 
   .. seealso::
 
-     :doc:`pyseasters.COUNTRIES <../api/pyseasters.constants.countries>`
-        PySEASTERS provides the ``COUNTRIES`` constant ``pandas`` DataFrame that relates
+     :doc:`seastersdb.COUNTRIES <../api/seastersdb.constants.countries>`
+        SEASTERSdb provides the ``COUNTRIES`` constant ``pandas`` DataFrame that relates
         country names with ISO and FIPS codes.
 
 
@@ -237,8 +237,8 @@ e.g., ``GQW00041406``, where (the following is derived from GHCNh documentation)
 .. tip::
 
    Such station ID formatting can be used to filter stations when loading data,
-   e.g., with PySEASTERS
-   :func:`~pyseasters.gauge_data_loaders.load_1h_gauge_data`
+   e.g., with SEASTERSdb
+   :func:`~seastersdb.gauge_data_loaders.load_1h_gauge_data`
    function. For instance, Indonesian stations could be selected using the following
    ``filter_condition`` argument: ``filter_condition='station_id[:2] == "ID"'``.
 
@@ -286,8 +286,8 @@ Below are explanations on the flags, derived from from GHCNh documentation:
 .. tip::
 
    As for station IDs, station names can be used in the ``filter_condition`` argument
-   of several PySEASTERS loading functions such as
-   :func:`~pyseasters.gauge_data_loaders.load_1h_gauge_data`. For
+   of several SEASTERSdb loading functions such as
+   :func:`~seastersdb.gauge_data_loaders.load_1h_gauge_data`. For
    example, stations with a WMO ID could be selected using
    ``filter_condition='"WMO=" in station_name'``.
 

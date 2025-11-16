@@ -1,8 +1,8 @@
 data\_curation
 ==============
-|rarr| :mod:`pyseasters.data_curation`
+|rarr| :mod:`seastersdb.data_curation`
 
-.. automodule:: pyseasters.data_curation
+.. automodule:: seastersdb.data_curation
    :members:
    :show-inheritance:
    :undoc-members:

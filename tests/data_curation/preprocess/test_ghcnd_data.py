@@ -7,8 +7,8 @@ import pandas as pd
 import pytest
 from dask import delayed
 
-from pyseasters.constants import paths
-from pyseasters.data_curation.preprocess.ghcnd_data import (
+from seastersdb.constants import paths
+from seastersdb.data_curation.preprocess.ghcnd_data import (
     _clean_columns,
     _preprocess_single_station,
     _single_station_to_parquet,
@@ -20,7 +20,7 @@ from pyseasters.data_curation.preprocess.ghcnd_data import (
 def patch_require_tools():
     """Cancel the `require_tools` decorator."""
     with patch(
-        "pyseasters.utils._dependencies.require_tools",
+        "seastersdb.utils._dependencies.require_tools",
         lambda *args, **kwargs: (lambda f: f),
     ):
         yield
@@ -252,7 +252,7 @@ class TestPreprocessSingleStation:
         """Test error logging when `_clean_columns()` fails."""
         self.patch_paths(tmp_path, tmp_sid, monkeypatch)
         monkeypatch.setattr(
-            "pyseasters.data_curation.preprocess.ghcnd_data._clean_columns",
+            "seastersdb.data_curation.preprocess.ghcnd_data._clean_columns",
             self.patch_failure(RuntimeError),
         )
         name, messages = _preprocess_single_station(
@@ -273,7 +273,7 @@ class TestPreprocessSingleStation:
         """Test error logging when the `mv` after `_clean_columns()` fails."""
         self.patch_paths(tmp_path, tmp_sid, monkeypatch)
         monkeypatch.setattr(
-            "pyseasters.data_curation.preprocess.ghcnd_data._clean_columns",
+            "seastersdb.data_curation.preprocess.ghcnd_data._clean_columns",
             self.patch_no_run(),
         )
         monkeypatch.setattr(subprocess, "run", patch_subprocess_run("failure:mv"))
@@ -295,12 +295,12 @@ class TestPreprocessSingleStation:
         """Test error logging when `_single_station_to_parquet()` fails."""
         self.patch_paths(tmp_path, tmp_sid, monkeypatch)
         monkeypatch.setattr(
-            "pyseasters.data_curation.preprocess.ghcnd_data._clean_columns",
+            "seastersdb.data_curation.preprocess.ghcnd_data._clean_columns",
             self.patch_no_run(),
         )
         monkeypatch.setattr(subprocess, "run", patch_subprocess_run("no_run"))
         monkeypatch.setattr(
-            "pyseasters.data_curation.preprocess.ghcnd_data._single_station_to_parquet",
+            "seastersdb.data_curation.preprocess.ghcnd_data._single_station_to_parquet",
             self.patch_failure(RuntimeError),
         )
         name, messages = _preprocess_single_station(
@@ -321,11 +321,11 @@ class TestPreprocessSingleStation:
         """Test error logging when the `rm` after `_single_station_to_parquet()` fails."""
         self.patch_paths(tmp_path, tmp_sid, monkeypatch)
         monkeypatch.setattr(
-            "pyseasters.data_curation.preprocess.ghcnd_data._clean_columns",
+            "seastersdb.data_curation.preprocess.ghcnd_data._clean_columns",
             self.patch_no_run(),
         )
         monkeypatch.setattr(
-            "pyseasters.data_curation.preprocess.ghcnd_data._single_station_to_parquet",
+            "seastersdb.data_curation.preprocess.ghcnd_data._single_station_to_parquet",
             self.patch_no_run(),
         )
         monkeypatch.setattr(subprocess, "run", self.patch_subprocess_dual())
@@ -347,11 +347,11 @@ class TestPreprocessSingleStation:
         """Test nominal behavior."""
         self.patch_paths(tmp_path, tmp_sid, monkeypatch)
         monkeypatch.setattr(
-            "pyseasters.data_curation.preprocess.ghcnd_data._clean_columns",
+            "seastersdb.data_curation.preprocess.ghcnd_data._clean_columns",
             self.patch_no_run(),
         )
         monkeypatch.setattr(
-            "pyseasters.data_curation.preprocess.ghcnd_data._single_station_to_parquet",
+            "seastersdb.data_curation.preprocess.ghcnd_data._single_station_to_parquet",
             self.patch_no_run(),
         )
         monkeypatch.setattr(subprocess, "run", patch_subprocess_run("no_run"))
@@ -378,7 +378,7 @@ class TestPreprocessGHCNdData:
             }
         ).set_index(["station_id", "var"])
         monkeypatch.setattr(
-            "pyseasters.data_curation.preprocess.ghcnd_data.load_ghcnd_inventory",
+            "seastersdb.data_curation.preprocess.ghcnd_data.load_ghcnd_inventory",
             lambda *a, **kw: inventory,
         )
 
@@ -400,7 +400,7 @@ class TestPreprocessGHCNdData:
             return sid, [("info", "Task completed for station %s", sid)]
 
         monkeypatch.setattr(
-            "pyseasters.data_curation.preprocess.ghcnd_data._preprocess_single_station",
+            "seastersdb.data_curation.preprocess.ghcnd_data._preprocess_single_station",
             patch_task,
         )
         preprocess_ghcnd_data(ntasks=2)

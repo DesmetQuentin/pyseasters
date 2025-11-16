@@ -3,7 +3,7 @@ Installation
 
 .. note::
 
-   PySEASTERS is not distributed in any public collection like Conda or ``pip``.
+   SEASTERSdb is not distributed in any public collection like Conda or ``pip``.
    Thus, installation must be done manually as described on this page.
 
 
@@ -12,7 +12,7 @@ Installation
 Virtual environment
 -------------------
 
-First thing is to create a virtual environment to ensure PySEASTERS requirements
+First thing is to create a virtual environment to ensure SEASTERSdb requirements
 do not mess up the Python tools you have already set up on your machine.
 Follow the adequate tab below according to your virtual environment manager:
 
@@ -24,13 +24,13 @@ Follow the adequate tab below according to your virtual environment manager:
 
       .. code:: bash
 
-         conda create --name pyseasters python=3.11
+         conda create --name seastersdb python=3.11
 
       Activate:
 
       .. code:: bash
 
-         conda activate pyseasters
+         conda activate seastersdb
 
       Ensure Git and ``pip`` are installed using the ``which <tool>`` command.
       Install them if not (using ``conda install <tool>`` inside the environment).
@@ -49,13 +49,13 @@ Follow the adequate tab below according to your virtual environment manager:
 
       .. code:: bash
 
-         python3 -m venv ~/venv/pyseasters
+         python3 -m venv ~/venv/seastersdb
 
       Activate:
 
       .. code:: bash
 
-         source ~/venv/pyseasters/bin/activate
+         source ~/venv/seastersdb/bin/activate
 
       Ensure Git and ``pip`` are installed using the ``which <tool>`` command.
       If not, then install them manually or contact your administrator.
@@ -89,21 +89,21 @@ Follow the relevant tab below:
 
       .. code:: bash
 
-         git clone https://github.com/DesmetQuentin/pyseasters.git
+         git clone https://github.com/DesmetQuentin/seastersdb.git
 
-      This should create a ``pyseasters`` folder. **Change directory**:
+      This should create a ``seastersdb`` folder. **Change directory**:
 
       .. code:: bash
 
-         cd pyseasters/
+         cd seastersdb/
 
-      From within your newly created virtual environment, **install PySEASTERS**:
+      From within your newly created virtual environment, **install SEASTERSdb**:
 
       .. code:: bash
 
          pip install -e .
 
-      Now, you need to **let PySEASTERS know where is the database** on your machine.
+      Now, you need to **let SEASTERSdb know where is the database** on your machine.
       Contact your data maintainer to know the database root directory.
       Change directory into it and it should contain a ``configure_api.py`` script.
       Run it:
@@ -120,7 +120,7 @@ Follow the relevant tab below:
 
    .. tab-item:: Update
 
-      From within your ``pyseasters`` environment, and in the package directory
+      From within your ``seastersdb`` environment, and in the package directory
       (where the ``pyproject.toml`` is located),
       **update the local code** with the newer features online (if any):
 
@@ -136,12 +136,12 @@ Follow the relevant tab below:
 
 
 You should now be able to import the package and use its functionalities *anywhere*,
-as long as your ``pyseasters`` virtual environment is activated.
+as long as your ``seastersdb`` virtual environment is activated.
 For instance:
 
 .. code:: pycon
 
-   >>> import pyseasters as ps
+   >>> import seastersdb as ps
    >>> ps.VERSION
    '1.0.0'
 

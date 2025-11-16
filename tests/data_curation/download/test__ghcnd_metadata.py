@@ -1,6 +1,6 @@
 import pytest  # noqa: F401
 
-from pyseasters.data_curation.download._ghcnd_metadata import (
+from seastersdb.data_curation.download._ghcnd_metadata import (
     _INVENTORY,
     _STATIONS,
     generate_ghcnd_metadata_download_script,

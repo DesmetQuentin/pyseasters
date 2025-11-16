@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-from pyseasters.gauge_data_loaders import (
+from seastersdb.gauge_data_loaders import (
     _GAUGE_DATA_SOURCES,
     _dispatcher,
     _renamer,
@@ -49,7 +49,7 @@ def patch_source_functions(data, metadata, patch):
     for source in _GAUGE_DATA_SOURCES:
         if source == "GHCNd":
             patch.setattr(
-                "pyseasters.gauge_data_loaders.load_ghcnd",
+                "seastersdb.gauge_data_loaders.load_ghcnd",
                 lambda *args, **kwargs: (data, metadata),
             )
 

@@ -1,8 +1,8 @@
 gsdr
 ====
-|rarr| :mod:`pyseasters.data_curation.preprocess.gsdr`
+|rarr| :mod:`seastersdb.data_curation.preprocess.gsdr`
 
-.. automodule:: pyseasters.data_curation.preprocess.gsdr
+.. automodule:: seastersdb.data_curation.preprocess.gsdr
    :members:
    :show-inheritance:
    :undoc-members:

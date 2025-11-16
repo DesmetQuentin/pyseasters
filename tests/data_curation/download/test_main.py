@@ -1,6 +1,6 @@
 import pytest
 
-import pyseasters.data_curation.download.main as module
+import seastersdb.data_curation.download.main as module
 
 
 class TestGenerateDownloadScript:

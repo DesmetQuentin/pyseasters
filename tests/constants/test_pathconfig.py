@@ -6,7 +6,7 @@ from unittest.mock import mock_open, patch
 
 import pytest
 
-import pyseasters.constants.pathconfig as module
+import seastersdb.constants.pathconfig as module
 
 
 def td(i: int = 1):
@@ -161,7 +161,7 @@ class TestPathConfig:
             ),
         )
         mp.setattr(
-            "pyseasters.constants.pathconfig._parse_pathsyaml",
+            "seastersdb.constants.pathconfig._parse_pathsyaml",
             lambda: (machine_to_root, network_to_root),
         )
 

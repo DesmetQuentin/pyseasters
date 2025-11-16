@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "wheel", "setuptools-scm>=7"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pyseasters"
+name = "seastersdb"
 description = "Python package to handle data in the SEASTERS project."
 authors = [{ name = "Quentin Desmet", email = "desmetque@gmail.com" }]
 dynamic = ["version"]
@@ -46,17 +46,17 @@ cli = [
 ]
 
 [project.scripts]
-generate_download_script = "pyseasters.cli.generate_download_script:main"
-preprocess_bsrn = "pyseasters.cli.preprocess_bsrn:main"
-preprocess_bsrn_metadata = "pyseasters.cli.preprocess_bsrn_metadata:main"
-preprocess_ghcnd_metadata = "pyseasters.cli.preprocess_ghcnd_metadata:main"
-preprocess_ghcnd_data = "pyseasters.cli.preprocess_ghcnd_data:main"
-preprocess_ghcnh_metadata = "pyseasters.cli.preprocess_ghcnh_metadata:main"
-preprocess_ghcnh = "pyseasters.cli.preprocess_ghcnh:main"
-preprocess_gsdr = "pyseasters.cli.preprocess_gsdr:main"
+generate_download_script = "seastersdb.cli.generate_download_script:main"
+preprocess_bsrn = "seastersdb.cli.preprocess_bsrn:main"
+preprocess_bsrn_metadata = "seastersdb.cli.preprocess_bsrn_metadata:main"
+preprocess_ghcnd_metadata = "seastersdb.cli.preprocess_ghcnd_metadata:main"
+preprocess_ghcnd_data = "seastersdb.cli.preprocess_ghcnd_data:main"
+preprocess_ghcnh_metadata = "seastersdb.cli.preprocess_ghcnh_metadata:main"
+preprocess_ghcnh = "seastersdb.cli.preprocess_ghcnh:main"
+preprocess_gsdr = "seastersdb.cli.preprocess_gsdr:main"
 
 [tool.setuptools_scm]
-write_to = "pyseasters/_version.py"
+write_to = "seastersdb/_version.py"
 
 [tool.isort]
 profile = "black"
@@ -76,7 +76,7 @@ per-file-ignores = """
 exclude = '^examples/'
 
 [tool.pytest.ini_options]
-addopts = "-v --cov=pyseasters --cov-report=term-missing"
+addopts = "-v --cov=seastersdb --cov-report=term-missing"
 
 [tool.coverage.run]
 omit = [

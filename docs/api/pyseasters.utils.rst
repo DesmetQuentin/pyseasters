@@ -1,8 +1,8 @@
 utils
 =====
-|rarr| :mod:`pyseasters.utils`
+|rarr| :mod:`seastersdb.utils`
 
-.. automodule:: pyseasters.utils
+.. automodule:: seastersdb.utils
    :members:
    :show-inheritance:
    :undoc-members:

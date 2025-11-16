@@ -3,7 +3,7 @@ from datetime import datetime
 import pandas as pd
 import pytest
 
-from pyseasters.ghcnd.data_loaders import _load_ghcnd_single_var_station, load_ghcnd
+from seastersdb.ghcnd.data_loaders import _load_ghcnd_single_var_station, load_ghcnd
 
 
 @pytest.fixture
@@ -82,7 +82,7 @@ class TestLoadGHCNdSingleVarStation:
         tmp_data1_df.to_parquet(fn)
 
         # Patch paths.ghcnd_stations() to return this path
-        from pyseasters.constants import paths
+        from seastersdb.constants import paths
 
         monkeypatch.setattr(
             paths, "ghcnd_file", lambda station_id=station_id, ext="parquet": fn
@@ -110,7 +110,7 @@ class TestLoadGHCNdData:
         df2.to_parquet(fn2)
 
         # Patch paths.ghcnd_stations() to return those paths
-        from pyseasters.constants import paths
+        from seastersdb.constants import paths
 
         patch.setattr(
             paths,
@@ -121,7 +121,7 @@ class TestLoadGHCNdData:
             }[station_id],
         )
         patch.setattr(
-            "pyseasters.ghcnd.data_loaders.get_ghcnd_metadata",
+            "seastersdb.ghcnd.data_loaders.get_ghcnd_metadata",
             lambda var="PRCP": df_meta,
         )
 

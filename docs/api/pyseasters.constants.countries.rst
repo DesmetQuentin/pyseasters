@@ -1,8 +1,8 @@
 countries
 =========
-|rarr| :mod:`pyseasters.constants.countries`
+|rarr| :mod:`seastersdb.constants.countries`
 
-.. automodule:: pyseasters.constants.countries
+.. automodule:: seastersdb.constants.countries
    :members:
    :show-inheritance:
    :undoc-members:

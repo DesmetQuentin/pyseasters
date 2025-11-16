@@ -1,8 +1,8 @@
 main
 ====
-|rarr| :mod:`pyseasters.data_curation.download.main`
+|rarr| :mod:`seastersdb.data_curation.download.main`
 
-.. automodule:: pyseasters.data_curation.download.main
+.. automodule:: seastersdb.data_curation.download.main
    :members:
    :show-inheritance:
    :undoc-members:

@@ -1,6 +1,6 @@
 import pytest
 
-import pyseasters.utils._dependencies as module
+import seastersdb.utils._dependencies as module
 
 
 class TestRequireTools:

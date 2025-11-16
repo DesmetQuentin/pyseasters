@@ -2,11 +2,11 @@
   {
     "name": "v1.x (stable)",
     "version": "v1.x",
-    "url": "https://pyseasters.readthedocs.io/en/stable/"
+    "url": "https://seastersdb.readthedocs.io/en/stable/"
   },
   {
     "name": "dev (latest)",
     "version": "dev",
-    "url": "https://pyseasters.readthedocs.io/en/dev"
+    "url": "https://seastersdb.readthedocs.io/en/dev"
   }
 ]
